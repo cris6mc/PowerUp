@@ -5,6 +5,7 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
+import '../../login/login/view/login_screen.dart';
 import '../doodle_dash.dart';
 
 // Overlay that appears for the main menu
@@ -37,91 +38,104 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
 
       return Material(
         color: Theme.of(context).colorScheme.background,
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'Doodle Dash',
-                    style: titleStyle.copyWith(
-                      height: .8,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const WhiteSpace(),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Text('Select your character:',
-                        style: Theme.of(context).textTheme.headlineSmall!),
-                  ),
-                  if (!screenHeightIsSmall) const WhiteSpace(height: 30),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      CharacterButton(
-                        character: Character.dash,
-                        selected: character == Character.dash,
-                        onSelectChar: () {
-                          setState(() {
-                            character = Character.dash;
-                          });
-                        },
-                        characterWidth: characterWidth,
-                      ),
-                      CharacterButton(
-                        character: Character.sparky,
-                        selected: character == Character.sparky,
-                        onSelectChar: () {
-                          setState(() {
-                            character = Character.sparky;
-                          });
-                        },
-                        characterWidth: characterWidth,
-                      ),
-                    ],
-                  ),
-                  if (!screenHeightIsSmall) const WhiteSpace(height: 50),
-                  Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            const WhiteSpace(height: 50),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const MyScreen()));
+              },
+              child: const Text('login'),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Center(
+                child: SingleChildScrollView(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text('Difficulty:',
-                          style: Theme.of(context).textTheme.bodyLarge!),
-                      LevelPicker(
-                        level: game.levelManager.selectedLevel.toDouble(),
-                        label: game.levelManager.selectedLevel.toString(),
-                        onChanged: ((value) {
-                          setState(() {
-                            game.levelManager.selectLevel(value.toInt());
-                          });
-                        }),
+                      Text(
+                        'PowerUp',
+                        style: titleStyle.copyWith(
+                          height: .8,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const WhiteSpace(),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Text('Selecciona tu personaje:',
+                            style: Theme.of(context).textTheme.headlineSmall!),
+                      ),
+                      if (!screenHeightIsSmall) const WhiteSpace(height: 30),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          CharacterButton(
+                            character: Character.dash,
+                            selected: character == Character.dash,
+                            onSelectChar: () {
+                              setState(() {
+                                character = Character.dash;
+                              });
+                            },
+                            characterWidth: characterWidth,
+                          ),
+                          CharacterButton(
+                            character: Character.sparky,
+                            selected: character == Character.sparky,
+                            onSelectChar: () {
+                              setState(() {
+                                character = Character.sparky;
+                              });
+                            },
+                            characterWidth: characterWidth,
+                          ),
+                        ],
+                      ),
+                      if (!screenHeightIsSmall) const WhiteSpace(height: 50),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Dificultad:',
+                              style: Theme.of(context).textTheme.bodyLarge!),
+                          LevelPicker(
+                            level: game.levelManager.selectedLevel.toDouble(),
+                            label: game.levelManager.selectedLevel.toString(),
+                            onChanged: ((value) {
+                              setState(() {
+                                game.levelManager.selectLevel(value.toInt());
+                              });
+                            }),
+                          ),
+                        ],
+                      ),
+                      if (!screenHeightIsSmall) const WhiteSpace(height: 50),
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            game.gameManager.selectCharacter(character);
+                            game.startGame();
+                          },
+                          style: ButtonStyle(
+                            minimumSize: MaterialStateProperty.all(
+                              const Size(100, 50),
+                            ),
+                            textStyle: MaterialStateProperty.all(
+                                Theme.of(context).textTheme.titleLarge),
+                          ),
+                          child: const Text('JUGAR'),
+                        ),
                       ),
                     ],
                   ),
-                  if (!screenHeightIsSmall) const WhiteSpace(height: 50),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        game.gameManager.selectCharacter(character);
-                        game.startGame();
-                      },
-                      style: ButtonStyle(
-                        minimumSize: MaterialStateProperty.all(
-                          const Size(100, 50),
-                        ),
-                        textStyle: MaterialStateProperty.all(
-                            Theme.of(context).textTheme.titleLarge),
-                      ),
-                      child: const Text('Start'),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
+          ],
         ),
       );
     });

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "486496463953",
+    "project_id": "powerup-e769f",
+    "storage_bucket": "powerup-e769f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:486496463953:android:0ccfcf6314f00bf9071c70",
+        "android_client_info": {
+          "package_name": "com.example.jueguito2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "486496463953-09q74geqnm6d0k27gsta14uvs3ka484j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfTTrnBRr06yRbrSau7qJyF1TJAw_O2jg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "486496463953-09q74geqnm6d0k27gsta14uvs3ka484j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
