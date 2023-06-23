@@ -4,6 +4,7 @@
 
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:jueguito2/game/my_game.dart';
 
 import '../../login/login/view/login_screen.dart';
 import '../doodle_dash.dart';

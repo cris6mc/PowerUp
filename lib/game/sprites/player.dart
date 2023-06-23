@@ -137,7 +137,7 @@ class Player extends SpriteGroupComponent<PlayerState>
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
-    if (other is EnemyPlatform && !isInvincible) {
+    if (other is Enemy2Platform && !isInvincible) {
       gameRef.onLose();
       return;
     }
@@ -147,7 +147,7 @@ class Player extends SpriteGroupComponent<PlayerState>
 
     if (isMovingDown && isCollidingVertically) {
       current = PlayerState.center;
-      if (other is NormalPlatform) {
+      if (other is Platform2) {
         jump();
         return;
       } else if (other is SpringBoard) {
