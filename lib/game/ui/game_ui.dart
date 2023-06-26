@@ -52,22 +52,10 @@ class GameUI extends PositionComponent with HasGameRef<MyGame> {
         size: Vector2(50, 50),
         position: Vector2(390, 40),
         onPressed: () {
-          if (kDebugMode) {
-            print("pause");
-          }
           findGame()?.overlays.add('PauseMenu');
           findGame()?.paused = true;
         })
       ..positionType = PositionType.viewport;
-
-    final knobPaint = BasicPalette.blue.withAlpha(200).paint();
-    final backgroundPaint = BasicPalette.blue.withAlpha(100).paint();
-    joystick = JoystickComponent(
-      knob: CircleComponent(radius: 30, paint: knobPaint),
-      background: CircleComponent(radius: 100, paint: backgroundPaint),
-      margin: const EdgeInsets.only(left: 40, bottom: 40),
-    );
-
 
     add(btPause);
     add(coin);
@@ -78,7 +66,6 @@ class GameUI extends PositionComponent with HasGameRef<MyGame> {
     add(totalCoins);
     add(totalBullets);
     add(totalObjects);
-    add(joystick);
   }
 
   @override
@@ -86,7 +73,7 @@ class GameUI extends PositionComponent with HasGameRef<MyGame> {
     super.update(dt);
 
     totalBodies.text = 'Bodies: ${gameRef.world.bodies.length}';
-    totalScore.text = 'Score ${gameRef.score}';
+    totalScore.text = 'Score ${gameRef.score.value}';
     totalCoins.text = 'x${gameRef.coins}';
     totalBullets.text = 'x${gameRef.bullets}';
     totalObjects.text = 'xa${gameRef.objects}';

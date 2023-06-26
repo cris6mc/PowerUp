@@ -7,6 +7,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:jueguito2/game/my_game.dart';
+import 'package:jueguito2/game/widgets/heart_display.dart';
 
 import '../doodle_dash.dart';
 import 'widgets.dart';
@@ -29,14 +30,41 @@ class GameOverlayState extends State<GameOverlay> {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
     return Material(
       color: Colors.transparent,
       child: Stack(
         children: [
+          Positioned(
+            top: 30,
+            left: 30,
+            child: ScoreDisplay(game: widget.game),
+          ),
+          Positioned(
+            top: 30,
+            right: 30,
+            child: ElevatedButton(
+              child: isPaused
+                  ? const Icon(
+                      Icons.play_arrow,
+                      size: 48,
+                    )
+                  : const Icon(
+                      Icons.pause,
+                      size: 48,
+                    ),
+              onPressed: () {
+                widget.game.togglePauseState();
+                setState(
+                  () {
+                    isPaused = !isPaused;
+                  },
+                );
+              },
+            ),
+          ),
           if (isMobile)
             Positioned(
-              bottom: MediaQuery.of(context).size.height / 2,
+              bottom: MediaQuery.of(context).size.height / 4,
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: Row(
@@ -46,10 +74,10 @@ class GameOverlayState extends State<GameOverlay> {
                       padding: const EdgeInsets.only(left: 24),
                       child: GestureDetector(
                         onTapDown: (details) {
-                          (widget.game as DoodleDash).player.moveLeft();
+                          widget.game.hero.moveLeft();
                         },
                         onTapUp: (details) {
-                          (widget.game as DoodleDash).player.resetDirection();
+                          widget.game.hero.resetDirection();
                         },
                         child: Material(
                           color: Colors.transparent,
@@ -60,13 +88,39 @@ class GameOverlayState extends State<GameOverlay> {
                       ),
                     ),
                     Padding(
+                      padding:
+                          const EdgeInsets.only(top: 60, bottom: 0, left: 10),
+                      child: GestureDetector(
+                        onTapDown: (details) {
+                          widget.game.hero.fireBullet();
+                        },
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Material(
+                              color: Colors.transparent,
+                              elevation: 3.0,
+                              shadowColor:
+                                  Theme.of(context).colorScheme.background,
+                              child: const Icon(
+                                Icons.favorite,
+                                size: 64,
+                                color: Colors.red,
+                              ),
+                            ),
+                            Positioned(child: HeartDisplay(game: widget.game)),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
                       padding: const EdgeInsets.only(right: 24),
                       child: GestureDetector(
                         onTapDown: (details) {
-                          (widget.game as DoodleDash).player.moveRight();
+                          widget.game.hero.moveRight();
                         },
                         onTapUp: (details) {
-                          (widget.game as DoodleDash).player.resetDirection();
+                          widget.game.hero.resetDirection();
                         },
                         child: Material(
                           color: Colors.transparent,

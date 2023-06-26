@@ -23,7 +23,8 @@ enum HeroState {
 
 const _durationJetpack = 3.0;
 
-class MyHero extends BodyComponent<MyGame> with ContactCallbacks, KeyboardHandler {
+class MyHero extends BodyComponent<MyGame>
+    with ContactCallbacks, KeyboardHandler {
   static final size = Vector2(.75, .80);
 
   var state = HeroState.fall;
@@ -48,6 +49,10 @@ class MyHero extends BodyComponent<MyGame> with ContactCallbacks, KeyboardHandle
   double durationJetpack = 0;
 
   StreamSubscription? accelerometerSubscription;
+
+  int _hAxisInput = 0;
+  final int movingLeftInput = -1;
+  final int movingRightInput = 1;
 
   @override
   Future<void> onLoad() async {
@@ -92,7 +97,7 @@ class MyHero extends BodyComponent<MyGame> with ContactCallbacks, KeyboardHandle
       remove(bubbleShieldComponent);
       return;
     }
-    if(gameRef.objects >=9){
+    if (gameRef.objects >= 9) {
       state = HeroState.dead;
       body.applyAngularImpulse(2);
       return;
@@ -128,7 +133,7 @@ class MyHero extends BodyComponent<MyGame> with ContactCallbacks, KeyboardHandle
   // atacar
   void takeBullet() {
     if (state == HeroState.dead) return;
-    gameRef.bullets += 25;
+    gameRef.bullets.value += 25;
   }
 
   void fireBullet() {
@@ -216,11 +221,13 @@ class MyHero extends BodyComponent<MyGame> with ContactCallbacks, KeyboardHandle
   void beginContact(Object other, Contact contact) {
     if (other is HearthEnemy) {
       other.destroy = true;
-      {/*
+      {
+        /*
       if (hasBubbleShield) {
       other.destroy = true
       }
-      */}
+      */
+      }
       hit();
     }
     if (other is Lightning) {
@@ -270,6 +277,7 @@ class MyHero extends BodyComponent<MyGame> with ContactCallbacks, KeyboardHandle
 
   @override
   bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    _hAxisInput = 0;
     if (keysPressed.contains(LogicalKeyboardKey.arrowRight)) {
       accelerationX = 1;
     } else if (keysPressed.contains(LogicalKeyboardKey.arrowLeft)) {
@@ -283,6 +291,18 @@ class MyHero extends BodyComponent<MyGame> with ContactCallbacks, KeyboardHandle
     }
 
     return false;
+  }
+
+  void moveLeft() {
+    accelerationX = -1;
+  }
+
+  void moveRight() {
+    accelerationX = 1;
+  }
+
+  void resetDirection() {
+    accelerationX = 0;
   }
 
   @override

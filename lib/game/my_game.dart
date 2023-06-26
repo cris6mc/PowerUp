@@ -33,9 +33,11 @@ class MyGame extends Forge2DGame
     with HasKeyboardHandlerComponents, TapDetector {
   late final MyHero hero;
 
-  int score = 0;
+  // int score = 0;
+  ValueNotifier<int> score = ValueNotifier(0);
   int coins = 0;
-  int bullets = 0;
+  // int bullets = 0;
+  ValueNotifier<int> bullets = ValueNotifier(0);
   int objects = 0;
   double generatedWorldHeight = 6.7;
 
@@ -65,11 +67,12 @@ class MyGame extends Forge2DGame
 
     add(background);
 
-    add(GameUI());
+    // add(GameUI());
 
     add(Floor());
     hero = MyHero();
 
+    overlays.add('GameOverlay');
     // generateNextSectionOfWorld();
 
     await add(hero);
@@ -83,24 +86,23 @@ class MyGame extends Forge2DGame
   void update(double dt) {
     super.update(dt);
 
-    overlays.add('GameOverlay');
     if (state == GameState.running) {
       if (generatedWorldHeight > hero.body.position.y - worldSize.y / 2) {
         generateNextSectionOfWorld();
       }
       final heroY = (hero.body.position.y - worldSize.y) * -1;
 
-      if (score < heroY) {
-        score = heroY.toInt();
+      if (score.value < heroY) {
+        score.value = heroY.toInt();
       }
 
-      if (score - 7 > heroY) {
+      if (score.value - 7 > heroY) {
         hero.hit();
       }
 
-      if ((score - worldSize.y) > heroY || hero.state == HeroState.dead) {
+      if ((score.value - worldSize.y) > heroY || hero.state == HeroState.dead) {
         state = GameState.gameOver;
-        HighScores.saveNewScore(score);
+        HighScores.saveNewScore(score.value);
         overlays.add('GameOverMenu');
       }
     }
@@ -119,7 +121,7 @@ class MyGame extends Forge2DGame
 
   void generateNextSectionOfWorld() {
     for (int i = 0; i < 10; i++) {
-      if (score < 100) {
+      if (score.value < 100) {
         add(Platform(
           x: worldSize.x * random.nextDouble(),
           y: generatedWorldHeight,
@@ -225,14 +227,33 @@ class MyGame extends Forge2DGame
   }
 
   void addBullets() {
-    bullets -= 3;
-    if (bullets < 0) bullets = 0;
-    if (bullets == 0) return;
+    bullets.value -= 3;
+    if (bullets.value < 0) bullets.value = 0;
+    if (bullets.value == 0) return;
     final x = hero.body.position.x;
     final y = hero.body.position.y;
 
     add(Bullet(x: x, y: y, accelX: -1.5));
     add(Bullet(x: x, y: y, accelX: 0));
     add(Bullet(x: x, y: y, accelX: 1.5));
+  }
+
+  void togglePauseState() {
+    if (paused) {
+      resumeEngine();
+    } else {
+      pauseEngine();
+    }
+  }
+
+  void resetGame() {
+    startGame();
+    overlays.remove('gameOverOverlay');
+  }
+
+  void startGame() {
+    // initializeGameStart();
+    // gameManager.state = GameState.playing;
+    // overlays.remove('mainMenuOverlay');
   }
 }

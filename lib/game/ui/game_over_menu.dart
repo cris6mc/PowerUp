@@ -43,7 +43,7 @@ class GameOverMenu extends StatelessWidget {
                       children: [
                         const SizedBox(),
                         const MyText('Score'),
-                        MyText(game.score.toString()),
+                        MyText(game.score.value.toString()),
                         const SizedBox(),
                       ],
                     ),

@@ -30,10 +30,10 @@ class GameOverOverlay extends StatelessWidget {
                 style: Theme.of(context).textTheme.displayMedium!.copyWith(),
               ),
               const WhiteSpace(height: 50),
-              ScoreDisplay(
-                game: game,
-                isLight: true,
-              ),
+              // ScoreDisplay(
+              //   game: game,
+              //   isLight: true,
+              // ),
               const WhiteSpace(
                 height: 50,
               ),
