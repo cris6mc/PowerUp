@@ -1,5 +1,6 @@
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/high_scores.dart';
@@ -7,6 +8,9 @@ import 'package:jueguito2/game/my_game.dart';
 import 'package:jueguito2/game/navigation/routes.dart';
 import 'package:jueguito2/game/ui/game_over_menu.dart';
 import 'package:jueguito2/game/ui/pause_menu.dart';
+import 'dart:io' show Platform;
+
+import 'package:jueguito2/game/widgets/game_overlay.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +31,8 @@ class MyGameWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isMobile = !kIsWeb && (Platform.isAndroid || Platform.isIOS);
+
     return GameWidget(
       game: MyGame(),
       overlayBuilderMap: {
@@ -35,6 +41,9 @@ class MyGameWidget extends StatelessWidget {
         },
         'PauseMenu': (context, MyGame game) {
           return PauseMenu(game: game);
+        },
+        'GameOverlay': (context, MyGame game) {
+          return GameOverlay(game: game);
         }
       },
     );

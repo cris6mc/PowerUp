@@ -1,5 +1,9 @@
+import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/input.dart';
+import 'package:flame/palette.dart';
+import 'package:flame/sprite.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/my_game.dart';
@@ -14,7 +18,7 @@ final textPaint = TextPaint(
   ),
 );
 
-class GameUI extends PositionComponent with HasGameRef<MyGame>{
+class GameUI extends PositionComponent with HasGameRef<MyGame> {
   // Keep track of the number of bodies in the world.
   final totalBodies =
       TextComponent(position: Vector2(5, 895), textRenderer: textPaint);
@@ -34,6 +38,8 @@ class GameUI extends PositionComponent with HasGameRef<MyGame>{
   final fps =
       FpsTextComponent(position: Vector2(5, 870), textRenderer: textPaint);
 
+  late final JoystickComponent joystick;
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -43,13 +49,25 @@ class GameUI extends PositionComponent with HasGameRef<MyGame>{
 
     final btPause = SpriteButtonComponent(
         button: Assets.buttonPause,
-        size: Vector2(35, 35),
+        size: Vector2(50, 50),
         position: Vector2(390, 40),
         onPressed: () {
+          if (kDebugMode) {
+            print("pause");
+          }
           findGame()?.overlays.add('PauseMenu');
           findGame()?.paused = true;
         })
       ..positionType = PositionType.viewport;
+
+    final knobPaint = BasicPalette.blue.withAlpha(200).paint();
+    final backgroundPaint = BasicPalette.blue.withAlpha(100).paint();
+    joystick = JoystickComponent(
+      knob: CircleComponent(radius: 30, paint: knobPaint),
+      background: CircleComponent(radius: 100, paint: backgroundPaint),
+      margin: const EdgeInsets.only(left: 40, bottom: 40),
+    );
+
 
     add(btPause);
     add(coin);
@@ -60,6 +78,7 @@ class GameUI extends PositionComponent with HasGameRef<MyGame>{
     add(totalCoins);
     add(totalBullets);
     add(totalObjects);
+    add(joystick);
   }
 
   @override
@@ -79,7 +98,7 @@ class GameUI extends PositionComponent with HasGameRef<MyGame>{
 
     totalObjects.position
       ..x = 5
-      ..y=70;
+      ..y = 70;
 
     coin.position
       ..x = posX - 35

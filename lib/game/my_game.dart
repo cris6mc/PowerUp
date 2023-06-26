@@ -83,6 +83,7 @@ class MyGame extends Forge2DGame
   void update(double dt) {
     super.update(dt);
 
+    overlays.add('GameOverlay');
     if (state == GameState.running) {
       if (generatedWorldHeight > hero.body.position.y - worldSize.y / 2) {
         generateNextSectionOfWorld();
@@ -174,9 +175,6 @@ class MyGame extends Forge2DGame
           }
         }
       }
-
-
-
       generatedWorldHeight -= 2.7;
     }
   }
