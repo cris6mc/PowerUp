@@ -97,12 +97,12 @@ class MyHero extends BodyComponent<MyGame>
       remove(bubbleShieldComponent);
       return;
     }
-    if (gameRef.objects >= 9) {
+    if (gameRef.objects.value <= 0) {
       state = HeroState.dead;
       body.applyAngularImpulse(2);
       return;
     }
-    gameRef.objects++;
+    gameRef.objects.value--;
 
     //state = HeroState.dead;
     //body.setFixedRotation(false);

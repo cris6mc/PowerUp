@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:jueguito2/game/my_game.dart';
 import 'package:jueguito2/game/widgets/heart_display.dart';
+import 'package:jueguito2/game/widgets/life_display.dart';
 
 import '../doodle_dash.dart';
 import 'widgets.dart';
@@ -38,6 +39,19 @@ class GameOverlayState extends State<GameOverlay> {
             top: 30,
             left: 30,
             child: ScoreDisplay(game: widget.game),
+          ),
+          Positioned(
+            bottom: 10,
+            left: 10,
+            right: 10,
+            child: Container(
+              height: 10,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: LifeDisplay(game: widget.game)
+            ),
           ),
           Positioned(
             top: 30,

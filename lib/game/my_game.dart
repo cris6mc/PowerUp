@@ -38,7 +38,7 @@ class MyGame extends Forge2DGame
   int coins = 0;
   // int bullets = 0;
   ValueNotifier<int> bullets = ValueNotifier(0);
-  int objects = 0;
+  ValueNotifier<double> objects = ValueNotifier(5);
   double generatedWorldHeight = 6.7;
 
   var state = GameState.running;
