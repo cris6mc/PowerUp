@@ -2,6 +2,8 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:jueguito2/game/my_game.dart';
+import 'package:jueguito2/game/widgets/widgets.dart';
+import 'package:jueguito2/login/login/view/login_screen.dart';
 import 'package:jueguito2/main.dart';
 import 'package:jueguito2/game/ui/leaderboards_screen.dart';
 import 'package:jueguito2/game/ui/main_menu_screen.dart';
@@ -9,7 +11,9 @@ import 'package:jueguito2/game/ui/main_menu_screen.dart';
 enum Routes {
   main('/'),
   game('/game'),
+  login('/login'),
   leaderboard('/leaderboard');
+
 
   final String route;
 
@@ -24,11 +28,13 @@ enum Routes {
 
     switch (routeName) {
       case Routes.main:
-        return _buildRoute(const MainMenuScreen());
+        return _buildRoute(const MainMenuOverlay());
       case Routes.game:
         return _buildRoute(const MyGameWidget());
       case Routes.leaderboard:
         return _buildRoute(const LeaderboardScreen());
+      case Routes.login:
+        return _buildRoute(const MyScreen());
       default:
         throw Exception('Route does not exists');
     }

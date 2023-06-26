@@ -36,6 +36,7 @@ class MyGame extends Forge2DGame
   // int score = 0;
   ValueNotifier<int> score = ValueNotifier(0);
   int coins = 0;
+
   // int bullets = 0;
   ValueNotifier<int> bullets = ValueNotifier(0);
   ValueNotifier<double> objects = ValueNotifier(5);
@@ -210,14 +211,10 @@ class MyGame extends Forge2DGame
     final x = (worldSize.x - (Coin.size.x * cols)) * random.nextDouble() +
         Coin.size.x / 2;
 
-    for (int col = 0; col < cols; col++) {
-      for (int row = 0; row <= rows; row++) {
-        add(Coin(
-          x: x + (col * Coin.size.x),
-          y: generatedWorldHeight + (row * Coin.size.y) - 2,
-        ));
-      }
-    }
+    add(Coin(
+      x: x + (random.nextInt(5) + 1 * Coin.size.x),
+      y: generatedWorldHeight + (random.nextInt(15) + 1 * Coin.size.y) - 2,
+    ));
   }
 
   @override

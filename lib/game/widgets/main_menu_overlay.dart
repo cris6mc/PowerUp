@@ -4,16 +4,16 @@
 
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:jueguito2/game/managers/level_manager.dart';
 import 'package:jueguito2/game/my_game.dart';
+import 'package:jueguito2/game/navigation/routes.dart';
 
 import '../../login/login/view/login_screen.dart';
 import '../doodle_dash.dart';
 
 // Overlay that appears for the main menu
 class MainMenuOverlay extends StatefulWidget {
-  const MainMenuOverlay(this.game, {super.key});
-
-  final Game game;
+  const MainMenuOverlay({super.key});
 
   @override
   State<MainMenuOverlay> createState() => _MainMenuOverlayState();
@@ -24,7 +24,7 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
 
   @override
   Widget build(BuildContext context) {
-    DoodleDash game = widget.game as DoodleDash;
+    //DoodleDash game = widget.game as DoodleDash;
 
     return LayoutBuilder(builder: (context, constraints) {
       final characterWidth = constraints.maxWidth / 5;
@@ -36,7 +36,7 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
       // 760 is the smallest height the browser can have until the
       // layout is too large to fit.
       final bool screenHeightIsSmall = constraints.maxHeight < 760;
-
+      LevelManager levelManager = LevelManager();
       return Material(
         color: Theme.of(context).colorScheme.background,
         child: Column(
@@ -45,6 +45,7 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
             const WhiteSpace(height: 50),
             ElevatedButton(
               onPressed: () {
+                context.pushAndRemoveUntil(Routes.game);
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => const MyScreen()));
               },
@@ -104,11 +105,11 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
                           Text('Dificultad:',
                               style: Theme.of(context).textTheme.bodyLarge!),
                           LevelPicker(
-                            level: game.levelManager.selectedLevel.toDouble(),
-                            label: game.levelManager.selectedLevel.toString(),
+                            level:levelManager.selectedLevel.toDouble(),
+                            label: levelManager.selectedLevel.toString(),
                             onChanged: ((value) {
                               setState(() {
-                                game.levelManager.selectLevel(value.toInt());
+                                levelManager.selectLevel(value.toInt());
                               });
                             }),
                           ),
@@ -118,8 +119,7 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
                       Center(
                         child: ElevatedButton(
                           onPressed: () async {
-                            game.gameManager.selectCharacter(character);
-                            game.startGame();
+                            context.pushAndRemoveUntil(Routes.game);
                           },
                           style: ButtonStyle(
                             minimumSize: MaterialStateProperty.all(

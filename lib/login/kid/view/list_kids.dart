@@ -102,7 +102,7 @@ class _ListKidsState extends State<ListKids> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text('Tines ${widget.me.kids?.length} niños en tu lista'),
+            child: Text('Tienes ${widget.me.kids?.length} niños en tu lista'),
           ),
           ListView(
             shrinkWrap: true,

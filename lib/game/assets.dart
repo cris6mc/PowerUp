@@ -152,6 +152,10 @@ class Assets {
     return _loadSprite('platforms/$name.png');
   }
 
+  static Future<Sprite> _loadItemSVG(String name) async {
+    return _loadSprite('items/$name.svg');
+  }
+
   static Future<Sprite> _loadItem(String name) {
     return _loadSprite('items/$name.png');
   }
