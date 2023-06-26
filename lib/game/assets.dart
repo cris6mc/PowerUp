@@ -96,7 +96,7 @@ class Assets {
 
     coin = await _loadItem('Coin');
     gun = await _loadItem('Pistol');
-    bullet = await _loadItem('Bullet');
+    bullet = await _loadItem('Heart');
     spring = await _loadItem('Spring');
     bubbleSmall = await _loadItem('Bubble_Small');
     jetpackSmall = await _loadItem('Jetpack_Small');
