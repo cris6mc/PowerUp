@@ -4,6 +4,8 @@ import 'package:jueguito2/game/navigation/routes.dart';
 import 'package:jueguito2/game/ui/widgets/my_button.dart';
 import 'package:jueguito2/game/ui/widgets/my_text.dart';
 
+import '../../login/login/view/login_screen.dart';
+
 class MainMenuScreen extends StatelessWidget {
   const MainMenuScreen({
     super.key,
@@ -69,6 +71,12 @@ class MainMenuScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         const SizedBox(height: 24),
+                        MyButton('login', onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const MyScreen()));
+                        }),
                         Image.asset('assets/images/title.png'),
                         MyText(
                           'Best Score: ${HighScores.highScores[0]}',
