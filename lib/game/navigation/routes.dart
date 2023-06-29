@@ -10,8 +10,8 @@ import 'package:jueguito2/game/ui/main_menu_screen.dart';
 
 enum Routes {
   main('/'),
-  game('/game'),
   login('/login'),
+  game('/game'),
   leaderboard('/leaderboard');
 
 

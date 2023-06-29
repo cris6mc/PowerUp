@@ -17,7 +17,7 @@ import 'package:jueguito2/game/objects/hero.dart';
 import 'package:jueguito2/game/objects/platform.dart';
 import 'package:jueguito2/game/objects/platform_pieces.dart';
 import 'package:jueguito2/game/objects/power_up.dart';
-import 'package:jueguito2/game/ui/game_ui.dart';
+import 'package:jueguito2/main.dart';
 
 final screenSize = Vector2(428, 926);
 final worldSize = Vector2(4.28, 9.26);
@@ -45,7 +45,10 @@ class MyGame extends Forge2DGame
   var state = GameState.running;
 
   // Scale the screenSize by 100 and set the gravity of 15
-  MyGame() : super(zoom: 100, gravity: Vector2(0, 9.8));
+  MyGame({required this.character}
+  ) : super(zoom: 100, gravity: Vector2(0, 9.8));
+
+  Character character;
 
   @override
   Future<void> onLoad() async {
@@ -71,7 +74,7 @@ class MyGame extends Forge2DGame
     // add(GameUI());
 
     add(Floor());
-    hero = MyHero();
+    hero = MyHero(character: character);
 
     overlays.add('GameOverlay');
     // generateNextSectionOfWorld();
@@ -79,7 +82,7 @@ class MyGame extends Forge2DGame
     await add(hero);
 
     final worldBounds =
-        Rect.fromLTRB(0, -double.infinity, worldSize.x, worldSize.y);
+    Rect.fromLTRB(0, -double.infinity, worldSize.x, worldSize.y);
     camera.followBodyComponent(hero, worldBounds: worldBounds);
   }
 

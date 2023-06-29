@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
+import 'package:flame/flame.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/services.dart';
 import 'package:jueguito2/game/assets.dart';
@@ -13,6 +14,7 @@ import 'package:jueguito2/game/objects/lightning.dart';
 import 'package:jueguito2/game/objects/platform.dart';
 import 'package:jueguito2/game/objects/power_up.dart';
 import 'package:jueguito2/game/utils.dart';
+import 'package:jueguito2/main.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
 enum HeroState {
@@ -25,6 +27,11 @@ const _durationJetpack = 3.0;
 
 class MyHero extends BodyComponent<MyGame>
     with ContactCallbacks, KeyboardHandler {
+
+  MyHero({
+    required this.character,
+  });
+
   static final size = Vector2(.75, .80);
 
   var state = HeroState.fall;
@@ -54,6 +61,8 @@ class MyHero extends BodyComponent<MyGame>
   final int movingLeftInput = -1;
   final int movingRightInput = 1;
 
+  Character character;
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -66,13 +75,13 @@ class MyHero extends BodyComponent<MyGame>
     }
 
     fallComponent = SpriteComponent(
-      sprite: Assets.heroFall,
+      sprite: Sprite(await Flame.images.load('${character.name}Fall.png')),
       size: size,
       anchor: Anchor.center,
     );
 
     jumpComponent = SpriteComponent(
-      sprite: Assets.heroJump,
+      sprite: Sprite(await Flame.images.load('${character.name}Jump.png')),
       size: size,
       anchor: Anchor.center,
     );

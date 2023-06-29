@@ -7,9 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:jueguito2/game/managers/level_manager.dart';
 import 'package:jueguito2/game/my_game.dart';
 import 'package:jueguito2/game/navigation/routes.dart';
+import 'package:jueguito2/main.dart';
+import 'package:provider/provider.dart';
 
 import '../../login/login/view/login_screen.dart';
-import '../doodle_dash.dart';
 
 // Overlay that appears for the main menu
 class MainMenuOverlay extends StatefulWidget {
@@ -27,7 +28,7 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
     //DoodleDash game = widget.game as DoodleDash;
 
     return LayoutBuilder(builder: (context, constraints) {
-      final characterWidth = constraints.maxWidth / 5;
+      final characterWidth = constraints.maxWidth / 8;
 
       final TextStyle titleStyle = (constraints.maxWidth > 830)
           ? Theme.of(context).textTheme.displayLarge!
@@ -60,13 +61,13 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        'PowerUp',
+                        'Bullybuster',
                         style: titleStyle.copyWith(
                           height: .8,
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      const WhiteSpace(),
+                      const WhiteSpace(height: 50),
                       Align(
                         alignment: Alignment.center,
                         child: Text('Selecciona tu personaje:',
@@ -119,6 +120,8 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
                       Center(
                         child: ElevatedButton(
                           onPressed: () async {
+                            final myCharacter = Provider.of<MyProvider>(context, listen: false);
+                            myCharacter.updateValue(character);
                             context.pushAndRemoveUntil(Routes.game);
                           },
                           style: ButtonStyle(
@@ -126,9 +129,25 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
                               const Size(100, 50),
                             ),
                             textStyle: MaterialStateProperty.all(
-                                Theme.of(context).textTheme.titleLarge),
+                                Theme.of(context).textTheme.titleMedium),
                           ),
                           child: const Text('JUGAR'),
+                        ),
+                      ),
+                      const WhiteSpace(height: 20),
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            context.pushAndRemoveUntil(Routes.leaderboard);
+                          },
+                          style: ButtonStyle(
+                            minimumSize: MaterialStateProperty.all(
+                              const Size(100, 50),
+                            ),
+                            textStyle: MaterialStateProperty.all(
+                                Theme.of(context).textTheme.titleMedium),
+                          ),
+                          child: const Text('LEADERBOARD'),
                         ),
                       ),
                     ],
@@ -203,7 +222,7 @@ class CharacterButton extends StatelessWidget {
             const WhiteSpace(height: 18),
             Text(
               character.name,
-              style: const TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 16),
             ),
           ],
         ),
