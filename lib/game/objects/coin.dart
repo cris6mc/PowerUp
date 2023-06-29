@@ -4,7 +4,7 @@ import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/my_game.dart';
 
 class Coin extends BodyComponent<MyGame> {
-  static Vector2 size = Vector2(.26, .36);
+  static Vector2 size = Vector2(.36, .36);
   final Vector2 _position;
   bool isTaken = false;
 

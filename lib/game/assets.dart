@@ -96,7 +96,7 @@ class Assets {
 
     coin = await _loadItem('Coin');
     gun = await _loadItem('Pistol');
-    bullet = await _loadItem('Bullet');
+    bullet = await _loadItem('Heart');
     spring = await _loadItem('Spring');
     bubbleSmall = await _loadItem('Bubble_Small');
     jetpackSmall = await _loadItem('Jetpack_Small');
@@ -150,6 +150,10 @@ class Assets {
 
   static Future<Sprite> _loadPlatform(String name) {
     return _loadSprite('platforms/$name.png');
+  }
+
+  static Future<Sprite> _loadItemSVG(String name) async {
+    return _loadSprite('items/$name.svg');
   }
 
   static Future<Sprite> _loadItem(String name) {
