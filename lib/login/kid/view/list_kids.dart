@@ -45,7 +45,7 @@ class ListKids extends StatefulWidget {
 }
 
 class _ListKidsState extends State<ListKids> {
-  Widget bottonKid(String name, String id) {
+  Widget bottonKid(String name, int index) {
     // Map<String, dynamic> kidData = {};
     // getKid(id).then((value) => kidData = value);
     return Padding(
@@ -60,8 +60,8 @@ class _ListKidsState extends State<ListKids> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            FlBarChartExample(widget.me.id, id, name)));
+                        builder: (context) => FlBarChartExample(
+                            index, widget.me.kids?[index], name)));
               },
               child: const Icon(Icons.list)),
         ],
@@ -108,7 +108,7 @@ class _ListKidsState extends State<ListKids> {
             shrinkWrap: true,
             children: [
               for (var i = 0; i < widget.me.kids!.length; i++)
-                bottonKid(widget.me.kids![i]['name'], widget.me.kids![i]['id']),
+                bottonKid(widget.me.kids![i]['name'], i),
             ],
           ),
         ],
