@@ -38,7 +38,7 @@ class GameOverlayState extends State<GameOverlay> {
           Positioned(
             top: 30,
             left: 30,
-            child: ScoreDisplay(game: widget.game),
+            child: ScoreDisplay(title: 'title',game: widget.game),
           ),
           Positioned(
             bottom: 10,

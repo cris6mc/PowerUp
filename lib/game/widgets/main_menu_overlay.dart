@@ -43,7 +43,7 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            const WhiteSpace(height: 50),
+            const WhiteSpace(height: 20),
             ElevatedButton(
               onPressed: () {
                 context.pushAndRemoveUntil(Routes.game);
@@ -52,30 +52,31 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
               },
               child: const Text('login'),
             ),
-            Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Center(
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Bullybuster',
-                        style: titleStyle.copyWith(
-                          height: .8,
-                        ),
-                        textAlign: TextAlign.center,
+            const WhiteSpace(height: 50),
+            Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Bullybuster',
+                      style: titleStyle.copyWith(
+                        height: .8,
                       ),
-                      const WhiteSpace(height: 50),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text('Selecciona tu personaje:',
-                            style: Theme.of(context).textTheme.headlineSmall!),
-                      ),
-                      if (!screenHeightIsSmall) const WhiteSpace(height: 30),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      textAlign: TextAlign.center,
+                    ),
+                    const WhiteSpace(height: 50),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text('Selecciona tu personaje:',
+                          style: Theme.of(context).textTheme.headlineSmall!),
+                    ),
+                    if (!screenHeightIsSmall) const WhiteSpace(height: 30),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CharacterButton(
                             character: Character.dash,
@@ -87,6 +88,18 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
                             },
                             characterWidth: characterWidth,
                           ),
+                          const HorizontalSpace(),
+                          CharacterButton(
+                            character: Character.hero,
+                            selected: character == Character.hero,
+                            onSelectChar: () {
+                              setState(() {
+                                character = Character.hero;
+                              });
+                            },
+                            characterWidth: characterWidth,
+                          ),
+                          const HorizontalSpace(),
                           CharacterButton(
                             character: Character.sparky,
                             selected: character == Character.sparky,
@@ -99,14 +112,17 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
                           ),
                         ],
                       ),
-                      if (!screenHeightIsSmall) const WhiteSpace(height: 50),
-                      Row(
+                    ),
+                    if (!screenHeightIsSmall) const WhiteSpace(height: 50),
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text('Dificultad:',
                               style: Theme.of(context).textTheme.bodyLarge!),
                           LevelPicker(
-                            level:levelManager.selectedLevel.toDouble(),
+                            level: levelManager.selectedLevel.toDouble(),
                             label: levelManager.selectedLevel.toString(),
                             onChanged: ((value) {
                               setState(() {
@@ -116,42 +132,43 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
                           ),
                         ],
                       ),
-                      if (!screenHeightIsSmall) const WhiteSpace(height: 50),
-                      Center(
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            final myCharacter = Provider.of<MyProvider>(context, listen: false);
-                            myCharacter.updateValue(character);
-                            context.pushAndRemoveUntil(Routes.game);
-                          },
-                          style: ButtonStyle(
-                            minimumSize: MaterialStateProperty.all(
-                              const Size(100, 50),
-                            ),
-                            textStyle: MaterialStateProperty.all(
-                                Theme.of(context).textTheme.titleMedium),
+                    ),
+                    if (!screenHeightIsSmall) const WhiteSpace(height: 50),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          final myCharacter =
+                              Provider.of<MyProvider>(context, listen: false);
+                          myCharacter.updateValue(character);
+                          context.pushAndRemoveUntil(Routes.game);
+                        },
+                        style: ButtonStyle(
+                          minimumSize: MaterialStateProperty.all(
+                            const Size(100, 50),
                           ),
-                          child: const Text('JUGAR'),
+                          textStyle: MaterialStateProperty.all(
+                              Theme.of(context).textTheme.titleMedium),
                         ),
+                        child: const Text('JUGAR'),
                       ),
-                      const WhiteSpace(height: 20),
-                      Center(
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            context.pushAndRemoveUntil(Routes.leaderboard);
-                          },
-                          style: ButtonStyle(
-                            minimumSize: MaterialStateProperty.all(
-                              const Size(100, 50),
-                            ),
-                            textStyle: MaterialStateProperty.all(
-                                Theme.of(context).textTheme.titleMedium),
+                    ),
+                    const WhiteSpace(height: 20),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          context.pushAndRemoveUntil(Routes.leaderboard);
+                        },
+                        style: ButtonStyle(
+                          minimumSize: MaterialStateProperty.all(
+                            const Size(100, 50),
                           ),
-                          child: const Text('LEADERBOARD'),
+                          textStyle: MaterialStateProperty.all(
+                              Theme.of(context).textTheme.titleMedium),
                         ),
+                        child: const Text('LEADERBOARD'),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -189,12 +206,13 @@ class LevelPicker extends StatelessWidget {
 }
 
 class CharacterButton extends StatelessWidget {
-  const CharacterButton(
-      {super.key,
-      required this.character,
-      this.selected = false,
-      required this.onSelectChar,
-      required this.characterWidth});
+  const CharacterButton({
+    Key? key,
+    required this.character,
+    this.selected = false,
+    required this.onSelectChar,
+    required this.characterWidth,
+  }) : super(key: key);
 
   final Character character;
   final bool selected;
@@ -204,25 +222,33 @@ class CharacterButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
-      style: (selected)
+      style: selected
           ? ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(
-                  const Color.fromARGB(31, 64, 195, 255)))
+                const Color.fromARGB(31, 64, 195, 255),
+              ),
+            )
           : null,
       onPressed: onSelectChar,
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            Image.asset(
-              'assets/images/game/${character.name}_center.png',
-              height: characterWidth,
+            Container(
               width: characterWidth,
+              height: characterWidth,
+              child: Image.asset(
+                'assets/images/game/${character.name}_center.png',
+                fit: BoxFit.contain,
+              ),
             ),
-            const WhiteSpace(height: 18),
+            const SizedBox(height: 18),
             Text(
-              character.name,
-              style: const TextStyle(fontSize: 16),
+              (character.name.length > 4
+                  ? '${character.name.substring(0, 2)}..'
+                  : character.name),
+              style: const TextStyle(fontSize: 18),
+              textAlign: TextAlign.center,
             ),
           ],
         ),
@@ -240,6 +266,19 @@ class WhiteSpace extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: height,
+    );
+  }
+}
+
+class HorizontalSpace extends StatelessWidget {
+  const HorizontalSpace({super.key, this.width = 10});
+
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width,
     );
   }
 }

@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:jueguito2/game/my_game.dart';
 
 class ScoreDisplay extends StatelessWidget {
-  const ScoreDisplay({super.key, required this.game, this.isLight = false});
+  const ScoreDisplay({super.key, required this.game, required this.title, this.isLight = false});
 
   final MyGame game;
   final bool isLight;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class ScoreDisplay extends StatelessWidget {
       valueListenable: game.score,
       builder: (context, value, child) {
         return Text(
-          'Score: $value',
+          '$title: $value',
           style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,

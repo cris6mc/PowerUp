@@ -13,6 +13,7 @@ import 'package:jueguito2/game/navigation/routes.dart';
 import 'package:jueguito2/game/ui/game_over_menu.dart';
 import 'package:jueguito2/game/ui/pause_menu.dart';
 import 'package:jueguito2/game/util/color_schemes.dart';
+import 'package:jueguito2/game/widgets/game_over_overlay.dart';
 import 'dart:io' show Platform;
 
 import 'package:jueguito2/game/widgets/game_overlay.dart';
@@ -39,7 +40,7 @@ Future<void> main() async {
   ], child: MyApp.create()));
 }
 
-enum Character { dash, sparky }
+enum Character { dash, sparky, hero }
 
 class MyProvider with ChangeNotifier{
   Character _myValue = Character.dash;
@@ -92,7 +93,7 @@ class MyGameWidget extends StatelessWidget {
       game: MyGame(character: myCharacter._myValue),
       overlayBuilderMap: {
         'GameOverMenu': (context, MyGame game) {
-          return GameOverMenu(game: game);
+          return GameOverOverlay(game: game);
         },
         'PauseMenu': (context, MyGame game) {
           return PauseMenu(game: game);
