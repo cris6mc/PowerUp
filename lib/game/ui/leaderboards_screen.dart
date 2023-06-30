@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jueguito2/game/high_scores.dart';
+import 'package:jueguito2/game/navigation/routes.dart';
 import 'package:jueguito2/game/ui/widgets/my_text.dart';
 
 class LeaderboardScreen extends StatelessWidget {
@@ -25,8 +26,9 @@ class LeaderboardScreen extends StatelessWidget {
                 Row(
                   children: [
                     IconButton(
-                      icon: Image.asset('assets/images/ui/buttonBack.png'),
-                      onPressed: () => Navigator.of(context).pop(),
+                      // icon: Image.asset('assets/images/ui/buttonBack.png'),
+                      icon: const Icon(Icons.arrow_back),
+                      onPressed: () => context.push(Routes.main),
                     )
                   ],
                 ),

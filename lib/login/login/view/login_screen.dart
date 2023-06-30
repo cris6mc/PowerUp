@@ -7,6 +7,7 @@ import 'form_sign_up.dart';
 
 class MyScreen extends StatelessWidget {
   const MyScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthCubit, AuthState>(builder: (context, authState) {
@@ -30,6 +31,7 @@ class LoginScreen extends StatefulWidget {
   }
 
   const LoginScreen({super.key});
+
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }

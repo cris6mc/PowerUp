@@ -83,7 +83,27 @@ class _ListKidsState extends State<ListKids> {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              context.read<AuthCubit>().signOut();
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                        title: const Text('Cerrar sesion'),
+                        content: const Text(
+                            '¿Estas seguro que deseas cerrar sesion?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Cancelar'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              context.read<AuthCubit>().signOut();
+                            },
+                            child: const Text('Si'),
+                          ),
+                        ],
+                      ));
             },
           ),
         ],

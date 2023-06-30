@@ -45,7 +45,7 @@ Future<void> deleteKid(int index) async {
   DocumentSnapshot documentSnapshot = await documentReference.get();
   if (documentSnapshot.exists) {
     Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
-    List<Map<String, dynamic>> array = data['kids'];
+    List array = data['kids'];
     array.removeAt(index);
     await documentReference.update({'kids': array});
   }
