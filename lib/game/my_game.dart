@@ -8,6 +8,7 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/high_scores.dart';
+import 'package:jueguito2/game/objects/anti_values.dart';
 import 'package:jueguito2/game/objects/bullet.dart';
 import 'package:jueguito2/game/objects/cloud_enemy.dart';
 import 'package:jueguito2/game/objects/coin.dart';
@@ -17,6 +18,7 @@ import 'package:jueguito2/game/objects/hero.dart';
 import 'package:jueguito2/game/objects/platform.dart';
 import 'package:jueguito2/game/objects/platform_pieces.dart';
 import 'package:jueguito2/game/objects/power_up.dart';
+import 'package:jueguito2/game/objects/values.dart';
 import 'package:jueguito2/main.dart';
 
 final screenSize = Vector2(428, 926);
@@ -35,7 +37,6 @@ class MyGame extends Forge2DGame
 
   // int score = 0;
   ValueNotifier<int> score = ValueNotifier(0);
-  int coins = 0;
 
   // int bullets = 0;
   ValueNotifier<int> bullets = ValueNotifier(0);
@@ -44,9 +45,15 @@ class MyGame extends Forge2DGame
 
   var state = GameState.running;
 
+  // Object counter
+  ValueNotifier<int> coins = ValueNotifier(0);
+  ValueNotifier<int> bubbles = ValueNotifier(0);
+  ValueNotifier<int> fires = ValueNotifier(0);
+  ValueNotifier<int> lightnings = ValueNotifier(0);
+
   // Scale the screenSize by 100 and set the gravity of 15
-  MyGame({required this.character}
-  ) : super(zoom: 100, gravity: Vector2(0, 9.8));
+  MyGame({required this.character})
+      : super(zoom: 100, gravity: Vector2(0, 9.8));
 
   Character character;
 
@@ -82,7 +89,7 @@ class MyGame extends Forge2DGame
     await add(hero);
 
     final worldBounds =
-    Rect.fromLTRB(0, -double.infinity, worldSize.x, worldSize.y);
+        Rect.fromLTRB(0, -double.infinity, worldSize.x, worldSize.y);
     camera.followBodyComponent(hero, worldBounds: worldBounds);
   }
 
@@ -135,15 +142,14 @@ class MyGame extends Forge2DGame
           y: generatedWorldHeight,
         ));
         if (random.nextDouble() < .1) {
-          add(HearthEnemy(
+          add(AntiValues(
             x: worldSize.x * random.nextDouble(),
             y: generatedWorldHeight - 1.5,
           ));
-        } else if (random.nextDouble() < .2) {
-          add(CloudEnemy(
-            x: worldSize.x * random.nextDouble(),
-            y: generatedWorldHeight - 1.5,
-          ));
+        } else if (random.nextDouble() < .4) {
+          add(Values(
+              x: worldSize.x * random.nextDouble(),
+              y: generatedWorldHeight - 1.5));
         }
         if (random.nextDouble() < .2) {
           add(PowerUp(
@@ -159,17 +165,15 @@ class MyGame extends Forge2DGame
           x: worldSize.x * random.nextDouble(),
           y: generatedWorldHeight,
         ));
-
-        if (random.nextDouble() < .3) {
-          add(HearthEnemy(
+        if (random.nextDouble() < .2) {
+          add(AntiValues(
             x: worldSize.x * random.nextDouble(),
             y: generatedWorldHeight - 1.5,
           ));
-        } else if (random.nextDouble() < .2) {
-          add(CloudEnemy(
-            x: worldSize.x * random.nextDouble(),
-            y: generatedWorldHeight - 1.5,
-          ));
+        }else if (random.nextDouble() < .4) {
+          add(Values(
+              x: worldSize.x * random.nextDouble(),
+              y: generatedWorldHeight - 1.5));
         }
         if (random.nextDouble() < .3) {
           add(PowerUp(

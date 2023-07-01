@@ -62,6 +62,18 @@ class Assets {
   static late final Sprite platformPinkLeft;
   static late final Sprite platformPinkRight;
 
+  static late final Sprite love;
+  static late final Sprite empathy;
+  static late final Sprite solidarity;
+  static late final Sprite respect;
+  static late final Sprite equality;
+
+  static late final Sprite hate;
+  static late final Sprite envy;
+  static late final Sprite indifference;
+  static late final Sprite violence;
+  static late final Sprite injustice;
+
   static Future<void> load() async {
     button = await _loadSprite('ui/button.png');
     buttonPause = await _loadSprite('ui/buttonPause.png');
@@ -93,6 +105,21 @@ class Assets {
       lightning1,
       lightning2,
     ], stepTime: 0.15, loop: true);
+
+    //values
+    love = await _loadSprite('items/love.png');
+    empathy = await _loadSprite('items/empathy.png');
+    solidarity = await _loadSprite('items/solidarity.png');
+    respect = await _loadSprite('items/respect.png');
+    equality = await _loadSprite('items/equality.png');
+
+    //anti-values
+    hate = await _loadSprite('items/hate.png');
+    envy = await _loadSprite('items/envy.png');
+    indifference = await _loadSprite('items/indifference.png');
+    violence = await _loadSprite('items/violence.png');
+    injustice = await _loadSprite('items/injustice.png');
+
 
     coin = await _loadItem('Coin');
     gun = await _loadItem('Pistol');
