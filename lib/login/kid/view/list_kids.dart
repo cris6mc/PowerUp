@@ -53,7 +53,38 @@ class _ListKidsState extends State<ListKids> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ElevatedButton(onPressed: () {}, child: Text(name)),
+          ElevatedButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Comenzar a jugar'),
+                    content: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text('Escoge tu personaje'),
+                        Container(
+                          height: 55,
+                          width: 55,
+                          color: Colors.red,
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text('JUGAR'),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              child: Text(name)),
           const SizedBox(width: 10),
           ElevatedButton(
               onPressed: () {
@@ -84,26 +115,27 @@ class _ListKidsState extends State<ListKids> {
             icon: const Icon(Icons.logout),
             onPressed: () {
               showDialog(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                        title: const Text('Cerrar sesion'),
-                        content: const Text(
-                            '¿Estas seguro que deseas cerrar sesion?'),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('Cancelar'),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              context.read<AuthCubit>().signOut();
-                            },
-                            child: const Text('Si'),
-                          ),
-                        ],
-                      ));
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text('Cerrar sesion'),
+                  content:
+                      const Text('¿Estas seguro que deseas cerrar sesion?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Cancelar'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.read<AuthCubit>().signOut();
+                      },
+                      child: const Text('Si'),
+                    ),
+                  ],
+                ),
+              );
             },
           ),
         ],
