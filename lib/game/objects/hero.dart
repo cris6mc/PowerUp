@@ -6,6 +6,7 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/services.dart';
 import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/my_game.dart';
+import 'package:jueguito2/game/objects/anti_values.dart';
 import 'package:jueguito2/game/objects/coin.dart';
 import 'package:jueguito2/game/objects/floor.dart';
 import 'package:jueguito2/game/objects/hearth_enemy.dart';
@@ -134,7 +135,7 @@ class MyHero extends BodyComponent<MyGame>
   //acumular coins
   void takeCoin() {
     if (state == HeroState.dead) return;
-    gameRef.coins++;
+    gameRef.coins.value++;
     final velocity = body.linearVelocity;
     body.linearVelocity = Vector2(velocity.x, -8.5);
   }
@@ -142,7 +143,7 @@ class MyHero extends BodyComponent<MyGame>
   // atacar
   void takeBullet() {
     if (state == HeroState.dead) return;
-    gameRef.bullets.value += 25;
+    gameRef.bullets.value += 3;
   }
 
   void fireBullet() {
@@ -239,6 +240,11 @@ class MyHero extends BodyComponent<MyGame>
       }
       hit();
     }
+    if (other is AntiValues){
+      other.destroy = true;
+      hit();
+    }
+
     if (other is Lightning) {
       hit();
     }
