@@ -1,72 +1,107 @@
-// Copyright 2022 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jueguito2/firebase_options.dart';
+import 'package:jueguito2/game/assets.dart';
+import 'package:jueguito2/game/high_scores.dart';
+import 'package:jueguito2/game/my_game.dart';
+import 'package:jueguito2/game/navigation/routes.dart';
+import 'package:jueguito2/game/ui/game_over_menu.dart';
+import 'package:jueguito2/game/ui/pause_menu.dart';
+import 'package:jueguito2/game/util/color_schemes.dart';
+import 'package:jueguito2/game/widgets/game_over_overlay.dart';
+import 'dart:io' show Platform;
 
-import 'game/doodle_dash.dart';
-import 'game/util/util.dart';
-import 'game/widgets/widgets.dart';
+import 'package:jueguito2/game/widgets/game_overlay.dart';
+import 'package:jueguito2/login/login/cubit/auth_cubit.dart';
+import 'package:jueguito2/login/login/cubit/my_user_cubit.dart';
+import 'package:jueguito2/login/login/provider/auth.dart';
+import 'package:jueguito2/login/login/provider/my_user_repository.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Flame.device.fullScreen();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await HighScores.load();
+  await Assets.load();
+
+  final authCubit = AuthCubit(AuthRepository());
+
+  runApp(MultiBlocProvider(providers: [
+    BlocProvider(create: (_) => authCubit..init()),
+    BlocProvider(create: (context) => MyUserCubit(MyUserRepository())),
+  ], child: MyApp.create()));
+}
+
+enum Character { dash, sparky, hero }
+
+class MyProvider with ChangeNotifier {
+  Character _myValue = Character.dash;
+  Character get myValue => _myValue;
+  void updateValue(Character newValue) {
+    _myValue = newValue;
+    notifyListeners();
+  }
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  static Widget create() {
+    return const MyApp();
+  }
+
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Doodle Dash',
-      themeMode: ThemeMode.dark,
-      theme: ThemeData(
-        colorScheme: lightColorScheme,
-        useMaterial3: true,
+    Character character = Character.dash;
+
+    return ChangeNotifierProvider(
+      create: (context) => MyProvider(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'PowerUp',
+        themeMode: ThemeMode.dark,
+        theme: ThemeData(
+          colorScheme: lightColorScheme,
+          useMaterial3: true,
+        ),
+        darkTheme: ThemeData(
+          colorScheme: darkColorScheme,
+          textTheme: GoogleFonts.audiowideTextTheme(ThemeData.dark().textTheme),
+          useMaterial3: true,
+        ),
+        onGenerateRoute: Routes.routes,
       ),
-      darkTheme: ThemeData(
-        colorScheme: darkColorScheme,
-        textTheme: GoogleFonts.audiowideTextTheme(ThemeData.dark().textTheme),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Doodle Dash'),
     );
   }
 }
 
-final Game game = DoodleDash();
+class MyGameWidget extends StatelessWidget {
+  const MyGameWidget({Key? key}) : super(key: key);
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: Center(
-        child: LayoutBuilder(builder: (context, constraints) {
-          return Container(
-            constraints: const BoxConstraints(
-              maxWidth: 800,
-              minWidth: 550,
-            ),
-            child: GameWidget(
-              game: game,
-              overlayBuilderMap: <String, Widget Function(BuildContext, Game)>{
-                'gameOverlay': (context, game) => GameOverlay(game),
-                'mainMenuOverlay': (context, game) => MainMenuOverlay(game),
-                'gameOverOverlay': (context, game) => GameOverOverlay(game),
-              },
-            ),
-          );
-        }),
-      ),
+    final myCharacter = Provider.of<MyProvider>(context, listen: false);
+    return GameWidget(
+      game: MyGame(character: myCharacter._myValue),
+      overlayBuilderMap: {
+        'GameOverMenu': (context, MyGame game) {
+          return GameOverOverlay(game: game);
+        },
+        'PauseMenu': (context, MyGame game) {
+          return PauseMenu(game: game);
+        },
+        'GameOverlay': (context, MyGame game) {
+          return GameOverlay(game: game);
+        }
+      },
     );
   }
 }

@@ -80,11 +80,11 @@ class ObjectManager extends Component with HasGameRef<DoodleDash> {
   }
 
   final Map<String, bool> specialPlatforms = {
-    'spring': true, // level 1
+    'enemy': true, // level 1
     'broken': false, // level 2
     'noogler': false, // level 3
     'rocket': false, // level 4
-    'enemy': false, // level 5
+    'spring': false, // level 5
   };
 
   void _cleanupPlatforms() {
@@ -169,16 +169,16 @@ class ObjectManager extends Component with HasGameRef<DoodleDash> {
       return BrokenPlatform(position: position);
     }
 
-    return NormalPlatform(position: position);
+    return Platform2(position: position);
   }
 
-  final List<EnemyPlatform> _enemies = [];
+  final List<Enemy2Platform> _enemies = [];
   void _maybeAddEnemy() {
     if (specialPlatforms['enemy'] != true) {
       return;
     }
     if (probGen.generateWithProbability(20)) {
-      var enemy = EnemyPlatform(
+      var enemy = Enemy2Platform(
         position: Vector2(_generateNextX(100), _generateNextY()),
       );
       add(enemy);

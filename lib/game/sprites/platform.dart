@@ -6,6 +6,9 @@ import 'dart:math';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/flame.dart';
+import 'package:flame_forge2d/flame_forge2d.dart';
+import 'package:jueguito2/game/assets.dart';
 
 import '../doodle_dash.dart';
 
@@ -17,6 +20,7 @@ import '../doodle_dash.dart';
 /// [T] should be an enum that is used to Switch between spirtes, if necessary
 /// Many platforms only need one Sprite, so [T] will be an enum that looks
 /// something like: `enum { only }`
+final random = Random();
 
 abstract class Platform<T> extends SpriteGroupComponent<T>
     with HasGameRef<DoodleDash>, CollisionCallbacks {
@@ -30,9 +34,9 @@ abstract class Platform<T> extends SpriteGroupComponent<T>
   Platform({
     super.position,
   }) : super(
-          size: Vector2.all(100),
-          priority: 2,
-        );
+    size: Vector2.all(100),
+    priority: 2,
+  );
 
   @override
   Future<void>? onLoad() async {
@@ -96,6 +100,37 @@ class NormalPlatform extends Platform<NormalPlatformState> {
   }
 }
 
+enum Platform2State {
+  only
+}
+
+class Platform2 extends Platform<Platform2State> {
+  Platform2({super.position});
+  final Map<String, Vector2> spriteOptions = {
+    'LandPiece_DarkBlue': Vector2(82, 40),
+    'LandPiece_DarkBeige': Vector2(82, 40),
+    'LandPiece_DarkGray': Vector2(82, 40),
+    'LandPiece_DarkGreen': Vector2(82, 40),
+    'LandPiece_DarkMulticolored': Vector2(82, 40),
+  };
+
+
+  @override
+  Future<void> onLoad() async {
+    var randSpriteIndex = Random().nextInt(spriteOptions.length);
+    String randSprite = spriteOptions.keys.elementAt(randSpriteIndex);
+
+    sprites = {
+      Platform2State.only: await gameRef.loadSprite('platforms/$randSprite.png')
+    };
+
+    current = Platform2State.only;
+
+    size = spriteOptions[randSprite]!;
+    await super.onLoad();
+  }
+}
+
 enum BrokenPlatformState { cracked, broken }
 
 class BrokenPlatform extends Platform<BrokenPlatformState> {
@@ -107,9 +142,9 @@ class BrokenPlatform extends Platform<BrokenPlatformState> {
 
     sprites = <BrokenPlatformState, Sprite>{
       BrokenPlatformState.cracked:
-          await gameRef.loadSprite('game/platform_cracked_monitor.png'),
+      await gameRef.loadSprite('game/platform_cracked_monitor.png'),
       BrokenPlatformState.broken:
-          await gameRef.loadSprite('game/platform_monitor_broken.png'),
+      await gameRef.loadSprite('game/platform_monitor_broken.png'),
     };
 
     current = BrokenPlatformState.cracked;
@@ -134,9 +169,9 @@ class SpringBoard extends Platform<SpringState> {
 
     sprites = <SpringState, Sprite>{
       SpringState.down:
-          await gameRef.loadSprite('game/platform_trampoline_down.png'),
+      await gameRef.loadSprite('game/platform_trampoline_down.png'),
       SpringState.up:
-          await gameRef.loadSprite('game/platform_trampoline_up.png'),
+      await gameRef.loadSprite('game/platform_trampoline_up.png'),
     };
 
     current = SpringState.up;
@@ -145,8 +180,8 @@ class SpringBoard extends Platform<SpringState> {
   }
 
   @override
-  void onCollisionStart(
-      Set<Vector2> intersectionPoints, PositionComponent other) {
+  void onCollisionStart(Set<Vector2> intersectionPoints,
+      PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
 
     bool isCollidingVertically =
@@ -177,10 +212,31 @@ class EnemyPlatform extends Platform<EnemyPlatformState> {
 
     sprites = <EnemyPlatformState, Sprite>{
       EnemyPlatformState.only:
-          await gameRef.loadSprite('game/$enemySprite.png'),
+      await gameRef.loadSprite('game/$enemySprite.png'),
     };
 
     current = EnemyPlatformState.only;
+
+    return super.onLoad();
+  }
+}
+
+enum Enemy2PlatformState { only }
+
+class Enemy2Platform extends Platform<Enemy2PlatformState> {
+  Enemy2Platform({super.position});
+
+  @override
+  Future<void>? onLoad() async {
+    var randBool = Random().nextBool();
+    var enemySprite = randBool ? 'enemy_trash_can' : 'enemy_error';
+
+    sprites = <Enemy2PlatformState, Sprite>{
+      Enemy2PlatformState.only:
+      await gameRef.loadSprite('HearthEnemy1.png'),
+    };
+
+    current = Enemy2PlatformState.only;
 
     return super.onLoad();
   }
