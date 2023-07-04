@@ -62,7 +62,11 @@ class Assets {
   static late final Sprite platformPinkLeft;
   static late final Sprite platformPinkRight;
 
-  static late final Sprite love;
+  static late final Sprite platform1;
+  static late final Sprite platform2;
+  static late final Sprite platform3;
+  
+  static late final SpriteAnimation love;
   static late final Sprite empathy;
   static late final Sprite solidarity;
   static late final Sprite respect;
@@ -73,6 +77,11 @@ class Assets {
   static late final Sprite indifference;
   static late final Sprite violence;
   static late final Sprite injustice;
+
+  static late final Sprite rocket1;
+  static late final Sprite rocket2;
+  static late final Sprite rocket3;
+  static late final Sprite rocket4;
 
   static Future<void> load() async {
     button = await _loadSprite('ui/button.png');
@@ -106,8 +115,21 @@ class Assets {
       lightning2,
     ], stepTime: 0.15, loop: true);
 
+    final love2 = await _loadItem('Love2');
+    final love3 = await _loadItem('Love3');
+    final love7 = await _loadItem('Love7');
+    final love8 = await _loadItem('Love8');
+    final love9 = await _loadItem('Love9');
+
+    love = SpriteAnimation.spriteList([
+      love2,
+      love3,
+      love7,
+      love8,
+      love9
+    ], stepTime: 0.35, loop: true);
     //values
-    love = await _loadSprite('items/love.png');
+    //love = await _loadSprite('items/love1.png');
     empathy = await _loadSprite('items/empathy.png');
     solidarity = await _loadSprite('items/solidarity.png');
     respect = await _loadSprite('items/respect.png');
@@ -137,6 +159,17 @@ class Assets {
       jetpack1,
       jetpack2,
     ], stepTime: 0.15, loop: true);
+
+    final rocket1 = await _loadItem('rocker_1');
+    final rocket2 = await _loadItem('rocker_2');
+    final rocket3 = await _loadItem('rocker_3');
+    final rocket4 = await _loadItem('rocker_4');
+
+
+
+    platform1 = await _loadPlatform('platform1');
+    platform2 = await _loadPlatform('platform2');
+    platform3 = await _loadPlatform('platform3');
 
     platformBeige = await _loadPlatform('LandPiece_DarkBeige');
     platformBeigeLight = await _loadPlatform('LandPiece_LightBeige');

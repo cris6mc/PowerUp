@@ -8,6 +8,8 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/high_scores.dart';
+import 'package:jueguito2/game/objects/Plataform/platform.dart';
+import 'package:jueguito2/game/objects/Values/love.dart';
 import 'package:jueguito2/game/objects/anti_values.dart';
 import 'package:jueguito2/game/objects/bullet.dart';
 import 'package:jueguito2/game/objects/cloud_enemy.dart';
@@ -133,11 +135,11 @@ class MyGame extends Forge2DGame
   void generateNextSectionOfWorld() {
     for (int i = 0; i < 10; i++) {
       if (score.value < 100) {
-        add(Platform(
+        add(Platform2(
           x: worldSize.x * random.nextDouble(),
           y: generatedWorldHeight,
         ));
-        add(Platform(
+        add(Platform2(
           x: worldSize.x * random.nextDouble(),
           y: generatedWorldHeight,
         ));
@@ -148,6 +150,10 @@ class MyGame extends Forge2DGame
           ));
         } else if (random.nextDouble() < .4) {
           add(Values(
+              x: worldSize.x * random.nextDouble(),
+              y: generatedWorldHeight - 1.5));
+        } else if (random.nextDouble() < .5) {
+          add(Love(
               x: worldSize.x * random.nextDouble(),
               y: generatedWorldHeight - 1.5));
         }
@@ -170,7 +176,7 @@ class MyGame extends Forge2DGame
             x: worldSize.x * random.nextDouble(),
             y: generatedWorldHeight - 1.5,
           ));
-        }else if (random.nextDouble() < .4) {
+        } else if (random.nextDouble() < .4) {
           add(Values(
               x: worldSize.x * random.nextDouble(),
               y: generatedWorldHeight - 1.5));
