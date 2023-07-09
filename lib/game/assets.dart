@@ -1,7 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 
-
 class Assets {
   static late final Sprite button;
   static late final Sprite buttonPause;
@@ -65,7 +64,7 @@ class Assets {
   static late final Sprite platform1;
   static late final Sprite platform2;
   static late final Sprite platform3;
-  
+
   static late final SpriteAnimation love;
   static late final Sprite empathy;
   static late final Sprite solidarity;
@@ -121,13 +120,8 @@ class Assets {
     final love8 = await _loadItem('Love8');
     final love9 = await _loadItem('Love9');
 
-    love = SpriteAnimation.spriteList([
-      love2,
-      love3,
-      love7,
-      love8,
-      love9
-    ], stepTime: 0.35, loop: true);
+    love = SpriteAnimation.spriteList([love2, love3, love7, love8, love9],
+        stepTime: 0.35, loop: true);
     //values
     //love = await _loadSprite('items/love1.png');
     empathy = await _loadSprite('items/empathy.png');
@@ -141,7 +135,6 @@ class Assets {
     indifference = await _loadSprite('items/indifference.png');
     violence = await _loadSprite('items/violence.png');
     injustice = await _loadSprite('items/injustice.png');
-
 
     coin = await _loadItem('Coin');
     gun = await _loadItem('Pistol');
@@ -160,12 +153,10 @@ class Assets {
       jetpack2,
     ], stepTime: 0.15, loop: true);
 
-    final rocket1 = await _loadItem('rocker_1');
-    final rocket2 = await _loadItem('rocker_2');
-    final rocket3 = await _loadItem('rocker_3');
-    final rocket4 = await _loadItem('rocker_4');
-
-
+    final rocket1 = await _loadItem('rocket_1');
+    final rocket2 = await _loadItem('rocket_2');
+    final rocket3 = await _loadItem('rocket_3');
+    final rocket4 = await _loadItem('rocket_4');
 
     platform1 = await _loadPlatform('platform1');
     platform2 = await _loadPlatform('platform2');
@@ -196,10 +187,14 @@ class Assets {
     platformGreenRight = await _loadPlatform('HalfLandPiece_Right_Green');
 
     platformMulticolor = await _loadPlatform('LandPiece_DarkMulticolored');
-    platformMulticolorLight = await _loadPlatform('LandPiece_LightMulticolored');
-    platformMulticolorBroken = await _loadPlatform('BrokenLandPiece_Multicolored');
-    platformMulticolorLeft = await _loadPlatform('HalfLandPiece_Left_Multicolored');
-    platformMulticolorRight = await _loadPlatform('HalfLandPiece_Right_Multicolored');
+    platformMulticolorLight =
+        await _loadPlatform('LandPiece_LightMulticolored');
+    platformMulticolorBroken =
+        await _loadPlatform('BrokenLandPiece_Multicolored');
+    platformMulticolorLeft =
+        await _loadPlatform('HalfLandPiece_Left_Multicolored');
+    platformMulticolorRight =
+        await _loadPlatform('HalfLandPiece_Right_Multicolored');
 
     platformPink = await _loadPlatform('LandPiece_DarkPink');
     platformPinkLight = await _loadPlatform('LandPiece_LightPink');

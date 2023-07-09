@@ -5,12 +5,6 @@ import 'package:forge2d/src/dynamics/body.dart';
 import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/my_game.dart';
 
-enum ValuesType { empathy, solidarity, respect, equality }
-
-class MySprite extends SpriteComponent{
-
-}
-
 extension ValuesTypeExtension on ValuesType {
   Sprite get sprite {
     switch (this) {
@@ -36,7 +30,7 @@ class Values extends BodyComponent<MyGame> {
   Values({
     required double x,
     required double y,
-  }) : _position = Vector2(x, y),
+  })  : _position = Vector2(x, y),
         type = ValuesType.values
             .elementAt(random.nextInt(ValuesType.values.length));
 
@@ -62,7 +56,7 @@ class Values extends BodyComponent<MyGame> {
 
     bool isOutOfScreen = gameRef.isOutOfScreen(body.position);
 
-    if (isOutOfScreen) {
+    if (destroy || isOutOfScreen) {
       world.destroyBody(body);
       gameRef.remove(this);
     }
@@ -81,5 +75,9 @@ class Values extends BodyComponent<MyGame> {
     return world.createBody(bodyDef)
       ..createFixture(fixtureDef)
       ..linearVelocity = Vector2(0, 1.5);
+  }
+
+  ValuesType getType() {
+    return type;
   }
 }

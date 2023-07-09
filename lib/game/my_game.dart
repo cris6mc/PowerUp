@@ -12,10 +12,8 @@ import 'package:jueguito2/game/objects/Plataform/platform.dart';
 import 'package:jueguito2/game/objects/Values/love.dart';
 import 'package:jueguito2/game/objects/anti_values.dart';
 import 'package:jueguito2/game/objects/bullet.dart';
-import 'package:jueguito2/game/objects/cloud_enemy.dart';
 import 'package:jueguito2/game/objects/coin.dart';
 import 'package:jueguito2/game/objects/floor.dart';
-import 'package:jueguito2/game/objects/hearth_enemy.dart';
 import 'package:jueguito2/game/objects/hero.dart';
 import 'package:jueguito2/game/objects/platform.dart';
 import 'package:jueguito2/game/objects/platform_pieces.dart';
@@ -32,6 +30,8 @@ enum GameState {
   running,
   gameOver,
 }
+
+enum ValuesType { empathy, solidarity, respect, equality }
 
 class MyGame extends Forge2DGame
     with HasKeyboardHandlerComponents, TapDetector {
@@ -53,11 +53,24 @@ class MyGame extends Forge2DGame
   ValueNotifier<int> fires = ValueNotifier(0);
   ValueNotifier<int> lightnings = ValueNotifier(0);
 
+  ValueNotifier<Map<ValuesType, int>> valuesNotifier = ValueNotifier({
+    ValuesType.empathy: 0,
+    ValuesType.solidarity: 0,
+    ValuesType.respect: 0,
+    ValuesType.equality: 0,
+  });
+
   // Scale the screenSize by 100 and set the gravity of 15
   MyGame({required this.character})
       : super(zoom: 100, gravity: Vector2(0, 9.8));
 
   Character character;
+
+  void updateValue(ValuesType type, int value) {
+    final Map<ValuesType, int> currentValues = valuesNotifier.value;
+    currentValues[type] = (currentValues[type] ?? 0) + 1;
+    valuesNotifier.value = currentValues;
+  }
 
   @override
   Future<void> onLoad() async {

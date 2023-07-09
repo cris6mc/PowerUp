@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/my_game.dart';
@@ -16,6 +15,7 @@ import 'package:jueguito2/game/objects/jetpack_group.dart';
 import 'package:jueguito2/game/objects/lightning.dart';
 import 'package:jueguito2/game/objects/platform.dart';
 import 'package:jueguito2/game/objects/power_up.dart';
+import 'package:jueguito2/game/objects/values.dart';
 import 'package:jueguito2/game/utils.dart';
 import 'package:jueguito2/main.dart';
 import 'package:sensors_plus/sensors_plus.dart';
@@ -77,7 +77,6 @@ class MyHero extends BodyComponent<MyGame>
   final int movingRightInput = 1;
 
   Character character;
-
 
   @override
   Future<void> onLoad() async {
@@ -293,6 +292,12 @@ class MyHero extends BodyComponent<MyGame>
     if (other is AntiValues) {
       other.destroy = true;
       hit();
+    }
+
+    if (other is Values) {
+      other.destroy = true;
+      final ValuesType type = other.getType();
+      gameRef.updateValue(type, 1);
     }
 
     if (other is Lightning) {
