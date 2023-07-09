@@ -76,8 +76,4 @@ class Values extends BodyComponent<MyGame> {
       ..createFixture(fixtureDef)
       ..linearVelocity = Vector2(0, 1.5);
   }
-
-  ValuesType getType() {
-    return type;
-  }
 }

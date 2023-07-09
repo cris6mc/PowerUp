@@ -296,8 +296,8 @@ class MyHero extends BodyComponent<MyGame>
 
     if (other is Values) {
       other.destroy = true;
-      final ValuesType type = other.getType();
-      gameRef.updateValue(type, 1);
+      final ValuesType type = other.type;
+      gameRef.updateValue(type);
     }
 
     if (other is Lightning) {

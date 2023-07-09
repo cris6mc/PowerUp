@@ -16,7 +16,6 @@ class ValueDisplay extends StatelessWidget {
       valueListenable: game.valuesNotifier,
       builder: (context, values, child) {
         final int value = values[type] ?? 0;
-        print(values[type]);
         final String path = type.name.toLowerCase();
         return Row(
           children: [
@@ -26,7 +25,7 @@ class ValueDisplay extends StatelessWidget {
               height: 30,
             ),
             const SizedBox(
-                width: 10), // Ajusta el espacio según tus necesidades
+                width: 10),
             Text(
               '$value',
               style: const TextStyle(

@@ -66,8 +66,8 @@ class MyGame extends Forge2DGame
 
   Character character;
 
-  void updateValue(ValuesType type, int value) {
-    final Map<ValuesType, int> currentValues = valuesNotifier.value;
+  void updateValue(ValuesType type) {
+    final Map<ValuesType, int> currentValues = Map.from(valuesNotifier.value);
     currentValues[type] = (currentValues[type] ?? 0) + 1;
     valuesNotifier.value = currentValues;
   }

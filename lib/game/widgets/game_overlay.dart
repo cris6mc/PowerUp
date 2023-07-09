@@ -40,10 +40,18 @@ class GameOverlayState extends State<GameOverlay> {
             left: 30,
             child: ScoreDisplay(title: 'Score', game: widget.game),
           ),
-          Positioned(
-            top: 60,
-            left: 30,
-            child: ValueDisplay(type: ValuesType.empathy, game: widget.game),
+          Container(
+            padding: const EdgeInsets.only(top: 60, left: 30),
+            child: ListView.builder(
+              itemCount: ValuesType.values.length,
+              itemBuilder: (BuildContext context, int index) {
+                ValuesType valueType = ValuesType.values[index];
+                return ValueDisplay(
+                  type: valueType,
+                  game: widget.game,
+                );
+              },
+            ),
           ),
           Positioned(
             bottom: 10,
