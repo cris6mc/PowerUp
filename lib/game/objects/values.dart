@@ -34,7 +34,7 @@ class Values extends BodyComponent<MyGame> {
   Values({
     required double x,
     required double y,
-  }) : _position = Vector2(x, y),
+  })  : _position = Vector2(x, y),
         type = ValuesType.values
             .elementAt(random.nextInt(ValuesType.values.length));
 
@@ -60,7 +60,7 @@ class Values extends BodyComponent<MyGame> {
 
     bool isOutOfScreen = gameRef.isOutOfScreen(body.position);
 
-    if (isOutOfScreen) {
+    if (destroy || isOutOfScreen) {
       world.destroyBody(body);
       gameRef.remove(this);
     }

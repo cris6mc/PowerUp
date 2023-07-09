@@ -36,49 +36,121 @@ class GameOverlayState extends State<GameOverlay> {
       child: Stack(
         children: [
           Positioned(
-            top: 30,
-            left: 30,
-            child: ScoreDisplay(title: 'Score',game: widget.game),
-          ),
-          Positioned(
-            bottom: 10,
+            top: 10,
             left: 10,
-            right: 10,
-            child: Container(
-              height: 10,
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: LifeDisplay(game: widget.game)
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ScoreDisplay(game: widget.game),
+                const SizedBox(width: 10),
+                Container(
+                  height: 15,
+                  width: 200,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: LifeDisplay(game: widget.game),
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                  child: isPaused
+                      ? const Icon(
+                          Icons.play_arrow,
+                          size: 48,
+                        )
+                      : const Icon(
+                          Icons.pause,
+                          size: 48,
+                        ),
+                  onPressed: () {
+                    widget.game.togglePauseState();
+                    setState(
+                      () {
+                        isPaused = !isPaused;
+                      },
+                    );
+                  },
+                ),
+              ],
             ),
           ),
           Positioned(
-            top: 30,
-            right: 30,
-            child: ElevatedButton(
-              child: isPaused
-                  ? const Icon(
-                      Icons.play_arrow,
-                      size: 48,
-                    )
-                  : const Icon(
-                      Icons.pause,
-                      size: 48,
-                    ),
-              onPressed: () {
-                widget.game.togglePauseState();
-                setState(
-                  () {
-                    isPaused = !isPaused;
-                  },
-                );
-              },
+            top: 100,
+            left: 10,
+            child: Container(
+              color: Colors.white10,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Image.asset('assets/images/items/love.png', width: 50),
+                      ValueListenableBuilder(
+                        valueListenable: widget.game.lightnings,
+                        builder: (context, value, child) {
+                          return Text('$value');
+                        },
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Image.asset('assets/images/items/empathy.png', width: 50),
+                      ValueListenableBuilder(
+                        valueListenable: widget.game.bullets,
+                        builder: (context, value, child) {
+                          return Text('$value');
+                        },
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Image.asset('assets/images/items/solidarity.png',
+                          width: 50, height: 50, fit: BoxFit.fill),
+                      ValueListenableBuilder(
+                        valueListenable: widget.game.objects,
+                        builder: (context, value, child) {
+                          return Text('$value');
+                        },
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Image.asset('assets/images/items/respect.png', width: 50),
+                      ValueListenableBuilder(
+                        valueListenable: widget.game.bubbles,
+                        builder: (context, value, child) {
+                          return Text('$value');
+                        },
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Image.asset('assets/images/items/equality.png',
+                          width: 50),
+                      ValueListenableBuilder(
+                        valueListenable: widget.game.coins,
+                        builder: (context, value, child) {
+                          return Text('$value');
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
           if (isMobile)
             Positioned(
-              bottom: MediaQuery.of(context).size.height / 4,
+              bottom: MediaQuery.of(context).size.height / 6,
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: Row(
@@ -95,38 +167,40 @@ class GameOverlayState extends State<GameOverlay> {
                         },
                         child: Material(
                           color: Colors.transparent,
+                          shape: const CircleBorder(),
                           elevation: 3.0,
                           shadowColor: Theme.of(context).colorScheme.background,
-                          child: const Icon(Icons.arrow_left, size: 64),
+                          child: const Icon(Icons.arrow_left, size: 100),
                         ),
                       ),
                     ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(top: 60, bottom: 0, left: 10),
-                      child: GestureDetector(
-                        onTapDown: (details) {
-                          widget.game.hero.fireBullet();
-                        },
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Material(
-                              color: Colors.transparent,
-                              elevation: 3.0,
-                              shadowColor:
-                                  Theme.of(context).colorScheme.background,
-                              child: const Icon(
-                                Icons.favorite,
-                                size: 64,
-                                color: Colors.red,
+                    if (widget.game.bullets.value > 0)
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(top: 60, bottom: 0, left: 10),
+                        child: GestureDetector(
+                          onTapDown: (details) {
+                            widget.game.hero.fireBullet();
+                          },
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Material(
+                                color: Colors.transparent,
+                                shape: const CircleBorder(),
+                                elevation: 3.0,
+                                shadowColor:
+                                    Theme.of(context).colorScheme.background,
+                                child: Image.asset(
+                                    'assets/images/items/love.png',
+                                    width: 64),
                               ),
-                            ),
-                            Positioned(child: HeartDisplay(game: widget.game)),
-                          ],
+                              Positioned(
+                                  child: HeartDisplay(game: widget.game)),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
                     Padding(
                       padding: const EdgeInsets.only(right: 24),
                       child: GestureDetector(
@@ -138,9 +212,10 @@ class GameOverlayState extends State<GameOverlay> {
                         },
                         child: Material(
                           color: Colors.transparent,
+                          shape: const CircleBorder(),
                           elevation: 3.0,
                           shadowColor: Theme.of(context).colorScheme.background,
-                          child: const Icon(Icons.arrow_right, size: 64),
+                          child: const Icon(Icons.arrow_right, size: 100),
                         ),
                       ),
                     ),

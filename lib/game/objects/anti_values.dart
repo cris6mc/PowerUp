@@ -5,26 +5,20 @@ import 'package:forge2d/src/dynamics/body.dart';
 import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/my_game.dart';
 
-enum ValuesType {
-  hate,
-  envy,
-  indifference,
-  violence,
-  injustice
-}
+enum AntiValuesType { hate, envy, indifference, violence, injustice }
 
-extension ValuesTypeExtension on ValuesType {
+extension AntiValuesTypeExtension on AntiValuesType {
   Sprite get sprite {
     switch (this) {
-      case ValuesType.hate:
+      case AntiValuesType.hate:
         return Assets.hate;
-      case ValuesType.envy:
+      case AntiValuesType.envy:
         return Assets.envy;
-      case ValuesType.indifference:
+      case AntiValuesType.indifference:
         return Assets.indifference;
-      case ValuesType.violence:
+      case AntiValuesType.violence:
         return Assets.violence;
-      case ValuesType.injustice:
+      case AntiValuesType.injustice:
         return Assets.injustice;
     }
   }
@@ -35,15 +29,14 @@ class AntiValues extends BodyComponent<MyGame> {
 
   Vector2 _position;
   bool destroy = false;
-  final ValuesType type;
+  final AntiValuesType type;
 
   AntiValues({
     required double x,
     required double y,
-  })
-      : _position = Vector2(x, y),
-        type = ValuesType.values
-            .elementAt(random.nextInt(ValuesType.values.length));
+  })  : _position = Vector2(x, y),
+        type = AntiValuesType.values
+            .elementAt(random.nextInt(AntiValuesType.values.length));
 
   @override
   Future<void> onLoad() async {
@@ -81,10 +74,8 @@ class AntiValues extends BodyComponent<MyGame> {
       type: BodyType.kinematic,
     );
 
-    final shape = PolygonShape()
-      ..setAsBoxXY(.14, .5);
-    final fixtureDef = FixtureDef(shape)
-      ..isSensor = true;
+    final shape = PolygonShape()..setAsBoxXY(.14, .5);
+    final fixtureDef = FixtureDef(shape)..isSensor = true;
     return world.createBody(bodyDef)
       ..createFixture(fixtureDef)
       ..linearVelocity = Vector2(0, 1.5);

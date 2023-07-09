@@ -18,17 +18,34 @@ import 'package:jueguito2/game/utils.dart';
 import 'package:jueguito2/main.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
+import 'values.dart';
+
 enum HeroState {
   jump,
   fall,
   dead,
 }
 
+Map antivaloresValues = {
+  'hate': 0,
+  'envy': 0,
+  'indifference': 0,
+  'violence': 0,
+  'injustice': 0,
+};
+
+Map valoresValues = {
+  'love': 0,
+  'empathy': 0,
+  'solidarity': 0,
+  'respect': 0,
+  'equality': 0,
+};
+
 const _durationJetpack = 3.0;
 
 class MyHero extends BodyComponent<MyGame>
     with ContactCallbacks, KeyboardHandler {
-
   MyHero({
     required this.character,
   });
@@ -124,12 +141,14 @@ class MyHero extends BodyComponent<MyGame>
     durationJetpack = 0;
     if (!hasJetpack) add(jetpackComponent);
     hasJetpack = true;
+    gameRef.lightnings.value++;
   }
 
   void takeBubbleShield() {
     if (state == HeroState.dead) return;
     if (!hasBubbleShield) add(bubbleShieldComponent);
     hasBubbleShield = true;
+    gameRef.bubbles.value++;
   }
 
   //acumular coins
@@ -240,9 +259,52 @@ class MyHero extends BodyComponent<MyGame>
       }
       hit();
     }
-    if (other is AntiValues){
+    if (other is AntiValues) {
+      if (other.type == AntiValuesType.hate) {
+        antivaloresValues['hate']++;
+      }
+      if (other.type == AntiValuesType.envy) {
+        antivaloresValues['envy']++;
+      }
+      if (other.type == AntiValuesType.indifference) {
+        antivaloresValues['indifference']++;
+      }
+      if (other.type == AntiValuesType.violence) {
+        antivaloresValues['violence']++;
+      }
+      if (other.type == AntiValuesType.injustice) {
+        antivaloresValues['injustice']++;
+      }
       other.destroy = true;
       hit();
+    }
+
+    if (other is Values) {
+      if (other.type == ValuesType.love) {
+        valoresValues['love']++;
+        if (valoresValues['love'] > 2) {
+          takeJetpack();
+        }
+      }
+      if (other.type == ValuesType.empathy) {
+        valoresValues['empathy']++;
+        takeBullet();
+      }
+      if (other.type == ValuesType.respect) {
+        valoresValues['solidarity']++;
+        takeBubbleShield();
+      }
+      if (other.type == ValuesType.solidarity) {
+        valoresValues['respect']++;
+        if (gameRef.objects.value < 5) {
+          gameRef.objects.value++;
+        }
+      }
+      if (other.type == ValuesType.equality) {
+        valoresValues['equality']++;
+        takeCoin();
+      }
+      other.destroy = true;
     }
 
     if (other is Lightning) {
