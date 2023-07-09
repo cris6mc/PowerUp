@@ -3,14 +3,14 @@
 // found in the LICENSE file.
 
 import 'dart:io' show Platform;
-import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/my_game.dart';
 import 'package:jueguito2/game/widgets/heart_display.dart';
 import 'package:jueguito2/game/widgets/life_display.dart';
+import 'package:jueguito2/game/widgets/value_display.dart';
 
-import '../doodle_dash.dart';
 import 'widgets.dart';
 
 class GameOverlay extends StatefulWidget {
@@ -38,20 +38,32 @@ class GameOverlayState extends State<GameOverlay> {
           Positioned(
             top: 30,
             left: 30,
-            child: ScoreDisplay(title: 'Score',game: widget.game),
+            child: ScoreDisplay(title: 'Score', game: widget.game),
+          ),
+          Container(
+            padding: const EdgeInsets.only(top: 60, left: 30),
+            child: ListView.builder(
+              itemCount: ValuesType.values.length,
+              itemBuilder: (BuildContext context, int index) {
+                ValuesType valueType = ValuesType.values[index];
+                return ValueDisplay(
+                  type: valueType,
+                  game: widget.game,
+                );
+              },
+            ),
           ),
           Positioned(
             bottom: 10,
             left: 10,
             right: 10,
             child: Container(
-              height: 10,
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: LifeDisplay(game: widget.game)
-            ),
+                height: 10,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: LifeDisplay(game: widget.game)),
           ),
           Positioned(
             top: 30,

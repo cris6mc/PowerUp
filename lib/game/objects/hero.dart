@@ -6,6 +6,7 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/services.dart';
 import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/my_game.dart';
+import 'package:jueguito2/game/objects/Plataform/platform.dart';
 import 'package:jueguito2/game/objects/anti_values.dart';
 import 'package:jueguito2/game/objects/coin.dart';
 import 'package:jueguito2/game/objects/floor.dart';
@@ -14,6 +15,7 @@ import 'package:jueguito2/game/objects/jetpack_group.dart';
 import 'package:jueguito2/game/objects/lightning.dart';
 import 'package:jueguito2/game/objects/platform.dart';
 import 'package:jueguito2/game/objects/power_up.dart';
+import 'package:jueguito2/game/objects/values.dart';
 import 'package:jueguito2/game/utils.dart';
 import 'package:jueguito2/main.dart';
 import 'package:sensors_plus/sensors_plus.dart';
@@ -22,23 +24,35 @@ enum HeroState {
   jump,
   fall,
   dead,
+  left,
+  right,
+  center,
+  rocket,
 }
+
+enum State { jump, fall }
 
 const _durationJetpack = 3.0;
 
 class MyHero extends BodyComponent<MyGame>
     with ContactCallbacks, KeyboardHandler {
-
   MyHero({
     required this.character,
   });
 
   static final size = Vector2(.75, .80);
 
-  var state = HeroState.fall;
+  var state = HeroState.center;
+
+  var stateHero = State.fall;
 
   late final SpriteComponent fallComponent;
   late final SpriteComponent jumpComponent;
+  late final SpriteComponent rightComponent;
+  late final SpriteComponent leftComponent;
+  late final SpriteComponent centerComponent;
+  late final SpriteComponent rocketComponent;
+
   final jetpackComponent = JetpackGroup();
   final bubbleShieldComponent = SpriteComponent(
     sprite: Assets.bubble,
@@ -76,26 +90,54 @@ class MyHero extends BodyComponent<MyGame>
     }
 
     fallComponent = SpriteComponent(
-      sprite: Sprite(await Flame.images.load('${character.name}Fall.png')),
+      sprite: Sprite(await Flame.images.load('${character.name}_center.png')),
       size: size,
       anchor: Anchor.center,
     );
 
     jumpComponent = SpriteComponent(
-      sprite: Sprite(await Flame.images.load('${character.name}Jump.png')),
+      sprite:
+          Sprite(await Flame.images.load('game/${character.name}_center.png')),
       size: size,
       anchor: Anchor.center,
     );
 
-    currentComponent = fallComponent;
+    rightComponent = SpriteComponent(
+      sprite:
+          Sprite(await Flame.images.load('game/${character.name}_right.png')),
+      size: size,
+      anchor: Anchor.center,
+    );
+
+    leftComponent = SpriteComponent(
+      sprite:
+          Sprite(await Flame.images.load('game/${character.name}_left.png')),
+      size: size,
+      anchor: Anchor.center,
+    );
+    centerComponent = SpriteComponent(
+      sprite:
+          Sprite(await Flame.images.load('game/${character.name}_center.png')),
+      size: size,
+      anchor: Anchor.center,
+    );
+    rocketComponent = SpriteComponent(
+      sprite: Sprite(await Flame.images.load('game/rocket_4.png')),
+      size: size,
+      anchor: Anchor.center,
+    );
+
+    currentComponent = centerComponent;
     add(currentComponent);
   }
 
   void jump() {
-    if (state == HeroState.jump || state == HeroState.dead) return;
+    if (stateHero == State.jump || state == HeroState.dead) return;
     final velocity = body.linearVelocity;
     body.linearVelocity = Vector2(velocity.x, -7.5);
-    state = HeroState.jump;
+
+    //state = HeroState.jump;
+    stateHero = State.jump;
   }
 
   void hit() {
@@ -121,8 +163,6 @@ class MyHero extends BodyComponent<MyGame>
 
   void takeJetpack() {
     if (state == HeroState.dead) return;
-    durationJetpack = 0;
-    if (!hasJetpack) add(jetpackComponent);
     hasJetpack = true;
   }
 
@@ -143,7 +183,7 @@ class MyHero extends BodyComponent<MyGame>
   // atacar
   void takeBullet() {
     if (state == HeroState.dead) return;
-    gameRef.bullets.value += 3;
+    gameRef.bullets.value += 4;
   }
 
   void fireBullet() {
@@ -159,14 +199,15 @@ class MyHero extends BodyComponent<MyGame>
     final position = body.position;
 
     if (velocity.y > 0.1 && state != HeroState.dead) {
-      state = HeroState.fall;
+      stateHero = State.fall;
     }
 
     if (hasJetpack) {
       durationJetpack += dt;
       if (durationJetpack >= _durationJetpack) {
         hasJetpack = false;
-        remove(jetpackComponent);
+        state = HeroState.center;
+        //remove(jetpackComponent);
       }
       velocity.y = -7.5;
     }
@@ -188,6 +229,14 @@ class MyHero extends BodyComponent<MyGame>
       _setComponent(fallComponent);
     } else if (state == HeroState.dead) {
       _setComponent(fallComponent);
+    } else if (state == HeroState.center) {
+      _setComponent(centerComponent);
+    } else if (state == HeroState.right) {
+      _setComponent(rightComponent);
+    } else if (state == HeroState.left) {
+      _setComponent(leftComponent);
+    } else if (state == HeroState.rocket) {
+      _setComponent(rocketComponent);
     }
   }
 
@@ -233,16 +282,22 @@ class MyHero extends BodyComponent<MyGame>
       other.destroy = true;
       {
         /*
-      if (hasBubbleShield) {
-      other.destroy = true
-      }
-      */
+        if (hasBubbleShield) {
+        other.destroy = true
+        }
+        */
       }
       hit();
     }
-    if (other is AntiValues){
+    if (other is AntiValues) {
       other.destroy = true;
       hit();
+    }
+
+    if (other is Values) {
+      other.destroy = true;
+      final ValuesType type = other.type;
+      gameRef.updateValue(type);
     }
 
     if (other is Lightning) {
@@ -252,6 +307,7 @@ class MyHero extends BodyComponent<MyGame>
 
     if (other is PowerUp) {
       if (other.type == PowerUpType.jetpack) {
+        state = HeroState.rocket;
         takeJetpack();
       }
       if (other.type == PowerUpType.bubble) {
@@ -271,9 +327,13 @@ class MyHero extends BodyComponent<MyGame>
     }
 
     if (other is Platform) {
-      if (state == HeroState.fall && other.type.isBroken) {
+      if (stateHero == State.fall && other.type.isBroken) {
         other.destroy = true;
       }
+      jump();
+    }
+
+    if (other is Platform2) {
       jump();
     }
   }
@@ -281,6 +341,14 @@ class MyHero extends BodyComponent<MyGame>
   @override
   void preSolve(Object other, Contact contact, Manifold oldManifold) {
     if (other is Platform) {
+      final heroY = body.position.y - size.y / 2;
+      final platformY = other.body.position.y + Platform.size.y / 2;
+
+      if (heroY < platformY) {
+        contact.setEnabled(false);
+      }
+    }
+    if (other is Platform2) {
       final heroY = body.position.y - size.y / 2;
       final platformY = other.body.position.y + Platform.size.y / 2;
 
@@ -309,10 +377,13 @@ class MyHero extends BodyComponent<MyGame>
   }
 
   void moveLeft() {
+    if (state != HeroState.rocket) state = HeroState.left;
+
     accelerationX = -1;
   }
 
   void moveRight() {
+    if (state != HeroState.rocket) state = HeroState.right;
     accelerationX = 1;
   }
 

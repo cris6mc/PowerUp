@@ -1,38 +1,17 @@
 import 'package:flame/components.dart';
-import 'package:flame_forge2d/body_component.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-import 'package:forge2d/src/dynamics/body.dart';
 import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/my_game.dart';
 
-extension ValuesTypeExtension on ValuesType {
-  Sprite get sprite {
-    switch (this) {
-      case ValuesType.empathy:
-        return Assets.empathy;
-      case ValuesType.solidarity:
-        return Assets.solidarity;
-      case ValuesType.respect:
-        return Assets.respect;
-      case ValuesType.equality:
-        return Assets.equality;
-    }
-  }
-}
-
-class Values extends BodyComponent<MyGame> {
+class Love extends BodyComponent<MyGame> {
   static Vector2 size = Vector2(.6, .6);
 
   Vector2 _position;
-  bool destroy = false;
-  final ValuesType type;
 
-  Values({
+  Love({
     required double x,
     required double y,
-  })  : _position = Vector2(x, y),
-        type = ValuesType.values
-            .elementAt(random.nextInt(ValuesType.values.length));
+  }) : _position = Vector2(x, y);
 
   @override
   Future<void> onLoad() async {
@@ -40,10 +19,10 @@ class Values extends BodyComponent<MyGame> {
     renderBody = false;
 
     add(
-      SpriteComponent(
-        sprite: type.sprite,
-        size: size,
+      SpriteAnimationComponent(
+        animation: Assets.love.clone(),
         anchor: Anchor.center,
+        size: size,
       ),
     );
   }
@@ -51,12 +30,11 @@ class Values extends BodyComponent<MyGame> {
   @override
   void update(double dt) {
     super.update(dt);
-
     _position = body.position;
 
     bool isOutOfScreen = gameRef.isOutOfScreen(body.position);
 
-    if (destroy || isOutOfScreen) {
+    if (isOutOfScreen) {
       world.destroyBody(body);
       gameRef.remove(this);
     }
@@ -74,6 +52,6 @@ class Values extends BodyComponent<MyGame> {
     final fixtureDef = FixtureDef(shape)..isSensor = true;
     return world.createBody(bodyDef)
       ..createFixture(fixtureDef)
-      ..linearVelocity = Vector2(0, 1.5);
+      ..linearVelocity = Vector2(0, 1);
   }
 }
