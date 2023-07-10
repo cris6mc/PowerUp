@@ -26,12 +26,16 @@ class ValueDisplay extends StatelessWidget {
             ),
             const SizedBox(
                 width: 10),
-            Text(
-              '$value',
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+            SizedBox(
+              width: 20,
+              child: Text(
+                '$value',
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white
+                ),
+                textAlign: TextAlign.center,
               ),
             ),
           ],

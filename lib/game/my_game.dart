@@ -19,7 +19,10 @@ import 'package:jueguito2/game/objects/platform.dart';
 import 'package:jueguito2/game/objects/platform_pieces.dart';
 import 'package:jueguito2/game/objects/power_up.dart';
 import 'package:jueguito2/game/objects/values.dart';
+import 'package:jueguito2/login/kid/provider/firestore_kid.dart';
 import 'package:jueguito2/main.dart';
+
+import '../login/kid/view/list_kids.dart';
 
 final screenSize = Vector2(428, 926);
 final worldSize = Vector2(4.28, 9.26);
@@ -128,6 +131,11 @@ class MyGame extends Forge2DGame
 
       if ((score.value - worldSize.y) > heroY || hero.state == HeroState.dead) {
         state = GameState.gameOver;
+        //funcion de envio de contador de valores
+        if (saveValues == true) {
+          //updateKidValores(indexKid!, null, antivaloresValues);
+        }
+
         HighScores.saveNewScore(score.value);
         overlays.add('GameOverMenu');
       }
@@ -148,20 +156,20 @@ class MyGame extends Forge2DGame
   void generateNextSectionOfWorld() {
     for (int i = 0; i < 10; i++) {
       if (score.value < 100) {
-        add(Platform2(
+        add(Platform(
           x: worldSize.x * random.nextDouble(),
           y: generatedWorldHeight,
         ));
-        add(Platform2(
+        add(Platform(
           x: worldSize.x * random.nextDouble(),
           y: generatedWorldHeight,
         ));
-        if (random.nextDouble() < .1) {
+        if (random.nextDouble() < .5) {
           add(AntiValues(
             x: worldSize.x * random.nextDouble(),
             y: generatedWorldHeight - 1.5,
           ));
-        } else if (random.nextDouble() < .4) {
+        } else if (random.nextDouble() < .6) {
           add(Values(
               x: worldSize.x * random.nextDouble(),
               y: generatedWorldHeight - 1.5));
@@ -170,14 +178,30 @@ class MyGame extends Forge2DGame
               x: worldSize.x * random.nextDouble(),
               y: generatedWorldHeight - 1.5));
         }
-        if (random.nextDouble() < .2) {
-          add(PowerUp(
+
+        // if (random.nextDouble() < .2) {
+        //   add(PowerUp(
+        //     x: worldSize.x * random.nextDouble(),
+        //     y: generatedWorldHeight - 1.5,
+        //   ));
+        //   if (random.nextDouble() < .2) {
+        //     addCoins();
+        //   }
+        // }
+      } else if (score.value >= 100 && score.value < 300) {
+        add(Platform2(
+          x: worldSize.x * random.nextDouble(),
+          y: generatedWorldHeight,
+        ));
+        if (random.nextDouble() < .5) {
+          add(AntiValues(
             x: worldSize.x * random.nextDouble(),
             y: generatedWorldHeight - 1.5,
           ));
-          if (random.nextDouble() < .2) {
-            addCoins();
-          }
+        } else if (random.nextDouble() < .6) {
+          add(Values(
+              x: worldSize.x * random.nextDouble(),
+              y: generatedWorldHeight - 1.5));
         }
       } else {
         add(Platform(
@@ -194,15 +218,15 @@ class MyGame extends Forge2DGame
               x: worldSize.x * random.nextDouble(),
               y: generatedWorldHeight - 1.5));
         }
-        if (random.nextDouble() < .3) {
-          add(PowerUp(
-            x: worldSize.x * random.nextDouble(),
-            y: generatedWorldHeight - 1.5,
-          ));
-          if (random.nextDouble() < .2) {
-            addCoins();
-          }
-        }
+        // if (score.value % 5 == 0) {
+        //   add(PowerUp(
+        //     x: worldSize.x * random.nextDouble(),
+        //     y: generatedWorldHeight - 1.5,
+        //   ));
+        //   if (random.nextDouble() < .4) {
+        //     addCoins();
+        //   }
+        // }
       }
       generatedWorldHeight -= 2.7;
     }

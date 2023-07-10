@@ -20,6 +20,8 @@ import 'package:jueguito2/game/utils.dart';
 import 'package:jueguito2/main.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
+import 'values.dart';
+
 enum HeroState {
   jump,
   fall,
@@ -29,8 +31,8 @@ enum HeroState {
   center,
   rocket,
 }
-
 enum State { jump, fall }
+
 
 const _durationJetpack = 3.0;
 
@@ -164,12 +166,14 @@ class MyHero extends BodyComponent<MyGame>
   void takeJetpack() {
     if (state == HeroState.dead) return;
     hasJetpack = true;
+    gameRef.lightnings.value++;
   }
 
   void takeBubbleShield() {
     if (state == HeroState.dead) return;
     if (!hasBubbleShield) add(bubbleShieldComponent);
     hasBubbleShield = true;
+    gameRef.bubbles.value++;
   }
 
   //acumular coins
@@ -277,6 +281,26 @@ class MyHero extends BodyComponent<MyGame>
   }
 
   @override
+  void preSolve(Object other, Contact contact, Manifold oldManifold) {
+    if (other is Platform) {
+      final heroY = body.position.y - size.y / 2;
+      final platformY = other.body.position.y + Platform.size.y / 2;
+
+      if (heroY < platformY) {
+        contact.setEnabled(false);
+      }
+    }
+    if (other is Platform2) {
+      final heroY = body.position.y - size.y / 2;
+      final platformY = other.body.position.y + Platform.size.y / 2;
+
+      if (heroY < platformY) {
+        contact.setEnabled(false);
+      }
+    }
+  }
+
+  @override
   void beginContact(Object other, Contact contact) {
     if (other is HearthEnemy) {
       other.destroy = true;
@@ -298,6 +322,7 @@ class MyHero extends BodyComponent<MyGame>
       other.destroy = true;
       final ValuesType type = other.type;
       gameRef.updateValue(type);
+
     }
 
     if (other is Lightning) {
@@ -335,26 +360,6 @@ class MyHero extends BodyComponent<MyGame>
 
     if (other is Platform2) {
       jump();
-    }
-  }
-
-  @override
-  void preSolve(Object other, Contact contact, Manifold oldManifold) {
-    if (other is Platform) {
-      final heroY = body.position.y - size.y / 2;
-      final platformY = other.body.position.y + Platform.size.y / 2;
-
-      if (heroY < platformY) {
-        contact.setEnabled(false);
-      }
-    }
-    if (other is Platform2) {
-      final heroY = body.position.y - size.y / 2;
-      final platformY = other.body.position.y + Platform.size.y / 2;
-
-      if (heroY < platformY) {
-        contact.setEnabled(false);
-      }
     }
   }
 

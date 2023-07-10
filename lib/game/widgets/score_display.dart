@@ -5,11 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:jueguito2/game/my_game.dart';
 
 class ScoreDisplay extends StatelessWidget {
-  const ScoreDisplay({super.key, required this.game, required this.title, this.isLight = false});
+  const ScoreDisplay({super.key, required this.game, this.isLight = false});
 
   final MyGame game;
   final bool isLight;
-  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +16,24 @@ class ScoreDisplay extends StatelessWidget {
       // valueListenable: (game as DoodleDash).gameManager.score,
       valueListenable: game.score,
       builder: (context, value, child) {
-        return Text(
-          '$title: $value',
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+        return Container(
+          width: 70,
+          height: 70,
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.blue,
+          ),
+          child: ClipOval(
+            child: Center(
+              child: Text(
+                '$value',
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
           ),
         );
       },
