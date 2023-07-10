@@ -3,14 +3,14 @@
 // found in the LICENSE file.
 
 import 'dart:io' show Platform;
-import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/my_game.dart';
 import 'package:jueguito2/game/widgets/heart_display.dart';
 import 'package:jueguito2/game/widgets/life_display.dart';
+import 'package:jueguito2/game/widgets/value_display.dart';
 
-import '../doodle_dash.dart';
 import 'widgets.dart';
 
 class GameOverlay extends StatefulWidget {
@@ -57,17 +57,17 @@ class GameOverlayState extends State<GameOverlay> {
                 ElevatedButton(
                   child: isPaused
                       ? const Icon(
-                          Icons.play_arrow,
-                          size: 48,
-                        )
+                    Icons.play_arrow,
+                    size: 48,
+                  )
                       : const Icon(
-                          Icons.pause,
-                          size: 48,
-                        ),
+                    Icons.pause,
+                    size: 48,
+                  ),
                   onPressed: () {
                     widget.game.togglePauseState();
                     setState(
-                      () {
+                          () {
                         isPaused = !isPaused;
                       },
                     );
@@ -76,76 +76,17 @@ class GameOverlayState extends State<GameOverlay> {
               ],
             ),
           ),
-          Positioned(
-            top: 100,
-            left: 10,
-            child: Container(
-              color: Colors.white10,
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Image.asset('assets/images/items/love.png', width: 50),
-                      ValueListenableBuilder(
-                        valueListenable: widget.game.lightnings,
-                        builder: (context, value, child) {
-                          return Text('$value');
-                        },
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Image.asset('assets/images/items/empathy.png', width: 50),
-                      ValueListenableBuilder(
-                        valueListenable: widget.game.bullets,
-                        builder: (context, value, child) {
-                          return Text('$value');
-                        },
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Image.asset('assets/images/items/solidarity.png',
-                          width: 50, height: 50, fit: BoxFit.fill),
-                      ValueListenableBuilder(
-                        valueListenable: widget.game.objects,
-                        builder: (context, value, child) {
-                          return Text('$value');
-                        },
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Image.asset('assets/images/items/respect.png', width: 50),
-                      ValueListenableBuilder(
-                        valueListenable: widget.game.bubbles,
-                        builder: (context, value, child) {
-                          return Text('$value');
-                        },
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Image.asset('assets/images/items/equality.png',
-                          width: 50),
-                      ValueListenableBuilder(
-                        valueListenable: widget.game.coins,
-                        builder: (context, value, child) {
-                          return Text('$value');
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+          Container(
+            padding: const EdgeInsets.only(top: 100, left: 30),
+            child: ListView.builder(
+              itemCount: ValuesType.values.length,
+              itemBuilder: (BuildContext context, int index) {
+                ValuesType valueType = ValuesType.values[index];
+                return ValueDisplay(
+                  type: valueType,
+                  game: widget.game,
+                );
+              },
             ),
           ),
           if (isMobile)
