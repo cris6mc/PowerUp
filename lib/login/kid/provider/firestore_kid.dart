@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:jueguito2/game/my_game.dart';
 
 FirebaseFirestore get firestore => FirebaseFirestore.instance;
 
@@ -63,7 +64,7 @@ Future<void> updateKidDescription(int index, String? description) async {
   }
 }
 
-Future<void> updateKidValores(int index, Map? valores, Map? antivalores) async {
+Future<void> updateKidValores(int index, Map<ValuesType, int> valores, Map<AntiValuesType, int> antivalores) async {
   final DocumentReference documentReference =
       FirebaseFirestore.instance.collection('users').doc(currentUser.uid);
   DocumentSnapshot documentSnapshot = await documentReference.get();

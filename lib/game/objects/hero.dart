@@ -315,6 +315,8 @@ class MyHero extends BodyComponent<MyGame>
     }
     if (other is AntiValues) {
       other.destroy = true;
+      final AntiValuesType type = other.type;
+      gameRef.updateAntiValue(type);
       hit();
     }
 
@@ -322,7 +324,6 @@ class MyHero extends BodyComponent<MyGame>
       other.destroy = true;
       final ValuesType type = other.type;
       gameRef.updateValue(type);
-
     }
 
     if (other is Lightning) {

@@ -34,7 +34,8 @@ enum GameState {
   gameOver,
 }
 
-enum ValuesType { empathy, solidarity, respect, equality }
+enum ValuesType { empathy, solidarity, respect, equality,love }
+enum AntiValuesType { hate, envy, indifference, violence, injustice }
 
 class MyGame extends Forge2DGame
     with HasKeyboardHandlerComponents, TapDetector {
@@ -57,10 +58,19 @@ class MyGame extends Forge2DGame
   ValueNotifier<int> lightnings = ValueNotifier(0);
 
   ValueNotifier<Map<ValuesType, int>> valuesNotifier = ValueNotifier({
+    ValuesType.love: 0,
     ValuesType.empathy: 0,
     ValuesType.solidarity: 0,
     ValuesType.respect: 0,
     ValuesType.equality: 0,
+  });
+
+  ValueNotifier<Map<AntiValuesType, int>> antiValuesNotifier = ValueNotifier({
+    AntiValuesType.hate: 0,
+    AntiValuesType.envy: 0,
+    AntiValuesType.indifference: 0,
+    AntiValuesType.violence: 0,
+    AntiValuesType.injustice: 0,
   });
 
   // Scale the screenSize by 100 and set the gravity of 15
@@ -73,6 +83,12 @@ class MyGame extends Forge2DGame
     final Map<ValuesType, int> currentValues = Map.from(valuesNotifier.value);
     currentValues[type] = (currentValues[type] ?? 0) + 1;
     valuesNotifier.value = currentValues;
+  }
+
+  void updateAntiValue(AntiValuesType type) {
+    final Map<AntiValuesType, int> currentAntiValues = Map.from(antiValuesNotifier.value);
+    currentAntiValues[type] = (currentAntiValues[type] ?? 0) + 1;
+    antiValuesNotifier.value = currentAntiValues;
   }
 
   @override
@@ -131,9 +147,11 @@ class MyGame extends Forge2DGame
 
       if ((score.value - worldSize.y) > heroY || hero.state == HeroState.dead) {
         state = GameState.gameOver;
+        print(valuesNotifier.value);
+        print(antiValuesNotifier.value);
         //funcion de envio de contador de valores
         if (saveValues == true) {
-          //updateKidValores(indexKid!, null, antivaloresValues);
+          //updateKidValores(indexKid!, valuesNotifier.value, null);
         }
 
         HighScores.saveNewScore(score.value);
@@ -171,10 +189,6 @@ class MyGame extends Forge2DGame
           ));
         } else if (random.nextDouble() < .6) {
           add(Values(
-              x: worldSize.x * random.nextDouble(),
-              y: generatedWorldHeight - 1.5));
-        } else if (random.nextDouble() < .5) {
-          add(Love(
               x: worldSize.x * random.nextDouble(),
               y: generatedWorldHeight - 1.5));
         }

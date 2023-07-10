@@ -5,9 +5,6 @@ import 'package:forge2d/src/dynamics/body.dart';
 import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/my_game.dart';
 
-enum AntiValuesType { hate, envy, indifference, violence, injustice }
-
-
 extension AntiValuesTypeExtension on AntiValuesType {
   Sprite get sprite {
     switch (this) {
