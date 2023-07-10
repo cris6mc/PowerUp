@@ -8,16 +8,21 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/high_scores.dart';
+import 'package:jueguito2/game/objects/Plataform/platform.dart';
+import 'package:jueguito2/game/objects/Values/love.dart';
+import 'package:jueguito2/game/objects/anti_values.dart';
 import 'package:jueguito2/game/objects/bullet.dart';
-import 'package:jueguito2/game/objects/cloud_enemy.dart';
 import 'package:jueguito2/game/objects/coin.dart';
 import 'package:jueguito2/game/objects/floor.dart';
-import 'package:jueguito2/game/objects/hearth_enemy.dart';
 import 'package:jueguito2/game/objects/hero.dart';
 import 'package:jueguito2/game/objects/platform.dart';
 import 'package:jueguito2/game/objects/platform_pieces.dart';
 import 'package:jueguito2/game/objects/power_up.dart';
+import 'package:jueguito2/game/objects/values.dart';
+import 'package:jueguito2/login/kid/provider/firestore_kid.dart';
 import 'package:jueguito2/main.dart';
+
+import '../login/kid/view/list_kids.dart';
 
 final screenSize = Vector2(428, 926);
 final worldSize = Vector2(4.28, 9.26);
@@ -29,13 +34,15 @@ enum GameState {
   gameOver,
 }
 
+enum ValuesType { empathy, solidarity, respect, equality,love }
+enum AntiValuesType { hate, envy, indifference, violence, injustice }
+
 class MyGame extends Forge2DGame
     with HasKeyboardHandlerComponents, TapDetector {
   late final MyHero hero;
 
   // int score = 0;
   ValueNotifier<int> score = ValueNotifier(0);
-  int coins = 0;
 
   // int bullets = 0;
   ValueNotifier<int> bullets = ValueNotifier(0);
@@ -44,11 +51,45 @@ class MyGame extends Forge2DGame
 
   var state = GameState.running;
 
+  // Object counter
+  ValueNotifier<int> coins = ValueNotifier(0);
+  ValueNotifier<int> bubbles = ValueNotifier(0);
+  ValueNotifier<int> fires = ValueNotifier(0);
+  ValueNotifier<int> lightnings = ValueNotifier(0);
+
+  ValueNotifier<Map<ValuesType, int>> valuesNotifier = ValueNotifier({
+    ValuesType.love: 0,
+    ValuesType.empathy: 0,
+    ValuesType.solidarity: 0,
+    ValuesType.respect: 0,
+    ValuesType.equality: 0,
+  });
+
+  ValueNotifier<Map<AntiValuesType, int>> antiValuesNotifier = ValueNotifier({
+    AntiValuesType.hate: 0,
+    AntiValuesType.envy: 0,
+    AntiValuesType.indifference: 0,
+    AntiValuesType.violence: 0,
+    AntiValuesType.injustice: 0,
+  });
+
   // Scale the screenSize by 100 and set the gravity of 15
-  MyGame({required this.character}
-  ) : super(zoom: 100, gravity: Vector2(0, 9.8));
+  MyGame({required this.character})
+      : super(zoom: 100, gravity: Vector2(0, 9.8));
 
   Character character;
+
+  void updateValue(ValuesType type) {
+    final Map<ValuesType, int> currentValues = Map.from(valuesNotifier.value);
+    currentValues[type] = (currentValues[type] ?? 0) + 1;
+    valuesNotifier.value = currentValues;
+  }
+
+  void updateAntiValue(AntiValuesType type) {
+    final Map<AntiValuesType, int> currentAntiValues = Map.from(antiValuesNotifier.value);
+    currentAntiValues[type] = (currentAntiValues[type] ?? 0) + 1;
+    antiValuesNotifier.value = currentAntiValues;
+  }
 
   @override
   Future<void> onLoad() async {
@@ -82,7 +123,7 @@ class MyGame extends Forge2DGame
     await add(hero);
 
     final worldBounds =
-    Rect.fromLTRB(0, -double.infinity, worldSize.x, worldSize.y);
+        Rect.fromLTRB(0, -double.infinity, worldSize.x, worldSize.y);
     camera.followBodyComponent(hero, worldBounds: worldBounds);
   }
 
@@ -106,6 +147,13 @@ class MyGame extends Forge2DGame
 
       if ((score.value - worldSize.y) > heroY || hero.state == HeroState.dead) {
         state = GameState.gameOver;
+        print(valuesNotifier.value);
+        print(antiValuesNotifier.value);
+        //funcion de envio de contador de valores
+        if (saveValues == true) {
+          //updateKidValores(indexKid!, valuesNotifier.value, null);
+        }
+
         HighScores.saveNewScore(score.value);
         overlays.add('GameOverMenu');
       }
@@ -134,52 +182,65 @@ class MyGame extends Forge2DGame
           x: worldSize.x * random.nextDouble(),
           y: generatedWorldHeight,
         ));
-        if (random.nextDouble() < .1) {
-          add(HearthEnemy(
+        if (random.nextDouble() < .5) {
+          add(AntiValues(
             x: worldSize.x * random.nextDouble(),
             y: generatedWorldHeight - 1.5,
           ));
-        } else if (random.nextDouble() < .2) {
-          add(CloudEnemy(
-            x: worldSize.x * random.nextDouble(),
-            y: generatedWorldHeight - 1.5,
-          ));
+        } else if (random.nextDouble() < .6) {
+          add(Values(
+              x: worldSize.x * random.nextDouble(),
+              y: generatedWorldHeight - 1.5));
         }
-        if (random.nextDouble() < .2) {
-          add(PowerUp(
+
+        // if (random.nextDouble() < .2) {
+        //   add(PowerUp(
+        //     x: worldSize.x * random.nextDouble(),
+        //     y: generatedWorldHeight - 1.5,
+        //   ));
+        //   if (random.nextDouble() < .2) {
+        //     addCoins();
+        //   }
+        // }
+      } else if (score.value >= 100 && score.value < 300) {
+        add(Platform2(
+          x: worldSize.x * random.nextDouble(),
+          y: generatedWorldHeight,
+        ));
+        if (random.nextDouble() < .5) {
+          add(AntiValues(
             x: worldSize.x * random.nextDouble(),
             y: generatedWorldHeight - 1.5,
           ));
-          if (random.nextDouble() < .2) {
-            addCoins();
-          }
+        } else if (random.nextDouble() < .6) {
+          add(Values(
+              x: worldSize.x * random.nextDouble(),
+              y: generatedWorldHeight - 1.5));
         }
       } else {
         add(Platform(
           x: worldSize.x * random.nextDouble(),
           y: generatedWorldHeight,
         ));
-
-        if (random.nextDouble() < .3) {
-          add(HearthEnemy(
+        if (random.nextDouble() < .2) {
+          add(AntiValues(
             x: worldSize.x * random.nextDouble(),
             y: generatedWorldHeight - 1.5,
           ));
-        } else if (random.nextDouble() < .2) {
-          add(CloudEnemy(
-            x: worldSize.x * random.nextDouble(),
-            y: generatedWorldHeight - 1.5,
-          ));
+        } else if (random.nextDouble() < .4) {
+          add(Values(
+              x: worldSize.x * random.nextDouble(),
+              y: generatedWorldHeight - 1.5));
         }
-        if (random.nextDouble() < .3) {
-          add(PowerUp(
-            x: worldSize.x * random.nextDouble(),
-            y: generatedWorldHeight - 1.5,
-          ));
-          if (random.nextDouble() < .2) {
-            addCoins();
-          }
-        }
+        // if (score.value % 5 == 0) {
+        //   add(PowerUp(
+        //     x: worldSize.x * random.nextDouble(),
+        //     y: generatedWorldHeight - 1.5,
+        //   ));
+        //   if (random.nextDouble() < .4) {
+        //     addCoins();
+        //   }
+        // }
       }
       generatedWorldHeight -= 2.7;
     }

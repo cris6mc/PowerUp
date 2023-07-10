@@ -9,6 +9,9 @@ import '../../login/model/user.dart';
 import '../../login/provider/my_user_repository.dart';
 import 'estadisticas.dart';
 
+bool saveValues = false;
+int? indexKid;
+
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
   static Widget create(BuildContext context) {
@@ -56,33 +59,26 @@ class _ListKidsState extends State<ListKids> {
           ElevatedButton(
               onPressed: () {
                 showDialog(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                    title: const Text('Comenzar a jugar'),
-                    content: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text('Escoge tu personaje'),
-                        Container(
-                          height: 55,
-                          width: 55,
-                          color: Colors.red,
-                        ),
-                      ],
-                    ),
-                    actions: [
-                      Center(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('JUGAR'),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                          title: const Text('Comenzar a jugar'),
+                          content: const Text('Escoge un personaje'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Cancelar'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                saveValues = true;
+                                indexKid = index;
+                              },
+                              child: const Text('JUGAR'),
+                            ),
+                          ],
+                        ));
               },
               child: Text(name)),
           const SizedBox(width: 10),

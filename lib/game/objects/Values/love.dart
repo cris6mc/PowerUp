@@ -3,12 +3,12 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/my_game.dart';
 
-class Lightning extends BodyComponent<MyGame> {
-  static Vector2 size = Vector2(.28, 1.02);
+class Love extends BodyComponent<MyGame> {
+  static Vector2 size = Vector2(.6, .6);
 
   Vector2 _position;
 
-  Lightning({
+  Love({
     required double x,
     required double y,
   }) : _position = Vector2(x, y);
@@ -20,7 +20,7 @@ class Lightning extends BodyComponent<MyGame> {
 
     add(
       SpriteAnimationComponent(
-        animation: Assets.lightning.clone(),
+        animation: Assets.loveA.clone(),
         anchor: Anchor.center,
         size: size,
       ),
@@ -33,7 +33,7 @@ class Lightning extends BodyComponent<MyGame> {
     _position = body.position;
 
     bool isOutOfScreen = gameRef.isOutOfScreen(body.position);
-    
+
     if (isOutOfScreen) {
       world.destroyBody(body);
       gameRef.remove(this);
@@ -52,6 +52,6 @@ class Lightning extends BodyComponent<MyGame> {
     final fixtureDef = FixtureDef(shape)..isSensor = true;
     return world.createBody(bodyDef)
       ..createFixture(fixtureDef)
-      ..linearVelocity = Vector2(0, 3);
+      ..linearVelocity = Vector2(0, 1);
   }
 }

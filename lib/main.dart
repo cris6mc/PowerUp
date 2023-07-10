@@ -10,7 +10,6 @@ import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/high_scores.dart';
 import 'package:jueguito2/game/my_game.dart';
 import 'package:jueguito2/game/navigation/routes.dart';
-import 'package:jueguito2/game/ui/game_over_menu.dart';
 import 'package:jueguito2/game/ui/pause_menu.dart';
 import 'package:jueguito2/game/util/color_schemes.dart';
 import 'package:jueguito2/game/widgets/game_over_overlay.dart';
@@ -40,7 +39,7 @@ Future<void> main() async {
   ], child: MyApp.create()));
 }
 
-enum Character { dash, sparky, hero }
+enum Character { dash, sparky, hero, human }
 
 class MyProvider with ChangeNotifier {
   Character _myValue = Character.dash;
