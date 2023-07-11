@@ -39,7 +39,7 @@ Future<void> main() async {
   ], child: MyApp.create()));
 }
 
-enum Character { dash, sparky, hero, human }
+enum Character { dash, sparky }
 
 class MyProvider with ChangeNotifier {
   Character _myValue = Character.dash;

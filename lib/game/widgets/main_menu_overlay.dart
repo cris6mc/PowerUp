@@ -79,33 +79,11 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CharacterButton(
-                            character: Character.human,
-                            selected: character == Character.human,
-                            onSelectChar: () {
-                              setState(() {
-                                character = Character.human;
-                              });
-                            },
-                            characterWidth: characterWidth,
-                          ),
-                          const HorizontalSpace(),
-                          CharacterButton(
                             character: Character.dash,
                             selected: character == Character.dash,
                             onSelectChar: () {
                               setState(() {
                                 character = Character.dash;
-                              });
-                            },
-                            characterWidth: characterWidth,
-                          ),
-                          const HorizontalSpace(),
-                          CharacterButton(
-                            character: Character.hero,
-                            selected: character == Character.hero,
-                            onSelectChar: () {
-                              setState(() {
-                                character = Character.hero;
                               });
                             },
                             characterWidth: characterWidth,
