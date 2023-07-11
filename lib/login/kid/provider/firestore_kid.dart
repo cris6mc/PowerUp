@@ -64,15 +64,22 @@ Future<void> updateKidDescription(int index, String? description) async {
   }
 }
 
-Future<void> updateKidValores(int index, Map<ValuesType, int> valores, Map<AntiValuesType, int> antivalores) async {
+Future<void> updateKidValores(int index, Map<ValuesType, int> valores,
+    Map<AntiValuesType, int> antivalores) async {
+  Map<String, int> convertedValores =
+      valores.map((key, value) => MapEntry(key.toString(), value));
+
+  Map<String, int> convertedAntiValores =
+      antivalores.map((key, value) => MapEntry(key.toString(), value));
+
   final DocumentReference documentReference =
       FirebaseFirestore.instance.collection('users').doc(currentUser.uid);
   DocumentSnapshot documentSnapshot = await documentReference.get();
   if (documentSnapshot.exists) {
     Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
-    List<Map<String, dynamic>> array = data['kids'];
-    array[index]['valores'] = valores;
-    array[index]['antivalores'] = antivalores;
+    List array = data['kids'];
+    array[index]['valores'] = convertedValores;
+    array[index]['antivalores'] = convertedAntiValores;
     await documentReference.update({'kids': array});
   }
 }

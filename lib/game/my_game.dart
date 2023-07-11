@@ -34,7 +34,8 @@ enum GameState {
   gameOver,
 }
 
-enum ValuesType { empathy, solidarity, respect, equality,love }
+enum ValuesType { empathy, solidarity, respect, equality, love }
+
 enum AntiValuesType { hate, envy, indifference, violence, injustice }
 
 class MyGame extends Forge2DGame
@@ -86,7 +87,8 @@ class MyGame extends Forge2DGame
   }
 
   void updateAntiValue(AntiValuesType type) {
-    final Map<AntiValuesType, int> currentAntiValues = Map.from(antiValuesNotifier.value);
+    final Map<AntiValuesType, int> currentAntiValues =
+        Map.from(antiValuesNotifier.value);
     currentAntiValues[type] = (currentAntiValues[type] ?? 0) + 1;
     antiValuesNotifier.value = currentAntiValues;
   }
@@ -151,7 +153,10 @@ class MyGame extends Forge2DGame
         print(antiValuesNotifier.value);
         //funcion de envio de contador de valores
         if (saveValues == true) {
-          //updateKidValores(indexKid!, valuesNotifier.value, null);
+          print('enviando info index: $indexKid');
+          updateKidValores(
+              indexKid!, valuesNotifier.value, antiValuesNotifier.value);
+          print('info enviada');
         }
 
         HighScores.saveNewScore(score.value);

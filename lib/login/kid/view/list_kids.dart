@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jueguito2/login/kid/view/add_kid.dart';
 
+import '../../../game/navigation/routes.dart';
+import '../../../main.dart';
 import '../../../other screens/splash_screen.dart';
 import '../../login/cubit/auth_cubit.dart';
 import '../../login/cubit/my_user_cubit.dart';
@@ -71,9 +73,10 @@ class _ListKidsState extends State<ListKids> {
                               child: const Text('Cancelar'),
                             ),
                             ElevatedButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 saveValues = true;
                                 indexKid = index;
+                                context.pushAndRemoveUntil(Routes.game);
                               },
                               child: const Text('JUGAR'),
                             ),

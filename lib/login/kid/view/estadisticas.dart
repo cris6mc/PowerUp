@@ -24,18 +24,22 @@ class _FlBarChartExampleState extends State<FlBarChartExample> {
         widget.kid?['valores'] ?? {'1': 0, '2': 0, '3': 0, '4': 0, '5': 0};
     Map antivalores =
         widget.kid?['antivalores'] ?? {'1': 0, '2': 0, '3': 0, '4': 0, '5': 0};
+
+    List valoreskeysList = valores.values.toList();
+    List antivaloreskeysList = antivalores.values.toList();
+
     final barGroups = <BarChartGroupData>[
-      for (final entry in valores.entries)
+      for (int i = 0; i < 5; i++)
         BarChartGroupData(
-          x: int.parse(entry.key),
+          x: i + 1,
           barRods: [
             BarChartRodData(
-              toY: entry.value.toDouble(),
+              toY: valoreskeysList[i]!.toDouble(),
               color: Colors.blue,
               width: 15,
             ),
             BarChartRodData(
-              toY: antivalores[entry.key]!.toDouble(),
+              toY: antivaloreskeysList[i]!.toDouble(),
               color: Colors.red,
               width: 15,
             ),
@@ -46,23 +50,20 @@ class _FlBarChartExampleState extends State<FlBarChartExample> {
     Widget getBottomTitles(double value, TitleMeta meta) {
       Widget text = Transform.rotate(angle: 0.5, child: const Text(''));
       switch (value.toInt()) {
-        case 0:
-          text = Transform.rotate(angle: 0.5, child: const Text('amor'));
-          break;
         case 1:
-          text = Transform.rotate(angle: 0.5, child: const Text('amistad'));
+          text = Transform.rotate(angle: 0.5, child: const Text('empatia'));
           break;
         case 2:
-          text = Transform.rotate(angle: 0.5, child: const Text('cariño'));
+          text = Transform.rotate(angle: 0.5, child: const Text('igualdad'));
           break;
         case 3:
-          text = Transform.rotate(angle: 0.5, child: const Text('fuerza'));
+          text = Transform.rotate(angle: 0.5, child: const Text('amor'));
           break;
         case 4:
-          text = Transform.rotate(angle: 0.5, child: const Text('valentia'));
+          text = Transform.rotate(angle: 0.5, child: const Text('respeto'));
           break;
         case 5:
-          text = Transform.rotate(angle: 0.5, child: const Text('honestidad'));
+          text = Transform.rotate(angle: 0.5, child: const Text('solidaridad'));
           break;
         default:
           const Text('');

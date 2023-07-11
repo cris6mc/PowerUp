@@ -31,8 +31,8 @@ enum HeroState {
   center,
   rocket,
 }
-enum State { jump, fall }
 
+enum State { jump, fall }
 
 const _durationJetpack = 3.0;
 
@@ -166,6 +166,7 @@ class MyHero extends BodyComponent<MyGame>
   void takeJetpack() {
     if (state == HeroState.dead) return;
     hasJetpack = true;
+    state = HeroState.rocket;
     gameRef.lightnings.value++;
   }
 
@@ -323,6 +324,23 @@ class MyHero extends BodyComponent<MyGame>
     if (other is Values) {
       other.destroy = true;
       final ValuesType type = other.type;
+      if (type == ValuesType.love) {
+        takeJetpack();
+      }
+      if (type == ValuesType.respect) {
+        takeBubbleShield();
+      }
+      if (type == ValuesType.solidarity) {
+        if (gameRef.objects.value < 5) {
+          gameRef.objects.value++;
+        }
+      }
+      if (type == ValuesType.empathy) {
+        takeBullet();
+      }
+      if (type == ValuesType.equality) {
+        takeCoin();
+      }
       gameRef.updateValue(type);
     }
 
