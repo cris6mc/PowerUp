@@ -154,8 +154,8 @@ class MyGame extends Forge2DGame
         //funcion de envio de contador de valores
         if (saveValues == true) {
           print('enviando info index: $indexKid');
-          updateKidValores(
-              indexKid!, valuesNotifier.value, antiValuesNotifier.value);
+          updateKidValores(indexKid!, valuesNotifier.value,
+              antiValuesNotifier.value, score.value);
           print('info enviada');
         }
 

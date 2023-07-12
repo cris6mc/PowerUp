@@ -10,6 +10,7 @@ import 'package:jueguito2/game/navigation/routes.dart';
 import 'package:jueguito2/main.dart';
 import 'package:provider/provider.dart';
 
+import '../../login/kid/view/list_kids.dart';
 import '../../login/login/view/login_screen.dart';
 import '../ui/leaderboards_screen.dart';
 
@@ -126,6 +127,7 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
+                          saveValues = false;
                           final myCharacter =
                               Provider.of<MyProvider>(context, listen: false);
                           myCharacter.updateValue(character);

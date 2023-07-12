@@ -50,7 +50,7 @@ class ListKids extends StatefulWidget {
 }
 
 class _ListKidsState extends State<ListKids> {
-  Widget bottonKid(String name, int index) {
+  Widget bottonKid(String name, int index, int score) {
     // Map<String, dynamic> kidData = {};
     // getKid(id).then((value) => kidData = value);
     return Padding(
@@ -64,36 +64,33 @@ class _ListKidsState extends State<ListKids> {
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
                           title: const Text('Comenzar a jugar'),
-                          content: const Text('Escoge un personaje'),
                           actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text('Cancelar'),
-                            ),
-                            ElevatedButton(
-                              onPressed: () async {
-                                saveValues = true;
-                                indexKid = index;
-                                context.pushAndRemoveUntil(Routes.game);
-                              },
-                              child: const Text('JUGAR'),
+                            Center(
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  saveValues = true;
+                                  indexKid = index;
+                                  context.pushAndRemoveUntil(Routes.game);
+                                },
+                                child: const Text('JUGAR'),
+                              ),
                             ),
                           ],
                         ));
               },
               child: Text(name)),
           const SizedBox(width: 10),
+          Text('Score: $score'),
           ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => FlBarChartExample(
-                            index, widget.me.kids?[index], name)));
-              },
-              child: const Icon(Icons.list)),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => FlBarChartExample(
+                          index, widget.me.kids?[index], name)));
+            },
+            child: const Icon(Icons.list),
+          ),
         ],
       ),
     );
@@ -158,7 +155,8 @@ class _ListKidsState extends State<ListKids> {
             shrinkWrap: true,
             children: [
               for (var i = 0; i < widget.me.kids!.length; i++)
-                bottonKid(widget.me.kids![i]['name'], i),
+                bottonKid(widget.me.kids![i]['name'], i,
+                    widget.me.kids?[i]['score'] ?? 0),
             ],
           ),
         ],

@@ -10,8 +10,15 @@ User get currentUser {
   return user;
 }
 
-Future<void> saveKid(String? name, String? description, String? gender,
-    DateTime? birtday, String? ie, Map? valores, Map? antivalores) async {
+Future<void> saveKid(
+    String? name,
+    String? description,
+    String? gender,
+    DateTime? birtday,
+    String? ie,
+    Map? valores,
+    Map? antivalores,
+    int? score) async {
   firestore.collection('users').doc(currentUser.uid).update({
     'kids': FieldValue.arrayUnion([
       {
@@ -24,6 +31,7 @@ Future<void> saveKid(String? name, String? description, String? gender,
         'ie': ie,
         'valores': valores,
         'antivalores': antivalores,
+        'score': score,
       }
     ])
   });
@@ -65,7 +73,7 @@ Future<void> updateKidDescription(int index, String? description) async {
 }
 
 Future<void> updateKidValores(int index, Map<ValuesType, int> valores,
-    Map<AntiValuesType, int> antivalores) async {
+    Map<AntiValuesType, int> antivalores, int score) async {
   Map<String, int> convertedValores =
       valores.map((key, value) => MapEntry(key.toString(), value));
 
@@ -80,6 +88,7 @@ Future<void> updateKidValores(int index, Map<ValuesType, int> valores,
     List array = data['kids'];
     array[index]['valores'] = convertedValores;
     array[index]['antivalores'] = convertedAntiValores;
+    array[index]['score'] = score;
     await documentReference.update({'kids': array});
   }
 }

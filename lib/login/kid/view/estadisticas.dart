@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,8 +22,14 @@ class FlBarChartExample extends StatefulWidget {
 class _FlBarChartExampleState extends State<FlBarChartExample> {
   @override
   Widget build(BuildContext context) {
-    Map valores =
-        widget.kid?['valores'] ?? {'1': 0, '2': 0, '3': 0, '4': 0, '5': 0};
+    Map valores = widget.kid?['valores'] ??
+        {
+          'empatia': 0,
+          'igualdad': 0,
+          'amor': 0,
+          'respeto': 0,
+          'solidaridad': 0
+        };
     Map antivalores =
         widget.kid?['antivalores'] ?? {'1': 0, '2': 0, '3': 0, '4': 0, '5': 0};
 
@@ -29,15 +37,20 @@ class _FlBarChartExampleState extends State<FlBarChartExample> {
     List antivaloreskeysList = antivalores.values.toList();
 
     final barGroups = <BarChartGroupData>[
-      for (int i = 0; i < 5; i++)
+      for (int i = 0; i < 5; i++) ...[
         BarChartGroupData(
-          x: i + 1,
+          x: i * 2,
           barRods: [
             BarChartRodData(
               toY: valoreskeysList[i]!.toDouble(),
               color: Colors.blue,
               width: 15,
             ),
+          ],
+        ),
+        BarChartGroupData(
+          x: i * 2 + 1,
+          barRods: [
             BarChartRodData(
               toY: antivaloreskeysList[i]!.toDouble(),
               color: Colors.red,
@@ -45,25 +58,50 @@ class _FlBarChartExampleState extends State<FlBarChartExample> {
             ),
           ],
         ),
+      ]
     ];
 
+    Widget rotText(String text) {
+      return Transform.rotate(
+          angle: -(55 * pi / 180),
+          child: Text(
+            text,
+            style: const TextStyle(fontSize: 10),
+          ));
+    }
+
     Widget getBottomTitles(double value, TitleMeta meta) {
-      Widget text = Transform.rotate(angle: 0.5, child: const Text(''));
+      Widget text = rotText('');
       switch (value.toInt()) {
+        case 0:
+          text = rotText('empatia');
+          break;
         case 1:
-          text = Transform.rotate(angle: 0.5, child: const Text('empatia'));
+          text = rotText('envidia');
           break;
         case 2:
-          text = Transform.rotate(angle: 0.5, child: const Text('igualdad'));
+          text = rotText('igualdad');
           break;
         case 3:
-          text = Transform.rotate(angle: 0.5, child: const Text('amor'));
+          text = rotText('odio');
           break;
         case 4:
-          text = Transform.rotate(angle: 0.5, child: const Text('respeto'));
+          text = rotText('amor');
           break;
         case 5:
-          text = Transform.rotate(angle: 0.5, child: const Text('solidaridad'));
+          text = rotText('indiferencia');
+          break;
+        case 6:
+          text = rotText('respeto');
+          break;
+        case 7:
+          text = rotText('injusticia');
+          break;
+        case 8:
+          text = rotText('solidaridad');
+          break;
+        case 9:
+          text = rotText('violencia');
           break;
         default:
           const Text('');
@@ -82,41 +120,27 @@ class _FlBarChartExampleState extends State<FlBarChartExample> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.nameKid!),
-        actions: [
-          IconButton(
-            onPressed: () async {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                        title: const Text('Eliminar del registro'),
-                        content: const Text(
-                            '¿Estas seguro que deseas eliminar al niño del registro?'),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('Cancelar'),
-                          ),
-                          ElevatedButton(
-                            onPressed: () async {
-                              deleteKid(widget.index).then((value) {
-                                Navigator.pop(context);
-                                context.read<MyUserCubit>().getMyUser();
-                              });
-                            },
-                            child: const Text('Si'),
-                          ),
-                        ],
-                      ));
-            },
-            icon: const Icon(Icons.delete),
-          ),
-        ],
       ),
       body: Column(
         children: [
-          const Text('Valores'),
+          const Row(
+            children: [
+              Text('Valores', style: TextStyle(color: Colors.blue)),
+              Icon(
+                Icons.circle,
+                color: Colors.blue,
+              )
+            ],
+          ),
+          const Row(
+            children: [
+              Text('Antivalores', style: TextStyle(color: Colors.red)),
+              Icon(
+                Icons.circle,
+                color: Colors.red,
+              )
+            ],
+          ),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
