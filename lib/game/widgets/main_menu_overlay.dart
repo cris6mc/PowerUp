@@ -103,26 +103,26 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
                         ],
                       ),
                     ),
-                    if (!screenHeightIsSmall) const WhiteSpace(height: 50),
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('Dificultad:',
-                              style: Theme.of(context).textTheme.bodyLarge!),
-                          LevelPicker(
-                            level: levelManager.selectedLevel.toDouble(),
-                            label: levelManager.selectedLevel.toString(),
-                            onChanged: ((value) {
-                              setState(() {
-                                levelManager.selectLevel(value.toInt());
-                              });
-                            }),
-                          ),
-                        ],
-                      ),
-                    ),
+                    // if (!screenHeightIsSmall) const WhiteSpace(height: 50),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(20.0),
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.center,
+                    //     children: [
+                    //       Text('Dificultad:',
+                    //           style: Theme.of(context).textTheme.bodyLarge!),
+                    //       LevelPicker(
+                    //         level: levelManager.selectedLevel.toDouble(),
+                    //         label: levelManager.selectedLevel.toString(),
+                    //         onChanged: ((value) {
+                    //           setState(() {
+                    //             levelManager.selectLevel(value.toInt());
+                    //           });
+                    //         }),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                     if (!screenHeightIsSmall) const WhiteSpace(height: 50),
                     Center(
                       child: ElevatedButton(
@@ -135,17 +135,20 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
                         },
                         style: ButtonStyle(
                           minimumSize: MaterialStateProperty.all(
-                            const Size(100, 50),
+                            const Size(150, 100),
                           ),
                           textStyle: MaterialStateProperty.all(
                               Theme.of(context).textTheme.titleMedium),
                         ),
-                        child: const Text('JUGAR'),
+                        child: const Text(
+                          'JUGAR',
+                          style: TextStyle(color: Colors.red),
+                        ),
                       ),
                     ),
-                    const WhiteSpace(height: 20),
+                    const WhiteSpace(height: 50),
                     Center(
-                      child: ElevatedButton(
+                      child: TextButton(
                         onPressed: () async {
                           Navigator.push(
                               context,
@@ -153,13 +156,13 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
                                   builder: (context) =>
                                       const LeaderboardScreen()));
                         },
-                        style: ButtonStyle(
-                          minimumSize: MaterialStateProperty.all(
-                            const Size(100, 50),
-                          ),
-                          textStyle: MaterialStateProperty.all(
-                              Theme.of(context).textTheme.titleMedium),
-                        ),
+                        // style: ButtonStyle(
+                        //   minimumSize: MaterialStateProperty.all(
+                        //     const Size(100, 50),
+                        //   ),
+                        //   textStyle: MaterialStateProperty.all(
+                        //       Theme.of(context).textTheme.titleMedium),
+                        // ),
                         child: const Text('LEADERBOARD'),
                       ),
                     ),

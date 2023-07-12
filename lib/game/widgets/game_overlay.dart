@@ -11,6 +11,7 @@ import 'package:jueguito2/game/widgets/heart_display.dart';
 import 'package:jueguito2/game/widgets/life_display.dart';
 import 'package:jueguito2/game/widgets/value_display.dart';
 
+import '../navigation/routes.dart';
 import 'widgets.dart';
 
 class GameOverlay extends StatefulWidget {
@@ -71,6 +72,32 @@ class GameOverlayState extends State<GameOverlay> {
                         isPaused = !isPaused;
                       },
                     );
+                    if (isPaused) {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                                title: const Text('Juego en Pausa'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      context.pushAndRemoveUntil(Routes.main);
+                                    },
+                                    child: const Text('Volver al menu'),
+                                  ),
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        widget.game.togglePauseState();
+                                        setState(
+                                          () {
+                                            isPaused = !isPaused;
+                                          },
+                                        );
+                                      },
+                                      child: const Text('Continuar jugando'))
+                                ],
+                              ));
+                    }
                   },
                 ),
               ],
