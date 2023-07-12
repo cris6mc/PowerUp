@@ -207,6 +207,7 @@ class MyHero extends BodyComponent<MyGame>
       if (durationJetpack >= _durationJetpack) {
         hasJetpack = false;
         state = HeroState.center;
+        durationJetpack = 0;
         //remove(jetpackComponent);
       }
       velocity.y = -7.5;
