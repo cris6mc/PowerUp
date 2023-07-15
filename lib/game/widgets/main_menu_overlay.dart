@@ -40,8 +40,14 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
       // layout is too large to fit.
       final bool screenHeightIsSmall = constraints.maxHeight < 760;
       LevelManager levelManager = LevelManager();
-      return Material(
-        color: Theme.of(context).colorScheme.background,
+      return Container(
+        // color: Theme.of(context).colorScheme.background,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/background.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -61,10 +67,11 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'Bullybuster',
+                      'BULLYBUSTER',
                       style: titleStyle.copyWith(
-                        height: .8,
-                      ),
+                          height: .9,
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                     const WhiteSpace(height: 50),
@@ -103,26 +110,6 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
                         ],
                       ),
                     ),
-                    // if (!screenHeightIsSmall) const WhiteSpace(height: 50),
-                    // Padding(
-                    //   padding: const EdgeInsets.all(20.0),
-                    //   child: Row(
-                    //     mainAxisAlignment: MainAxisAlignment.center,
-                    //     children: [
-                    //       Text('Dificultad:',
-                    //           style: Theme.of(context).textTheme.bodyLarge!),
-                    //       LevelPicker(
-                    //         level: levelManager.selectedLevel.toDouble(),
-                    //         label: levelManager.selectedLevel.toString(),
-                    //         onChanged: ((value) {
-                    //           setState(() {
-                    //             levelManager.selectLevel(value.toInt());
-                    //           });
-                    //         }),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
                     if (!screenHeightIsSmall) const WhiteSpace(height: 50),
                     Center(
                       child: ElevatedButton(

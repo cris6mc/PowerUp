@@ -197,16 +197,21 @@ class MyGame extends Forge2DGame
               x: worldSize.x * random.nextDouble(),
               y: generatedWorldHeight - 1.5));
         }
-
-        // if (random.nextDouble() < .2) {
-        //   add(PowerUp(
-        //     x: worldSize.x * random.nextDouble(),
-        //     y: generatedWorldHeight - 1.5,
-        //   ));
-        //   if (random.nextDouble() < .2) {
-        //     addCoins();
-        //   }
-        // }
+      } else if (score.value >= 100 && score.value < 200) {
+        add(Platform(
+          x: worldSize.x * random.nextDouble(),
+          y: generatedWorldHeight,
+        ));
+        if (random.nextDouble() < .5) {
+          add(AntiValues(
+            x: worldSize.x * random.nextDouble(),
+            y: generatedWorldHeight - 1.5,
+          ));
+        } else if (random.nextDouble() < .6) {
+          add(Values(
+              x: worldSize.x * random.nextDouble(),
+              y: generatedWorldHeight - 1.5));
+        }
       } else if (score.value >= 100 && score.value < 300) {
         add(Platform2(
           x: worldSize.x * random.nextDouble(),
@@ -223,7 +228,7 @@ class MyGame extends Forge2DGame
               y: generatedWorldHeight - 1.5));
         }
       } else {
-        add(Platform(
+        add(Platform2(
           x: worldSize.x * random.nextDouble(),
           y: generatedWorldHeight,
         ));
@@ -237,15 +242,6 @@ class MyGame extends Forge2DGame
               x: worldSize.x * random.nextDouble(),
               y: generatedWorldHeight - 1.5));
         }
-        // if (score.value % 5 == 0) {
-        //   add(PowerUp(
-        //     x: worldSize.x * random.nextDouble(),
-        //     y: generatedWorldHeight - 1.5,
-        //   ));
-        //   if (random.nextDouble() < .4) {
-        //     addCoins();
-        //   }
-        // }
       }
       generatedWorldHeight -= 2.7;
     }

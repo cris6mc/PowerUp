@@ -78,9 +78,13 @@ class _ListKidsState extends State<ListKids> {
                           ],
                         ));
               },
-              child: Text(name)),
+              child: Text(
+                name,
+                style: const TextStyle(color: Colors.white),
+              )),
           const SizedBox(width: 10),
           Text('Score: $score'),
+          const SizedBox(width: 10),
           ElevatedButton(
             onPressed: () {
               Navigator.push(
@@ -89,7 +93,7 @@ class _ListKidsState extends State<ListKids> {
                       builder: (context) => FlBarChartExample(
                           index, widget.me.kids?[index], name)));
             },
-            child: const Icon(Icons.list),
+            child: const Icon(Icons.list, color: Colors.white),
           ),
         ],
       ),
@@ -126,6 +130,7 @@ class _ListKidsState extends State<ListKids> {
                           ElevatedButton(
                             onPressed: () {
                               context.read<AuthCubit>().signOut();
+                              Navigator.pop(context);
                             },
                             child: const Text('Si'),
                           ),
@@ -135,31 +140,47 @@ class _ListKidsState extends State<ListKids> {
           ),
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const AddKid()));
-                },
-                child: const Text('Agregar nuevo niño')),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text('Tienes ${widget.me.kids?.length} niños en tu lista'),
-          ),
-          ListView(
-            shrinkWrap: true,
-            children: [
-              for (var i = 0; i < widget.me.kids!.length; i++)
-                bottonKid(widget.me.kids![i]['name'], i,
-                    widget.me.kids?[i]['score'] ?? 0),
+      body: Container(
+        // fondo en gradiente
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+            colors: [
+              Colors.transparent,
+              Colors.blue,
+              Colors.transparent,
             ],
           ),
-        ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddKid()));
+                  },
+                  child: const Text('Agregar nuevo niño')),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Tienes ${widget.me.kids?.length} niños en tu lista'),
+            ),
+            ListView(
+              shrinkWrap: true,
+              children: [
+                for (var i = 0; i < widget.me.kids!.length; i++)
+                  bottonKid(widget.me.kids![i]['name'], i,
+                      widget.me.kids?[i]['score'] ?? 0),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
