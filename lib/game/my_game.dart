@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/high_scores.dart';
 import 'package:jueguito2/game/objects/Plataform/platform.dart';
+import 'package:jueguito2/game/objects/Values/love.dart';
 import 'package:jueguito2/game/objects/anti_values.dart';
 import 'package:jueguito2/game/objects/bullet.dart';
 import 'package:jueguito2/game/objects/coin.dart';
@@ -38,7 +39,7 @@ class MyGame extends Forge2DGame
   late final MyHero hero;
 
   late final background;
-  late final background2;
+  // late final background2;
 
   // int score = 0;
   ValueNotifier<int> score = ValueNotifier(0);
@@ -113,20 +114,20 @@ class MyGame extends Forge2DGame
       velocityMultiplierDelta: Vector2(0, 1.2),
     );
 
-    background2 = await loadParallaxComponent(
-      [
-        ParallaxImageData(Assets.background6),
-        ParallaxImageData(Assets.background5),
-        ParallaxImageData(Assets.background4),
-        ParallaxImageData(Assets.background3),
-        ParallaxImageData(Assets.background2),
-        ParallaxImageData(Assets.background1),
-      ],
-      fill: LayerFill.width,
-      repeat: ImageRepeat.repeat,
-      baseVelocity: Vector2(0, -5),
-      velocityMultiplierDelta: Vector2(0, 1.2),
-    );
+    // background2 = await loadParallaxComponent(
+    //   [
+    //     ParallaxImageData(Assets.background6),
+    //     ParallaxImageData(Assets.background5),
+    //     ParallaxImageData(Assets.background4),
+    //     ParallaxImageData(Assets.background3),
+    //     ParallaxImageData(Assets.background2),
+    //     ParallaxImageData(Assets.background1),
+    //   ],
+    //   fill: LayerFill.width,
+    //   repeat: ImageRepeat.repeat,
+    //   baseVelocity: Vector2(0, -5),
+    //   velocityMultiplierDelta: Vector2(0, 1.2),
+    // );
 
     add(background);
 
@@ -148,9 +149,9 @@ class MyGame extends Forge2DGame
   @override
   void update(double dt) {
     super.update(dt);
-    if (score.value > 40) {
-      background = background2;
-    }
+    // if (score.value > 40) {
+    //   background = background2;
+    // }
     if (state == GameState.running) {
       final heroY = (hero.body.position.y - worldSize.y) * -1;
       if (!mega) {
@@ -170,10 +171,8 @@ class MyGame extends Forge2DGame
         state = GameState.gameOver;
         //funcion de envio de contador de valores
         if (saveValues == true) {
-          print('enviando info index: $indexKid');
           updateKidValores(indexKid!, valuesNotifier.value,
               antiValuesNotifier.value, score.value);
-          print('info enviada');
         }
 
         HighScores.saveNewScore(score.value);
