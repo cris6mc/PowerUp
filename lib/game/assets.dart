@@ -115,6 +115,16 @@ class Assets {
       lightning2,
     ], stepTime: 0.15, loop: true);
 
+    final love2 = await _loadItem('Love2');
+    final love3 = await _loadItem('Love3');
+    final love7 = await _loadItem('Love7');
+    final love8 = await _loadItem('Love8');
+    final love9 = await _loadItem('Love9');
+
+    loveA = SpriteAnimation.spriteList([love2, love3, love7, love8, love9],
+        stepTime: 0.35, loop: true);
+    //values
+
     love = await _loadSprite('items/love.png');
     empathy = await _loadSprite('items/empathy.png');
     solidarity = await _loadSprite('items/solidarity.png');
