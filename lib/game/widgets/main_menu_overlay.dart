@@ -143,13 +143,6 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
                                   builder: (context) =>
                                       const LeaderboardScreen()));
                         },
-                        // style: ButtonStyle(
-                        //   minimumSize: MaterialStateProperty.all(
-                        //     const Size(100, 50),
-                        //   ),
-                        //   textStyle: MaterialStateProperty.all(
-                        //       Theme.of(context).textTheme.titleMedium),
-                        // ),
                         child: const Text('LEADERBOARD'),
                       ),
                     ),
@@ -230,9 +223,9 @@ class CharacterButton extends StatelessWidget {
             const SizedBox(height: 18),
             Text(
               (character.name.length > 4
-                  ? '${character.name.substring(0, 2)}..'
+                  ? character.name.substring(0, 4)
                   : character.name),
-              style: const TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 20),
               textAlign: TextAlign.center,
             ),
           ],
