@@ -124,6 +124,7 @@ class Assets {
     loveA = SpriteAnimation.spriteList([love2, love3, love7, love8, love9],
         stepTime: 0.35, loop: true);
     //values
+
     love = await _loadSprite('items/love.png');
     empathy = await _loadSprite('items/empathy.png');
     solidarity = await _loadSprite('items/solidarity.png');

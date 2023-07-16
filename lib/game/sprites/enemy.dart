@@ -7,7 +7,8 @@ import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/doodle_dash.dart';
 import 'package:jueguito2/game/my_game.dart';
 
-class Enemy<T> extends SpriteGroupComponent<T> with HasGameRef<DoodleDash>, CollisionCallbacks {
+class Enemy<T> extends SpriteGroupComponent<T>
+    with HasGameRef<DoodleDash>, CollisionCallbacks {
   final hitbox = RectangleHitbox();
   bool isMoving = false;
 
@@ -18,9 +19,9 @@ class Enemy<T> extends SpriteGroupComponent<T> with HasGameRef<DoodleDash>, Coll
   Enemy({
     super.position,
   }) : super(
-    size: Vector2.all(100),
-    priority: 2,
-  );
+          size: Vector2.all(100),
+          priority: 2,
+        );
 
   @override
   Future<void> onLoad() async {
@@ -31,6 +32,7 @@ class Enemy<T> extends SpriteGroupComponent<T> with HasGameRef<DoodleDash>, Coll
     final int rand = Random().nextInt(100);
     if (rand > 80) isMoving = true;
   }
+
   void _move(double dt) {
     if (!isMoving) return;
 
@@ -54,10 +56,9 @@ class Enemy<T> extends SpriteGroupComponent<T> with HasGameRef<DoodleDash>, Coll
   }
 }
 
-enum LightEnemyState {
-  only
-}
-class LightEnemy extends Enemy<LightEnemyState>{
+enum LightEnemyState { only }
+
+class LightEnemy extends Enemy<LightEnemyState> {
   LightEnemy({super.position});
   final Map<String, Vector2> spriteOptions = {
     'Lightning1': Vector2(28, 102),
