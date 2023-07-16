@@ -16,6 +16,7 @@ import 'package:jueguito2/game/widgets/game_over_overlay.dart';
 import 'dart:io' show Platform;
 
 import 'package:jueguito2/game/widgets/game_overlay.dart';
+import 'package:jueguito2/game/widgets/winner_overlay.dart';
 import 'package:jueguito2/login/login/cubit/auth_cubit.dart';
 import 'package:jueguito2/login/login/cubit/my_user_cubit.dart';
 import 'package:jueguito2/login/login/provider/auth.dart';
@@ -99,6 +100,9 @@ class MyGameWidget extends StatelessWidget {
         },
         'GameOverlay': (context, MyGame game) {
           return GameOverlay(game: game);
+        },
+        'WinnerOverlay': (context, MyGame game){
+          return WinnerOverlay();
         }
       },
     );

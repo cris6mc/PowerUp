@@ -32,6 +32,7 @@ final random = Random();
 enum GameState {
   running,
   gameOver,
+  winner
 }
 
 enum ValuesType { empathy, solidarity, respect, equality, love }
@@ -41,6 +42,9 @@ enum AntiValuesType { hate, envy, indifference, violence, injustice }
 class MyGame extends Forge2DGame
     with HasKeyboardHandlerComponents, TapDetector {
   late final MyHero hero;
+
+  late final background;
+  late final background2;
 
   // int score = 0;
   ValueNotifier<int> score = ValueNotifier(0);
@@ -80,6 +84,9 @@ class MyGame extends Forge2DGame
 
   Character character;
 
+  // Hero is mega
+  bool mega = false;
+
   void updateValue(ValuesType type) {
     final Map<ValuesType, int> currentValues = Map.from(valuesNotifier.value);
     currentValues[type] = (currentValues[type] ?? 0) + 1;
@@ -97,7 +104,7 @@ class MyGame extends Forge2DGame
   Future<void> onLoad() async {
     camera.viewport = FixedResolutionViewport(screenSize);
 
-    final background = await loadParallaxComponent(
+    background = await loadParallaxComponent(
       [
         ParallaxImageData(Assets.background1),
         ParallaxImageData(Assets.background2),
@@ -105,6 +112,21 @@ class MyGame extends Forge2DGame
         ParallaxImageData(Assets.background5),
         ParallaxImageData(Assets.background4),
         ParallaxImageData(Assets.background6),
+      ],
+      fill: LayerFill.width,
+      repeat: ImageRepeat.repeat,
+      baseVelocity: Vector2(0, -5),
+      velocityMultiplierDelta: Vector2(0, 1.2),
+    );
+
+    background2 = await loadParallaxComponent(
+      [
+        ParallaxImageData(Assets.background6),
+        ParallaxImageData(Assets.background5),
+        ParallaxImageData(Assets.background4),
+        ParallaxImageData(Assets.background3),
+        ParallaxImageData(Assets.background2),
+        ParallaxImageData(Assets.background1),
       ],
       fill: LayerFill.width,
       repeat: ImageRepeat.repeat,
@@ -132,16 +154,20 @@ class MyGame extends Forge2DGame
   @override
   void update(double dt) {
     super.update(dt);
-
+    if(score.value > 40){
+      background = background2;
+    }
     if (state == GameState.running) {
-      if (generatedWorldHeight > hero.body.position.y - worldSize.y / 2) {
-        generateNextSectionOfWorld();
-      }
       final heroY = (hero.body.position.y - worldSize.y) * -1;
-
-      if (score.value < heroY) {
-        score.value = heroY.toInt();
+      if(!mega){
+        if (generatedWorldHeight > hero.body.position.y - worldSize.y / 2) {
+          generateNextSectionOfWorld();
+        }
+        if (score.value < heroY) {
+          score.value = heroY.toInt();
+        }
       }
+
 
       if (score.value - 7 > heroY) {
         hero.hit();
@@ -149,8 +175,6 @@ class MyGame extends Forge2DGame
 
       if ((score.value - worldSize.y) > heroY || hero.state == HeroState.dead) {
         state = GameState.gameOver;
-        print(valuesNotifier.value);
-        print(antiValuesNotifier.value);
         //funcion de envio de contador de valores
         if (saveValues == true) {
           print('enviando info index: $indexKid');
@@ -161,6 +185,10 @@ class MyGame extends Forge2DGame
 
         HighScores.saveNewScore(score.value);
         overlays.add('GameOverMenu');
+      }
+      if(mega){
+        overlays.add('WinnerOverlay');
+        overlays.remove('GameOverlay');
       }
     }
   }
@@ -198,6 +226,7 @@ class MyGame extends Forge2DGame
               y: generatedWorldHeight - 1.5));
         }
       } else if (score.value >= 100 && score.value < 200) {
+
         add(Platform(
           x: worldSize.x * random.nextDouble(),
           y: generatedWorldHeight,

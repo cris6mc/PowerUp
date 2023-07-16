@@ -4,6 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/src/foundation/change_notifier.dart';
 import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/my_game.dart';
 import 'package:jueguito2/game/objects/Plataform/platform.dart';
@@ -22,15 +23,7 @@ import 'package:sensors_plus/sensors_plus.dart';
 
 import 'values.dart';
 
-enum HeroState {
-  jump,
-  fall,
-  dead,
-  left,
-  right,
-  center,
-  rocket,
-}
+enum HeroState { jump, fall, dead, left, right, center, rocket, mega }
 
 enum State { jump, fall }
 
@@ -54,6 +47,7 @@ class MyHero extends BodyComponent<MyGame>
   late final SpriteComponent leftComponent;
   late final SpriteComponent centerComponent;
   late final SpriteComponent rocketComponent;
+  late final SpriteComponent megaComponent;
 
   final jetpackComponent = JetpackGroup();
   final bubbleShieldComponent = SpriteComponent(
@@ -69,6 +63,7 @@ class MyHero extends BodyComponent<MyGame>
 
   bool hasJetpack = false;
   bool hasBubbleShield = false;
+  bool hasMega = false;
 
   double durationJetpack = 0;
 
@@ -126,6 +121,13 @@ class MyHero extends BodyComponent<MyGame>
     rocketComponent = SpriteComponent(
       sprite: Sprite(await Flame.images.load('game/rocket_4.png')),
       size: size,
+      anchor: Anchor.center,
+    );
+
+    megaComponent = SpriteComponent(
+      sprite:
+          Sprite(await Flame.images.load('game/mega_${character.name}.png')),
+      size: Vector2(1.75, .78),
       anchor: Anchor.center,
     );
 
@@ -218,6 +220,12 @@ class MyHero extends BodyComponent<MyGame>
       velocity.y = -7.5;
     }
 
+    if (hasMega) {
+      velocity.y = -10;
+      body.linearVelocity = velocity;
+      gameRef.mega = true;
+    }
+
     velocity.x = accelerationX * 5;
     body.linearVelocity = velocity;
 
@@ -243,7 +251,16 @@ class MyHero extends BodyComponent<MyGame>
       _setComponent(leftComponent);
     } else if (state == HeroState.rocket) {
       _setComponent(rocketComponent);
+    } else if (state == HeroState.mega) {
+      _setComponent(megaComponent);
     }
+  }
+
+  bool isMega() {
+    final Map<ValuesType, int> currentValues = gameRef.valuesNotifier.value;
+
+    // Verificar si todos los valores son mayores o iguales a 1
+    return currentValues.values.every((value) => value >= 1);
   }
 
   void _setComponent(PositionComponent component) {
@@ -343,6 +360,10 @@ class MyHero extends BodyComponent<MyGame>
         takeCoin();
       }
       gameRef.updateValue(type);
+      if(isMega()){
+        hasMega = true;
+        state = HeroState.mega;
+      }
     }
 
     if (other is Lightning) {
