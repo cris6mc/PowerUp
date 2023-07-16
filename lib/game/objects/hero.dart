@@ -360,7 +360,7 @@ class MyHero extends BodyComponent<MyGame>
         takeCoin();
       }
       gameRef.updateValue(type);
-      if(isMega()){
+      if (isMega()) {
         hasMega = true;
         state = HeroState.mega;
       }

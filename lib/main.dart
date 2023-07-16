@@ -101,7 +101,7 @@ class MyGameWidget extends StatelessWidget {
         'GameOverlay': (context, MyGame game) {
           return GameOverlay(game: game);
         },
-        'WinnerOverlay': (context, MyGame game){
+        'WinnerOverlay': (context, MyGame game) {
           return WinnerOverlay();
         }
       },

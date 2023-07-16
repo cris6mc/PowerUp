@@ -29,11 +29,7 @@ final worldSize = Vector2(4.28, 9.26);
 
 final random = Random();
 
-enum GameState {
-  running,
-  gameOver,
-  winner
-}
+enum GameState { running, gameOver, winner }
 
 enum ValuesType { empathy, solidarity, respect, equality, love }
 
@@ -154,12 +150,12 @@ class MyGame extends Forge2DGame
   @override
   void update(double dt) {
     super.update(dt);
-    if(score.value > 40){
+    if (score.value > 40) {
       background = background2;
     }
     if (state == GameState.running) {
       final heroY = (hero.body.position.y - worldSize.y) * -1;
-      if(!mega){
+      if (!mega) {
         if (generatedWorldHeight > hero.body.position.y - worldSize.y / 2) {
           generateNextSectionOfWorld();
         }
@@ -167,7 +163,6 @@ class MyGame extends Forge2DGame
           score.value = heroY.toInt();
         }
       }
-
 
       if (score.value - 7 > heroY) {
         hero.hit();
@@ -186,7 +181,7 @@ class MyGame extends Forge2DGame
         HighScores.saveNewScore(score.value);
         overlays.add('GameOverMenu');
       }
-      if(mega){
+      if (mega) {
         overlays.add('WinnerOverlay');
         overlays.remove('GameOverlay');
       }
@@ -226,7 +221,6 @@ class MyGame extends Forge2DGame
               y: generatedWorldHeight - 1.5));
         }
       } else if (score.value >= 100 && score.value < 200) {
-
         add(Platform(
           x: worldSize.x * random.nextDouble(),
           y: generatedWorldHeight,
