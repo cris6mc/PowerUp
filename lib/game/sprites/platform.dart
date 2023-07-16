@@ -34,9 +34,9 @@ abstract class Platform<T> extends SpriteGroupComponent<T>
   Platform({
     super.position,
   }) : super(
-    size: Vector2.all(100),
-    priority: 2,
-  );
+          size: Vector2.all(100),
+          priority: 2,
+        );
 
   @override
   Future<void>? onLoad() async {
@@ -100,9 +100,7 @@ class NormalPlatform extends Platform<NormalPlatformState> {
   }
 }
 
-enum Platform2State {
-  only
-}
+enum Platform2State { only }
 
 class Platform2 extends Platform<Platform2State> {
   Platform2({super.position});
@@ -113,7 +111,6 @@ class Platform2 extends Platform<Platform2State> {
     'LandPiece_DarkGreen': Vector2(82, 40),
     'LandPiece_DarkMulticolored': Vector2(82, 40),
   };
-
 
   @override
   Future<void> onLoad() async {
@@ -142,9 +139,9 @@ class BrokenPlatform extends Platform<BrokenPlatformState> {
 
     sprites = <BrokenPlatformState, Sprite>{
       BrokenPlatformState.cracked:
-      await gameRef.loadSprite('game/platform_cracked_monitor.png'),
+          await gameRef.loadSprite('game/platform_cracked_monitor.png'),
       BrokenPlatformState.broken:
-      await gameRef.loadSprite('game/platform_monitor_broken.png'),
+          await gameRef.loadSprite('game/platform_monitor_broken.png'),
     };
 
     current = BrokenPlatformState.cracked;
@@ -169,9 +166,9 @@ class SpringBoard extends Platform<SpringState> {
 
     sprites = <SpringState, Sprite>{
       SpringState.down:
-      await gameRef.loadSprite('game/platform_trampoline_down.png'),
+          await gameRef.loadSprite('game/platform_trampoline_down.png'),
       SpringState.up:
-      await gameRef.loadSprite('game/platform_trampoline_up.png'),
+          await gameRef.loadSprite('game/platform_trampoline_up.png'),
     };
 
     current = SpringState.up;
@@ -180,8 +177,8 @@ class SpringBoard extends Platform<SpringState> {
   }
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints,
-      PositionComponent other) {
+  void onCollisionStart(
+      Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
 
     bool isCollidingVertically =
@@ -212,7 +209,7 @@ class EnemyPlatform extends Platform<EnemyPlatformState> {
 
     sprites = <EnemyPlatformState, Sprite>{
       EnemyPlatformState.only:
-      await gameRef.loadSprite('game/$enemySprite.png'),
+          await gameRef.loadSprite('game/$enemySprite.png'),
     };
 
     current = EnemyPlatformState.only;
@@ -232,8 +229,7 @@ class Enemy2Platform extends Platform<Enemy2PlatformState> {
     var enemySprite = randBool ? 'enemy_trash_can' : 'enemy_error';
 
     sprites = <Enemy2PlatformState, Sprite>{
-      Enemy2PlatformState.only:
-      await gameRef.loadSprite('HearthEnemy1.png'),
+      Enemy2PlatformState.only: await gameRef.loadSprite('HearthEnemy1.png'),
     };
 
     current = Enemy2PlatformState.only;

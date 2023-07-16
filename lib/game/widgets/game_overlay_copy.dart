@@ -380,5 +380,3 @@ class GameOverlayState extends State<GameOverlay> {
     );
   }
 }
-
-

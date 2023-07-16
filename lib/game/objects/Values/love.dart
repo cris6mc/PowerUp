@@ -20,7 +20,7 @@ class Love extends BodyComponent<MyGame> {
 
     add(
       SpriteAnimationComponent(
-        animation: Assets.love.clone(),
+        animation: Assets.loveA.clone(),
         anchor: Anchor.center,
         size: size,
       ),

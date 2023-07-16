@@ -8,6 +8,8 @@ import 'package:jueguito2/game/my_game.dart';
 extension ValuesTypeExtension on ValuesType {
   Sprite get sprite {
     switch (this) {
+      case ValuesType.love:
+        return Assets.love;
       case ValuesType.empathy:
         return Assets.empathy;
       case ValuesType.solidarity:
