@@ -221,6 +221,7 @@ class MyHero extends BodyComponent<MyGame>
     }
 
     if (hasMega) {
+      resetDirection();
       velocity.y = -10;
       body.linearVelocity = velocity;
       gameRef.mega = true;
@@ -423,13 +424,13 @@ class MyHero extends BodyComponent<MyGame>
   }
 
   void moveLeft() {
-    if (state != HeroState.rocket) state = HeroState.left;
+    //if (state != HeroState.rocket) state = HeroState.center;
 
     accelerationX = -1;
   }
 
   void moveRight() {
-    if (state != HeroState.rocket) state = HeroState.right;
+    //if (state != HeroState.rocket) state = HeroState.center;
     accelerationX = 1;
   }
 

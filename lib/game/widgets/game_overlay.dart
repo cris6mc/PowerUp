@@ -158,7 +158,7 @@ class GameOverlayState extends State<GameOverlay> {
                               elevation: 3.0,
                               shadowColor:
                                   Theme.of(context).colorScheme.background,
-                              child: Image.asset('assets/images/items/love.png',
+                              child: Image.asset('assets/images/items/Love1.png',
                                   width: 64),
                             ),
                             Positioned(child: HeartDisplay(game: widget.game)),
