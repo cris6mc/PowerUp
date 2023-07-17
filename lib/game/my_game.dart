@@ -82,6 +82,8 @@ class MyGame extends Forge2DGame
   // Hero is mega
   bool mega = false;
 
+  double velocity = -7;
+
   void updateValue(ValuesType type) {
     final Map<ValuesType, int> currentValues = Map.from(valuesNotifier.value);
     currentValues[type] = (currentValues[type] ?? 0) + 1;
@@ -101,16 +103,10 @@ class MyGame extends Forge2DGame
 
     background = await loadParallaxComponent(
       [
-        ParallaxImageData(Assets.background1),
-        ParallaxImageData(Assets.background2),
-        ParallaxImageData(Assets.background3),
-        ParallaxImageData(Assets.background5),
-        ParallaxImageData(Assets.background4),
-        ParallaxImageData(Assets.background6),
+        ParallaxImageData(Assets.background)
       ],
       fill: LayerFill.width,
-      repeat: ImageRepeat.repeat,
-      baseVelocity: Vector2(0, -5),
+      baseVelocity: Vector2(0, velocity),
       velocityMultiplierDelta: Vector2(0, 1.2),
     );
 
@@ -179,7 +175,7 @@ class MyGame extends Forge2DGame
         overlays.add('GameOverMenu');
       }
       if (mega) {
-        overlays.add('WinnerOverlay');
+        //overlays.add('WinnerOverlay');
         overlays.remove('GameOverlay');
       }
     }

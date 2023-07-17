@@ -5,6 +5,7 @@ class Assets {
   static late final Sprite button;
   static late final Sprite buttonPause;
 
+  static late final String background;
   static late final String background1;
   static late final String background2;
   static late final String background3;
@@ -88,6 +89,7 @@ class Assets {
     buttonPause = await _loadSprite('ui/buttonPause.png');
 
     //background
+    background = 'background/background.png';
     background1 = 'background/06_Background_Solid.png';
     background2 = 'background/05_Background_Small_Stars.png';
     background3 = 'background/04_Background_Big_Stars.png';
