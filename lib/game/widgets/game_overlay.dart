@@ -47,7 +47,7 @@ class GameOverlayState extends State<GameOverlay> {
                 const SizedBox(width: 10),
                 Container(
                   height: 15,
-                  width: 200,
+                  width: MediaQuery.of(context).size.width / 2.3,
                   decoration: BoxDecoration(
                     color: Colors.grey[300],
                     borderRadius: BorderRadius.circular(5),
