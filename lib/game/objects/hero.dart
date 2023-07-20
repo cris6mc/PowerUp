@@ -308,10 +308,11 @@ class MyHero extends BodyComponent<MyGame>
     }
 
     if (hasMega) {
-      resetDirection();
       velocity.y = -10;
       body.linearVelocity = velocity;
-      gameRef.mega = true;
+      Future.delayed(const Duration(seconds: 10), () {
+        gameRef.mega = true;
+      });
     }
 
     velocity.x = accelerationX * 5;
@@ -465,6 +466,7 @@ class MyHero extends BodyComponent<MyGame>
       }
     }
     if (other is Values) {
+      if (hasMega) return;
       other.destroy = true;
       final ValuesType type = other.type;
       if (type == ValuesType.love) {

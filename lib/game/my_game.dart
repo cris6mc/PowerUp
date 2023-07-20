@@ -46,7 +46,7 @@ class MyGame extends Forge2DGame
   ValueNotifier<int> score = ValueNotifier(0);
 
   // int bullets = 0;
-  ValueNotifier<int> bullets = ValueNotifier(0);
+  ValueNotifier<int> bullets = ValueNotifier(20);
   ValueNotifier<double> objects = ValueNotifier(5);
   double generatedWorldHeight = 6.7;
 
@@ -103,9 +103,7 @@ class MyGame extends Forge2DGame
     camera.viewport = FixedResolutionViewport(screenSize);
 
     background = await loadParallaxComponent(
-      [
-        ParallaxImageData(Assets.background)
-      ],
+      [ParallaxImageData(Assets.background)],
       fill: LayerFill.width,
       baseVelocity: Vector2(0, velocity),
       velocityMultiplierDelta: Vector2(0, 1.2),
@@ -119,6 +117,7 @@ class MyGame extends Forge2DGame
     hero = MyHero(character: character);
 
     overlays.add('GameOverlay');
+    //overlays.add('WinnerOverlay');
     // generateNextSectionOfWorld();
 
     await add(hero);
@@ -144,6 +143,12 @@ class MyGame extends Forge2DGame
           score.value = heroY.toInt();
         }
       }
+      if (mega) {
+        if (saveValues == true) {
+          updateKidValores(indexKid!, valuesNotifier.value,
+              antiValuesNotifier.value, score.value);
+        }
+      }
 
       if (score.value - 7 > heroY) {
         hero.hit();
@@ -161,7 +166,7 @@ class MyGame extends Forge2DGame
         overlays.add('GameOverMenu');
       }
       if (mega) {
-        //overlays.add('WinnerOverlay');
+        overlays.add('WinnerOverlay');
         overlays.remove('GameOverlay');
         hero.onRemove();
       }

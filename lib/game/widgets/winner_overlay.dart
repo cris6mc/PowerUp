@@ -59,7 +59,7 @@ class _WinnerOverlayState extends State<WinnerOverlay> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Image.asset(
-                  'assets/images/trophy.gif',
+                  'assets/images/trophy.png',
                   width: MediaQuery.of(context).size.width,
                 ),
                 Center(

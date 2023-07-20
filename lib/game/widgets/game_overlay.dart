@@ -40,14 +40,14 @@ class GameOverlayState extends State<GameOverlay> {
             top: 10,
             left: 10,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.min,
               children: [
                 ScoreDisplay(game: widget.game),
                 const SizedBox(width: 10),
                 Container(
                   height: 15,
-                  width: 200,
+                  width: MediaQuery.of(context).size.width / 2,
                   decoration: BoxDecoration(
                     color: Colors.grey[300],
                     borderRadius: BorderRadius.circular(5),
@@ -158,7 +158,8 @@ class GameOverlayState extends State<GameOverlay> {
                               elevation: 3.0,
                               shadowColor:
                                   Theme.of(context).colorScheme.background,
-                              child: Image.asset('assets/images/items/Love1.png',
+                              child: Image.asset(
+                                  'assets/images/items/Love1.png',
                                   width: 64),
                             ),
                             Positioned(child: HeartDisplay(game: widget.game)),
