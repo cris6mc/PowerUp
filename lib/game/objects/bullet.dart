@@ -2,7 +2,10 @@ import 'package:flame/components.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/my_game.dart';
+import 'package:jueguito2/game/objects/anti_values.dart';
+import 'package:jueguito2/game/objects/anti_values_static.dart';
 import 'package:jueguito2/game/objects/hearth_enemy.dart';
+import 'package:jueguito2/game/objects/values.dart';
 
 class Bullet extends BodyComponent<MyGame> with ContactCallbacks {
   static Vector2 size = Vector2(.15, .15);
@@ -66,7 +69,7 @@ class Bullet extends BodyComponent<MyGame> with ContactCallbacks {
 
   @override
   void beginContact(Object other, Contact contact) {
-    if (other is HearthEnemy) {
+    if (other is AntiValues) {
       other.destroy = true;
     }
   }
