@@ -11,6 +11,7 @@ import 'package:jueguito2/game/high_scores.dart';
 import 'package:jueguito2/game/objects/Plataform/platform.dart';
 import 'package:jueguito2/game/objects/Values/love.dart';
 import 'package:jueguito2/game/objects/anti_values.dart';
+import 'package:jueguito2/game/objects/anti_values_static.dart';
 import 'package:jueguito2/game/objects/bullet.dart';
 import 'package:jueguito2/game/objects/coin.dart';
 import 'package:jueguito2/game/objects/floor.dart';
@@ -110,21 +111,6 @@ class MyGame extends Forge2DGame
       velocityMultiplierDelta: Vector2(0, 1.2),
     );
 
-    // background2 = await loadParallaxComponent(
-    //   [
-    //     ParallaxImageData(Assets.background6),
-    //     ParallaxImageData(Assets.background5),
-    //     ParallaxImageData(Assets.background4),
-    //     ParallaxImageData(Assets.background3),
-    //     ParallaxImageData(Assets.background2),
-    //     ParallaxImageData(Assets.background1),
-    //   ],
-    //   fill: LayerFill.width,
-    //   repeat: ImageRepeat.repeat,
-    //   baseVelocity: Vector2(0, -5),
-    //   velocityMultiplierDelta: Vector2(0, 1.2),
-    // );
-
     add(background);
 
     // add(GameUI());
@@ -177,6 +163,7 @@ class MyGame extends Forge2DGame
       if (mega) {
         //overlays.add('WinnerOverlay');
         overlays.remove('GameOverlay');
+        hero.onRemove();
       }
     }
   }

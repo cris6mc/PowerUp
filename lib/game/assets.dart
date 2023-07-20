@@ -30,6 +30,8 @@ class Assets {
   static late final Sprite jetpackSmall;
   static late final Sprite bubble;
   static late final Sprite jetpack;
+  static late final SpriteAnimation frozenComponent;
+  static late final SpriteAnimation burstComponent;
 
   static late final Sprite platformBeige;
   static late final Sprite platformBeigeLight;
@@ -79,6 +81,9 @@ class Assets {
   static late final Sprite violence;
   static late final Sprite injustice;
 
+  static late final Sprite hateStatic;
+  static late final Sprite injusticeStatic;
+
   static late final Sprite rocket1;
   static late final Sprite rocket2;
   static late final Sprite rocket3;
@@ -127,6 +132,27 @@ class Assets {
         stepTime: 0.35, loop: true);
     //values
 
+    final frozen1 = await _loadItem('Frozen1');
+    final frozen2 = await _loadItem('Frozen2');
+    final frozen3 = await _loadItem('Frozen3');
+    final frozen4 = await _loadItem('Frozen4');
+    final frozen5 = await _loadItem('Frozen5');
+    final frozen6 = await _loadItem('Frozen6');
+    final frozen7 = await _loadItem('Frozen7');
+    final frozen8 = await _loadItem('Frozen7');
+
+    //FrozenAnimation
+    frozenComponent = SpriteAnimation.spriteList([frozen1, frozen2, frozen3, frozen4, frozen5, frozen6,frozen7, frozen8],
+      stepTime: 0.375
+    );
+
+    final burst1 = await _loadItem('Burst1');
+    final burst2 = await _loadItem('Burst2');
+    final burst3 = await _loadItem('Burst3');
+    final burst4 = await _loadItem('Burst4');
+
+    burstComponent = SpriteAnimation.spriteList([burst1, burst2,burst3,burst4],stepTime: 0.75);
+
     love = await _loadSprite('items/love.png');
     empathy = await _loadSprite('items/empathy.png');
     solidarity = await _loadSprite('items/solidarity.png');
@@ -139,6 +165,10 @@ class Assets {
     indifference = await _loadSprite('items/indifference.png');
     violence = await _loadSprite('items/violence.png');
     injustice = await _loadSprite('items/injustice.png');
+
+    //anti-values-static
+    hateStatic = await _loadSprite('items/hate1.png');
+    injusticeStatic = await _loadSprite('items/injustice1.png');
 
     coin = await _loadItem('Coin');
     gun = await _loadItem('Pistol');

@@ -5,42 +5,39 @@ import 'package:forge2d/src/dynamics/body.dart';
 import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/my_game.dart';
 
-extension AntiValuesTypeExtension on AntiValuesType {
+enum AntiValuesTypeStatic { hate, injustice }
+
+extension AntiValuesStaticTypeExtension on AntiValuesTypeStatic {
   Sprite get sprite {
     switch (this) {
-      case AntiValuesType.hate:
-        return Assets.hate;
-      case AntiValuesType.envy:
-        return Assets.envy;
-      case AntiValuesType.indifference:
-        return Assets.indifference;
-      case AntiValuesType.violence:
-        return Assets.violence;
-      case AntiValuesType.injustice:
-        return Assets.injustice;
+      case AntiValuesTypeStatic.hate:
+        return Assets.hateStatic;
+      case AntiValuesTypeStatic.injustice:
+        return Assets.injusticeStatic;
     }
   }
 }
 
-class AntiValues extends BodyComponent<MyGame> {
+class AntiValuesStatic extends BodyComponent<MyGame> {
   static Vector2 size = Vector2(.6, .6);
 
   Vector2 _position;
   bool destroy = false;
-  final AntiValuesType type;
+  final AntiValuesTypeStatic type;
 
-  AntiValues({
+  final speed = 1.0 + (2.0 * random.nextDouble());
+
+  AntiValuesStatic({
     required double x,
     required double y,
   })  : _position = Vector2(x, y),
-        type = AntiValuesType.values
-            .elementAt(random.nextInt(AntiValuesType.values.length));
+        type = AntiValuesTypeStatic.values
+            .elementAt(random.nextInt(AntiValuesTypeStatic.values.length));
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
     renderBody = false;
-
     add(
       SpriteComponent(
         sprite: type.sprite,
@@ -53,8 +50,13 @@ class AntiValues extends BodyComponent<MyGame> {
   @override
   void update(double dt) {
     super.update(dt);
-
     _position = body.position;
+
+    if (_position.x > worldSize.x) {
+      body.linearVelocity = Vector2(-speed, 0);
+    } else if (_position.x < 0) {
+      body.linearVelocity = Vector2(speed, 0);
+    }
 
     bool isOutOfScreen = gameRef.isOutOfScreen(body.position);
 
@@ -72,10 +74,12 @@ class AntiValues extends BodyComponent<MyGame> {
       type: BodyType.kinematic,
     );
 
-    final shape = PolygonShape()..setAsBoxXY(.14, .5);
+    final randomSpeed = random.nextBool() ? speed : -speed;
+
+    final shape = PolygonShape()..setAsBoxXY(.3, .2);
     final fixtureDef = FixtureDef(shape)..isSensor = true;
     return world.createBody(bodyDef)
       ..createFixture(fixtureDef)
-      ..linearVelocity = Vector2(0, 1.5);
+      ..linearVelocity = Vector2(0, 0);
   }
 }
