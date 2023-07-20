@@ -21,7 +21,18 @@ import 'package:jueguito2/game/utils.dart';
 import 'package:jueguito2/main.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
-enum HeroState { jump, fall, dead, left, right, center, rocket, mega, centerPurple, hat }
+enum HeroState {
+  jump,
+  fall,
+  dead,
+  left,
+  right,
+  center,
+  rocket,
+  mega,
+  centerPurple,
+  hat
+}
 
 enum State { jump, fall }
 
@@ -154,15 +165,15 @@ class MyHero extends BodyComponent<MyGame>
     );
 
     centerPurpleComponent = SpriteComponent(
-      sprite:
-      Sprite(await Flame.images.load('game/${character.name}_center_purple.png')),
+      sprite: Sprite(
+          await Flame.images.load('game/${character.name}_center_purple.png')),
       size: size,
       anchor: Anchor.center,
     );
 
     hatComponent = SpriteComponent(
-      sprite:
-      Sprite(await Flame.images.load('game/${character.name}_hat_center.png')),
+      sprite: Sprite(
+          await Flame.images.load('game/${character.name}_hat_center.png')),
       size: size,
       anchor: Anchor.center,
     );
@@ -236,7 +247,7 @@ class MyHero extends BodyComponent<MyGame>
     gameRef.bullets.value += 4;
   }
 
-  void takeHat(){
+  void takeHat() {
     if (state == HeroState.dead) return;
     hasHat = true;
     state = HeroState.hat;
@@ -270,7 +281,7 @@ class MyHero extends BodyComponent<MyGame>
       velocity.y = -7.5;
     }
 
-    if(hasHat){
+    if (hasHat) {
       durationHat += dt;
       if (durationHat >= _durationJetpack) {
         hasHat = false;
@@ -342,9 +353,9 @@ class MyHero extends BodyComponent<MyGame>
       _setComponent(rocketComponent);
     } else if (state == HeroState.mega) {
       _setComponent(megaComponent);
-    }else if(state == HeroState.centerPurple){
+    } else if (state == HeroState.centerPurple) {
       _setComponent(centerPurpleComponent);
-    } else if(state == HeroState.hat){
+    } else if (state == HeroState.hat) {
       _setComponent(hatComponent);
     }
   }
@@ -413,8 +424,10 @@ class MyHero extends BodyComponent<MyGame>
   }
 
   void setFrozen(double duration) {
+    if (hasFrozen) return;
+
     // Inmovilizar al héroe por la duración especificada en segundos
-    if(hasBubbleShield){
+    if (hasBubbleShield) {
       hasBubbleShield = false;
       return;
     }
@@ -424,6 +437,7 @@ class MyHero extends BodyComponent<MyGame>
   }
 
   void setBurst(double duration) {
+    if (hasBurst) return;
     hasBurst = true;
     add(burstComponent);
     burstDuration = duration;
@@ -431,17 +445,6 @@ class MyHero extends BodyComponent<MyGame>
 
   @override
   void beginContact(Object other, Contact contact) {
-    if (other is HearthEnemy) {
-      other.destroy = true;
-      {
-        /*
-        if (hasBubbleShield) {
-        other.destroy = true
-        }
-        */
-      }
-      hit();
-    }
     if (other is AntiValues) {
       other.destroy = true;
       final AntiValuesType type = other.type;
@@ -452,6 +455,7 @@ class MyHero extends BodyComponent<MyGame>
       other.destroy = true;
       if (hasJetpack) return;
       if (hasHat) return;
+      if (isMega()) return;
       if (other.type == AntiValuesTypeStatic.injustice &&
           !hasAppliedFrozenEffect) {
         setFrozen(3.0);
@@ -460,7 +464,6 @@ class MyHero extends BodyComponent<MyGame>
       }
 
       if (other.type == AntiValuesTypeStatic.hate) {
-
         state = HeroState.centerPurple;
         setBurst(3.0);
       }
