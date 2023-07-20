@@ -20,21 +20,19 @@ class ValueDisplay extends StatelessWidget {
         return Row(
           children: [
             Image.asset(
-              'images/items/$path.png',
+              'assets/images/items/$path.png',
               width: 30,
               height: 30,
             ),
-            const SizedBox(
-                width: 10),
+            const SizedBox(width: 10),
             SizedBox(
               width: 20,
               child: Text(
                 '$value',
                 style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white
-                ),
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
                 textAlign: TextAlign.center,
               ),
             ),

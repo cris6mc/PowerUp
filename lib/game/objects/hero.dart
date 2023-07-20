@@ -8,6 +8,7 @@ import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/my_game.dart';
 import 'package:jueguito2/game/objects/Plataform/platform.dart';
 import 'package:jueguito2/game/objects/anti_values.dart';
+import 'package:jueguito2/game/objects/anti_values_static.dart';
 import 'package:jueguito2/game/objects/coin.dart';
 import 'package:jueguito2/game/objects/floor.dart';
 import 'package:jueguito2/game/objects/hearth_enemy.dart';
@@ -20,19 +21,9 @@ import 'package:jueguito2/game/utils.dart';
 import 'package:jueguito2/main.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
-import 'values.dart';
+enum HeroState { jump, fall, dead, left, right, center, rocket, mega, centerPurple, hat }
 
-enum HeroState {
-  jump,
-  fall,
-  dead,
-  left,
-  right,
-  center,
-  rocket,
-}
 enum State { jump, fall }
-
 
 const _durationJetpack = 3.0;
 
@@ -54,6 +45,9 @@ class MyHero extends BodyComponent<MyGame>
   late final SpriteComponent leftComponent;
   late final SpriteComponent centerComponent;
   late final SpriteComponent rocketComponent;
+  late final SpriteComponent megaComponent;
+  late final SpriteComponent centerPurpleComponent;
+  late final SpriteComponent hatComponent;
 
   final jetpackComponent = JetpackGroup();
   final bubbleShieldComponent = SpriteComponent(
@@ -62,6 +56,17 @@ class MyHero extends BodyComponent<MyGame>
     anchor: Anchor.center,
     priority: 2,
   );
+  final frozenComponent = SpriteAnimationComponent(
+    animation: Assets.frozenComponent.clone(),
+    anchor: Anchor.center,
+    size: size,
+  );
+
+  final burstComponent = SpriteAnimationComponent(
+    animation: Assets.burstComponent.clone(),
+    anchor: Anchor.center,
+    size: size,
+  );
 
   late Component currentComponent;
 
@@ -69,14 +74,26 @@ class MyHero extends BodyComponent<MyGame>
 
   bool hasJetpack = false;
   bool hasBubbleShield = false;
+  bool hasMega = false;
+  bool hasHat = false;
 
   double durationJetpack = 0;
+  double durationHat = 0;
 
   StreamSubscription? accelerometerSubscription;
 
   int _hAxisInput = 0;
-  final int movingLeftInput = -1;
-  final int movingRightInput = 1;
+  double movingLeftInput = -1;
+  double movingRightInput = 1;
+
+  bool hasFrozen = false;
+  double frozenTimer = 0.0;
+  double frozenDuration = 3.0;
+  bool hasAppliedFrozenEffect = false;
+
+  bool hasBurst = false;
+  double burstTimer = 0.0;
+  double burstDuration = 3.0;
 
   Character character;
 
@@ -129,6 +146,27 @@ class MyHero extends BodyComponent<MyGame>
       anchor: Anchor.center,
     );
 
+    megaComponent = SpriteComponent(
+      sprite:
+          Sprite(await Flame.images.load('game/mega_${character.name}.png')),
+      size: Vector2(1.75, .78),
+      anchor: Anchor.center,
+    );
+
+    centerPurpleComponent = SpriteComponent(
+      sprite:
+      Sprite(await Flame.images.load('game/${character.name}_center_purple.png')),
+      size: size,
+      anchor: Anchor.center,
+    );
+
+    hatComponent = SpriteComponent(
+      sprite:
+      Sprite(await Flame.images.load('game/${character.name}_hat_center.png')),
+      size: size,
+      anchor: Anchor.center,
+    );
+
     currentComponent = centerComponent;
     add(currentComponent);
   }
@@ -144,6 +182,7 @@ class MyHero extends BodyComponent<MyGame>
 
   void hit() {
     if (hasJetpack) return;
+    if (hasHat) return;
     if (state == HeroState.dead) return;
 
     if (hasBubbleShield) {
@@ -166,14 +205,21 @@ class MyHero extends BodyComponent<MyGame>
   void takeJetpack() {
     if (state == HeroState.dead) return;
     hasJetpack = true;
+    state = HeroState.rocket;
     gameRef.lightnings.value++;
   }
 
   void takeBubbleShield() {
     if (state == HeroState.dead) return;
+
     if (!hasBubbleShield) add(bubbleShieldComponent);
     hasBubbleShield = true;
     gameRef.bubbles.value++;
+  }
+
+  void takeFrozen() {
+    if (state == HeroState.dead) return;
+    if (!hasFrozen) add(frozenComponent);
   }
 
   //acumular coins
@@ -188,6 +234,13 @@ class MyHero extends BodyComponent<MyGame>
   void takeBullet() {
     if (state == HeroState.dead) return;
     gameRef.bullets.value += 4;
+  }
+
+  void takeHat(){
+    if (state == HeroState.dead) return;
+    hasHat = true;
+    state = HeroState.hat;
+    //gameRef.lightnings.value++;
   }
 
   void fireBullet() {
@@ -211,9 +264,54 @@ class MyHero extends BodyComponent<MyGame>
       if (durationJetpack >= _durationJetpack) {
         hasJetpack = false;
         state = HeroState.center;
+        durationJetpack = 0;
         //remove(jetpackComponent);
       }
       velocity.y = -7.5;
+    }
+
+    if(hasHat){
+      durationHat += dt;
+      if (durationHat >= _durationJetpack) {
+        hasHat = false;
+        state = HeroState.center;
+        durationHat = 0;
+        //remove(jetpackComponent);
+      }
+      velocity.y = -7.5;
+    }
+
+    if (hasFrozen) {
+      frozenTimer += dt;
+      if (frozenTimer >= frozenDuration) {
+        // Si ha pasado el tiempo de inmovilización, permitir el movimiento nuevamente
+        hasFrozen = false;
+        hasAppliedFrozenEffect =
+            false; // Restablecer la bandera de efecto aplicado
+      } else {
+        // Si aún estamos en el período de inmovilización, no permitir el movimiento
+        body.linearVelocity = Vector2.zero();
+        return;
+      }
+      frozenTimer = 0;
+      remove(frozenComponent);
+    }
+
+    if (hasBurst) {
+      burstTimer += dt;
+      if (burstTimer >= burstDuration) {
+        hasBurst = false;
+        burstTimer = 0;
+        remove(burstComponent);
+        state = HeroState.center;
+      }
+    }
+
+    if (hasMega) {
+      resetDirection();
+      velocity.y = -10;
+      body.linearVelocity = velocity;
+      gameRef.mega = true;
     }
 
     velocity.x = accelerationX * 5;
@@ -241,7 +339,20 @@ class MyHero extends BodyComponent<MyGame>
       _setComponent(leftComponent);
     } else if (state == HeroState.rocket) {
       _setComponent(rocketComponent);
+    } else if (state == HeroState.mega) {
+      _setComponent(megaComponent);
+    }else if(state == HeroState.centerPurple){
+      _setComponent(centerPurpleComponent);
+    } else if(state == HeroState.hat){
+      _setComponent(hatComponent);
     }
+  }
+
+  bool isMega() {
+    final Map<ValuesType, int> currentValues = gameRef.valuesNotifier.value;
+
+    // Verificar si todos los valores son mayores o iguales a 1
+    return currentValues.values.every((value) => value >= 1);
   }
 
   void _setComponent(PositionComponent component) {
@@ -300,6 +411,23 @@ class MyHero extends BodyComponent<MyGame>
     }
   }
 
+  void setFrozen(double duration) {
+    // Inmovilizar al héroe por la duración especificada en segundos
+    if(hasBubbleShield){
+      hasBubbleShield = false;
+      return;
+    }
+    hasFrozen = true;
+    add(frozenComponent);
+    frozenDuration = duration; // Desactivar temporalmente la gravedad
+  }
+
+  void setBurst(double duration) {
+    hasBurst = true;
+    add(burstComponent);
+    burstDuration = duration;
+  }
+
   @override
   void beginContact(Object other, Contact contact) {
     if (other is HearthEnemy) {
@@ -319,11 +447,49 @@ class MyHero extends BodyComponent<MyGame>
       gameRef.updateAntiValue(type);
       hit();
     }
+    if (other is AntiValuesStatic) {
+      other.destroy = true;
+      if (hasJetpack) return;
+      if (hasHat) return;
+      if (other.type == AntiValuesTypeStatic.injustice &&
+          !hasAppliedFrozenEffect) {
+        setFrozen(3.0);
+        hasAppliedFrozenEffect =
+            true; // Marcar que se ha aplicado el efecto de lentitud
+      }
 
+      if (other.type == AntiValuesTypeStatic.hate) {
+
+        state = HeroState.centerPurple;
+        setBurst(3.0);
+      }
+    }
     if (other is Values) {
       other.destroy = true;
       final ValuesType type = other.type;
+      if (type == ValuesType.love) {
+        takeJetpack();
+      }
+      if (type == ValuesType.respect) {
+        takeBubbleShield();
+      }
+      if (type == ValuesType.solidarity) {
+        if (gameRef.objects.value < 5) {
+          gameRef.objects.value++;
+        }
+      }
+      if (type == ValuesType.empathy) {
+        takeBullet();
+      }
+      if (type == ValuesType.equality) {
+        takeHat();
+        //takeCoin();
+      }
       gameRef.updateValue(type);
+      if (isMega()) {
+        hasMega = true;
+        state = HeroState.mega;
+      }
     }
 
     if (other is Lightning) {
@@ -353,6 +519,7 @@ class MyHero extends BodyComponent<MyGame>
     }
 
     if (other is Platform) {
+      if (hasFrozen) return;
       if (stateHero == State.fall && other.type.isBroken) {
         other.destroy = true;
       }
@@ -368,14 +535,14 @@ class MyHero extends BodyComponent<MyGame>
   bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     _hAxisInput = 0;
     if (keysPressed.contains(LogicalKeyboardKey.arrowRight)) {
-      accelerationX = 1;
+      moveRight();
     } else if (keysPressed.contains(LogicalKeyboardKey.arrowLeft)) {
-      accelerationX = -1;
+      moveLeft();
     } else {
-      accelerationX = 0;
+      resetDirection();
     }
 
-    if (keysPressed.contains(LogicalKeyboardKey.keyR)) {
+    if (keysPressed.contains(LogicalKeyboardKey.space)) {
       fireBullet();
     }
 
@@ -383,14 +550,21 @@ class MyHero extends BodyComponent<MyGame>
   }
 
   void moveLeft() {
-    if (state != HeroState.rocket) state = HeroState.left;
-
-    accelerationX = -1;
+    if (hasFrozen) return;
+    if (hasBurst) {
+      accelerationX = 1;
+    } else {
+      accelerationX = -1;
+    }
   }
 
   void moveRight() {
-    if (state != HeroState.rocket) state = HeroState.right;
-    accelerationX = 1;
+    if (hasFrozen) return;
+    if (hasBurst) {
+      accelerationX = -1;
+    } else {
+      accelerationX = 1;
+    }
   }
 
   void resetDirection() {
