@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
       create: (context) => MyProvider(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'PowerUp',
+        title: 'Bullybuster',
         themeMode: ThemeMode.dark,
         theme: ThemeData(
           colorScheme: lightColorScheme,

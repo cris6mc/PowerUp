@@ -194,6 +194,7 @@ class MyHero extends BodyComponent<MyGame>
   void hit() {
     if (hasJetpack) return;
     if (hasHat) return;
+    if (hasMega) return;
     if (state == HeroState.dead) return;
 
     if (hasBubbleShield) {
@@ -215,6 +216,7 @@ class MyHero extends BodyComponent<MyGame>
 
   void takeJetpack() {
     if (state == HeroState.dead) return;
+    if (hasMega) return;
     hasJetpack = true;
     state = HeroState.rocket;
     gameRef.lightnings.value++;
@@ -222,6 +224,8 @@ class MyHero extends BodyComponent<MyGame>
 
   void takeBubbleShield() {
     if (state == HeroState.dead) return;
+    if (hasBubbleShield) return;
+    if (hasMega) return;
 
     if (!hasBubbleShield) add(bubbleShieldComponent);
     hasBubbleShield = true;
@@ -230,6 +234,7 @@ class MyHero extends BodyComponent<MyGame>
 
   void takeFrozen() {
     if (state == HeroState.dead) return;
+    if (hasMega) return;
     if (!hasFrozen) add(frozenComponent);
   }
 
@@ -249,6 +254,7 @@ class MyHero extends BodyComponent<MyGame>
 
   void takeHat() {
     if (state == HeroState.dead) return;
+    if (hasMega) return;
     hasHat = true;
     state = HeroState.hat;
     //gameRef.lightnings.value++;
@@ -446,6 +452,7 @@ class MyHero extends BodyComponent<MyGame>
   @override
   void beginContact(Object other, Contact contact) {
     if (other is AntiValues) {
+      if (isMega()) return;
       other.destroy = true;
       final AntiValuesType type = other.type;
       gameRef.updateAntiValue(type);

@@ -44,43 +44,34 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
         // color: Theme.of(context).colorScheme.background,
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/background.png'),
+            image: AssetImage('assets/inicio/background.png'),
             fit: BoxFit.cover,
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
+        child: Stack(
           children: [
-            const WhiteSpace(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const MyScreen()));
-              },
-              child: const Text('login'),
+            Image.asset('assets/inicio/burbles.png'),
+            Positioned(
+              top: 0,
+              child: Image.asset('assets/inicio/top.png'),
             ),
-            const WhiteSpace(height: 50),
-            Center(
+            Positioned(
+              bottom: 0,
+              child: Image.asset('assets/inicio/bot.png'),
+            ),
+            Positioned(
+              top: 55,
+              right: 0,
+              left: 0,
               child: SingleChildScrollView(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
                   children: [
-                    Text(
-                      'BULLYBUSTER',
-                      style: titleStyle.copyWith(
-                          height: .9,
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
+                    Image.asset(
+                      'assets/inicio/logo.png',
                     ),
-                    const WhiteSpace(height: 50),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Text('Selecciona tu personaje:',
-                          style: Theme.of(context).textTheme.headlineSmall!),
-                    ),
-                    if (!screenHeightIsSmall) const WhiteSpace(height: 30),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
@@ -110,42 +101,85 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
                         ],
                       ),
                     ),
-                    if (!screenHeightIsSmall) const WhiteSpace(height: 50),
                     Center(
-                      child: ElevatedButton(
-                        onPressed: () async {
+                      child: GestureDetector(
+                        onTap: () async {
                           saveValues = false;
                           final myCharacter =
                               Provider.of<MyProvider>(context, listen: false);
                           myCharacter.updateValue(character);
                           context.pushAndRemoveUntil(Routes.game);
                         },
-                        style: ButtonStyle(
-                          minimumSize: MaterialStateProperty.all(
-                            const Size(150, 100),
-                          ),
-                          textStyle: MaterialStateProperty.all(
-                              Theme.of(context).textTheme.titleMedium),
-                        ),
-                        child: const Text(
-                          'JUGAR',
-                          style: TextStyle(color: Colors.red),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/inicio/bg-icon.png',
+                              height: 150,
+                              width: 150,
+                            ),
+                            Image.asset(
+                              'assets/inicio/icon-play.png',
+                              height: 80,
+                              width: 80,
+                            ),
+                          ],
                         ),
                       ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const MyScreen()));
+                          },
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/inicio/bg-icon2.png',
+                                height: 150,
+                                width: 150,
+                              ),
+                              Image.asset(
+                                'assets/inicio/icon-home.png',
+                                height: 80,
+                                width: 80,
+                              ),
+                            ],
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () async {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const LeaderboardScreen()));
+                          },
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/inicio/bg-icon2.png',
+                                height: 150,
+                                width: 150,
+                              ),
+                              Image.asset(
+                                'assets/inicio/icon-stadistic.png',
+                                height: 80,
+                                width: 80,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                     const WhiteSpace(height: 50),
-                    Center(
-                      child: TextButton(
-                        onPressed: () async {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const LeaderboardScreen()));
-                        },
-                        child: const Text('LEADERBOARD'),
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -199,38 +233,46 @@ class CharacterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton(
-      style: selected
-          ? ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(
-                const Color.fromARGB(31, 64, 195, 255),
-              ),
-            )
-          : null,
-      onPressed: onSelectChar,
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            Container(
-              width: characterWidth,
-              height: characterWidth,
-              child: Image.asset(
-                'assets/images/game/${character.name}_center.png',
-                fit: BoxFit.contain,
-              ),
+    return Column(
+      children: [
+        OutlinedButton(
+          style: selected
+              ? ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                    const Color.fromARGB(31, 64, 195, 255),
+                  ),
+                )
+              : null,
+          onPressed: onSelectChar,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                Container(
+                  width: characterWidth,
+                  height: characterWidth,
+                  child: Image.asset(
+                    'assets/images/game/${character.name}_center.png',
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                const SizedBox(height: 18),
+                Text(
+                  (character.name.length > 4
+                      ? character.name.substring(0, 4)
+                      : character.name),
+                  style: const TextStyle(fontSize: 20, color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
-            const SizedBox(height: 18),
-            Text(
-              (character.name.length > 4
-                  ? character.name.substring(0, 4)
-                  : character.name),
-              style: const TextStyle(fontSize: 20),
-              textAlign: TextAlign.center,
-            ),
-          ],
+          ),
         ),
-      ),
+        // Image.asset(
+        //   'assets/inicio/plataform.png',
+        //   width: characterWidth * 2.5,
+        // ),
+      ],
     );
   }
 }
