@@ -5,7 +5,6 @@
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/my_game.dart';
 import 'package:jueguito2/game/widgets/heart_display.dart';
 import 'package:jueguito2/game/widgets/life_display.dart';

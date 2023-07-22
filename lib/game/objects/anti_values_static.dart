@@ -74,8 +74,6 @@ class AntiValuesStatic extends BodyComponent<MyGame> {
       type: BodyType.kinematic,
     );
 
-    final randomSpeed = random.nextBool() ? speed : -speed;
-
     final shape = PolygonShape()..setAsBoxXY(.3, .2);
     final fixtureDef = FixtureDef(shape)..isSensor = true;
     return world.createBody(bodyDef)

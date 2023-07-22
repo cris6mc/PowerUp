@@ -13,7 +13,6 @@ import 'package:jueguito2/game/navigation/routes.dart';
 import 'package:jueguito2/game/ui/pause_menu.dart';
 import 'package:jueguito2/game/util/color_schemes.dart';
 import 'package:jueguito2/game/widgets/game_over_overlay.dart';
-import 'dart:io' show Platform;
 
 import 'package:jueguito2/game/widgets/game_overlay.dart';
 import 'package:jueguito2/game/widgets/winner_overlay.dart';
@@ -60,7 +59,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Character character = Character.dash;
 
     return ChangeNotifierProvider(
       create: (context) => MyProvider(),

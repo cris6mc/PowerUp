@@ -2,10 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:jueguito2/game/managers/level_manager.dart';
-import 'package:jueguito2/game/my_game.dart';
 import 'package:jueguito2/game/navigation/routes.dart';
 import 'package:jueguito2/main.dart';
 import 'package:provider/provider.dart';
@@ -39,7 +36,6 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
       // 760 is the smallest height the browser can have until the
       // layout is too large to fit.
       final bool screenHeightIsSmall = constraints.maxHeight < 760;
-      LevelManager levelManager = LevelManager();
       return Container(
         // color: Theme.of(context).colorScheme.background,
         decoration: const BoxDecoration(

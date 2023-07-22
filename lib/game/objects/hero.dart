@@ -11,28 +11,13 @@ import 'package:jueguito2/game/objects/anti_values.dart';
 import 'package:jueguito2/game/objects/anti_values_static.dart';
 import 'package:jueguito2/game/objects/coin.dart';
 import 'package:jueguito2/game/objects/floor.dart';
-import 'package:jueguito2/game/objects/hearth_enemy.dart';
-import 'package:jueguito2/game/objects/jetpack_group.dart';
-import 'package:jueguito2/game/objects/lightning.dart';
 import 'package:jueguito2/game/objects/platform.dart';
-import 'package:jueguito2/game/objects/power_up.dart';
 import 'package:jueguito2/game/objects/values.dart';
 import 'package:jueguito2/game/utils.dart';
 import 'package:jueguito2/main.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
-enum HeroState {
-  jump,
-  fall,
-  dead,
-  left,
-  right,
-  center,
-  rocket,
-  mega,
-  centerPurple,
-  hat
-}
+enum HeroState { dead, initial, rocket, mega, purple, dark }
 
 enum State { jump, fall }
 
@@ -46,21 +31,16 @@ class MyHero extends BodyComponent<MyGame>
 
   static final size = Vector2(.75, .80);
 
-  var state = HeroState.center;
+  var state = HeroState.initial;
 
   var stateHero = State.fall;
 
-  late final SpriteComponent fallComponent;
-  late final SpriteComponent jumpComponent;
-  late final SpriteComponent rightComponent;
-  late final SpriteComponent leftComponent;
-  late final SpriteComponent centerComponent;
+  late final SpriteComponent defaultComponent;
+  late final SpriteComponent purpleComponent;
+  late final SpriteComponent darkComponent;
   late final SpriteComponent rocketComponent;
   late final SpriteComponent megaComponent;
-  late final SpriteComponent centerPurpleComponent;
-  late final SpriteComponent hatComponent;
 
-  final jetpackComponent = JetpackGroup();
   final bubbleShieldComponent = SpriteComponent(
     sprite: Assets.bubble,
     size: Vector2(1, 1),
@@ -72,6 +52,12 @@ class MyHero extends BodyComponent<MyGame>
     anchor: Anchor.center,
     size: size,
   );
+
+  final hatComponent = SpriteComponent(
+      sprite: Assets.hat,
+      anchor: Anchor.topCenter,
+      size: Vector2(0.65625, 0.5975),
+      position: Vector2(0, -0.55));
 
   final burstComponent = SpriteAnimationComponent(
     animation: Assets.burstComponent.clone(),
@@ -93,7 +79,6 @@ class MyHero extends BodyComponent<MyGame>
 
   StreamSubscription? accelerometerSubscription;
 
-  int _hAxisInput = 0;
   double movingLeftInput = -1;
   double movingRightInput = 1;
 
@@ -119,38 +104,27 @@ class MyHero extends BodyComponent<MyGame>
       });
     }
 
-    fallComponent = SpriteComponent(
-      sprite: Sprite(await Flame.images.load('${character.name}_center.png')),
-      size: size,
-      anchor: Anchor.center,
-    );
-
-    jumpComponent = SpriteComponent(
+    defaultComponent = SpriteComponent(
       sprite:
           Sprite(await Flame.images.load('game/${character.name}_center.png')),
       size: size,
       anchor: Anchor.center,
     );
 
-    rightComponent = SpriteComponent(
-      sprite:
-          Sprite(await Flame.images.load('game/${character.name}_right.png')),
+    purpleComponent = SpriteComponent(
+      sprite: Sprite(
+          await Flame.images.load('game/${character.name}_center_purple.png')),
       size: size,
       anchor: Anchor.center,
     );
 
-    leftComponent = SpriteComponent(
-      sprite:
-          Sprite(await Flame.images.load('game/${character.name}_left.png')),
+    darkComponent = SpriteComponent(
+      sprite: Sprite(
+          await Flame.images.load('game/${character.name}_center_dark.png')),
       size: size,
       anchor: Anchor.center,
     );
-    centerComponent = SpriteComponent(
-      sprite:
-          Sprite(await Flame.images.load('game/${character.name}_center.png')),
-      size: size,
-      anchor: Anchor.center,
-    );
+
     rocketComponent = SpriteComponent(
       sprite: Sprite(await Flame.images.load('game/rocket_4.png')),
       size: size,
@@ -164,21 +138,7 @@ class MyHero extends BodyComponent<MyGame>
       anchor: Anchor.center,
     );
 
-    centerPurpleComponent = SpriteComponent(
-      sprite: Sprite(
-          await Flame.images.load('game/${character.name}_center_purple.png')),
-      size: size,
-      anchor: Anchor.center,
-    );
-
-    hatComponent = SpriteComponent(
-      sprite: Sprite(
-          await Flame.images.load('game/${character.name}_hat_center.png')),
-      size: size,
-      anchor: Anchor.center,
-    );
-
-    currentComponent = centerComponent;
+    currentComponent = defaultComponent;
     add(currentComponent);
   }
 
@@ -207,10 +167,6 @@ class MyHero extends BodyComponent<MyGame>
       return;
     }
     gameRef.objects.value--;
-
-    //state = HeroState.dead;
-    //body.setFixedRotation(false);
-    //body.applyAngularImpulse(2);
   }
 
   void takeJetpack() {
@@ -248,10 +204,11 @@ class MyHero extends BodyComponent<MyGame>
   }
 
   void takeHat() {
+    if (hasHat) return;
     if (state == HeroState.dead) return;
+    if (state == HeroState.rocket) return;
+    add(hatComponent);
     hasHat = true;
-    state = HeroState.hat;
-    //gameRef.lightnings.value++;
   }
 
   void fireBullet() {
@@ -274,7 +231,6 @@ class MyHero extends BodyComponent<MyGame>
       durationJetpack += dt;
       if (durationJetpack >= _durationJetpack) {
         hasJetpack = false;
-        state = HeroState.center;
         durationJetpack = 0;
         //remove(jetpackComponent);
       }
@@ -285,11 +241,26 @@ class MyHero extends BodyComponent<MyGame>
       durationHat += dt;
       if (durationHat >= _durationJetpack) {
         hasHat = false;
-        state = HeroState.center;
         durationHat = 0;
-        //remove(jetpackComponent);
+        remove(hatComponent);
       }
       velocity.y = -7.5;
+    }
+
+    if (gameRef.valuesNotifier.value.values.every((value) => value >= 1)) {
+      state = HeroState.mega;
+    } else if (gameRef.objects.value > 3) {
+      if (!hasJetpack) {
+        state = HeroState.initial;
+      }
+    } else if (gameRef.objects.value < 4 && gameRef.objects.value > 1) {
+      if (!hasJetpack) {
+        state = HeroState.purple;
+      }
+    } else {
+      if (!hasJetpack) {
+        state = HeroState.dark;
+      }
     }
 
     if (hasFrozen) {
@@ -314,7 +285,6 @@ class MyHero extends BodyComponent<MyGame>
         hasBurst = false;
         burstTimer = 0;
         remove(burstComponent);
-        state = HeroState.center;
       }
     }
 
@@ -337,26 +307,16 @@ class MyHero extends BodyComponent<MyGame>
       body.setTransform(position, 0);
     }
 
-    if (state == HeroState.jump) {
-      _setComponent(jumpComponent);
-    } else if (state == HeroState.fall) {
-      _setComponent(fallComponent);
-    } else if (state == HeroState.dead) {
-      _setComponent(fallComponent);
-    } else if (state == HeroState.center) {
-      _setComponent(centerComponent);
-    } else if (state == HeroState.right) {
-      _setComponent(rightComponent);
-    } else if (state == HeroState.left) {
-      _setComponent(leftComponent);
+    if (state == HeroState.initial) {
+      _setComponent(defaultComponent);
+    } else if (state == HeroState.purple) {
+      _setComponent(purpleComponent);
+    } else if (state == HeroState.dark) {
+      _setComponent(darkComponent);
     } else if (state == HeroState.rocket) {
       _setComponent(rocketComponent);
     } else if (state == HeroState.mega) {
       _setComponent(megaComponent);
-    } else if (state == HeroState.centerPurple) {
-      _setComponent(centerPurpleComponent);
-    } else if (state == HeroState.hat) {
-      _setComponent(hatComponent);
     }
   }
 
@@ -368,16 +328,6 @@ class MyHero extends BodyComponent<MyGame>
   }
 
   void _setComponent(PositionComponent component) {
-    if (accelerationX > 0) {
-      if (!component.isFlippedHorizontally) {
-        component.flipHorizontally();
-      }
-    } else {
-      if (component.isFlippedHorizontally) {
-        component.flipHorizontally();
-      }
-    }
-
     if (component == currentComponent) return;
     remove(currentComponent);
     currentComponent = component;
@@ -429,6 +379,7 @@ class MyHero extends BodyComponent<MyGame>
     // Inmovilizar al héroe por la duración especificada en segundos
     if (hasBubbleShield) {
       hasBubbleShield = false;
+      remove(bubbleShieldComponent);
       return;
     }
     hasFrozen = true;
@@ -438,6 +389,11 @@ class MyHero extends BodyComponent<MyGame>
 
   void setBurst(double duration) {
     if (hasBurst) return;
+    if (hasBubbleShield) {
+      hasBubbleShield = false;
+      remove(bubbleShieldComponent);
+      return;
+    }
     hasBurst = true;
     add(burstComponent);
     burstDuration = duration;
@@ -464,7 +420,6 @@ class MyHero extends BodyComponent<MyGame>
       }
 
       if (other.type == AntiValuesTypeStatic.hate) {
-        state = HeroState.centerPurple;
         setBurst(3.0);
       }
     }
@@ -496,25 +451,7 @@ class MyHero extends BodyComponent<MyGame>
         state = HeroState.mega;
       }
     }
-
-    if (other is Lightning) {
-      hit();
-    }
     if (other is Floor) jump();
-
-    if (other is PowerUp) {
-      if (other.type == PowerUpType.jetpack) {
-        state = HeroState.rocket;
-        takeJetpack();
-      }
-      if (other.type == PowerUpType.bubble) {
-        takeBubbleShield();
-      }
-      if (other.type == PowerUpType.gun) {
-        takeBullet();
-      }
-      other.take();
-    }
 
     if (other is Coin) {
       if (!other.isTaken) {
@@ -538,7 +475,6 @@ class MyHero extends BodyComponent<MyGame>
 
   @override
   bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    _hAxisInput = 0;
     if (keysPressed.contains(LogicalKeyboardKey.arrowRight)) {
       moveRight();
     } else if (keysPressed.contains(LogicalKeyboardKey.arrowLeft)) {
@@ -577,7 +513,7 @@ class MyHero extends BodyComponent<MyGame>
   }
 
   @override
-  void onRemove() {
+  Future<void> onRemove() async {
     super.onRemove();
   }
 }
