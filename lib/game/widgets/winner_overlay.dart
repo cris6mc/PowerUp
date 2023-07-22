@@ -5,6 +5,8 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../navigation/routes.dart';
 
 class WinnerOverlay extends StatefulWidget {
+  const WinnerOverlay({super.key});
+
   @override
   _WinnerOverlayState createState() => _WinnerOverlayState();
 }

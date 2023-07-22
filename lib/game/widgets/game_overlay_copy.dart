@@ -188,7 +188,7 @@ class GameOverlay extends StatefulWidget {
 class GameOverlayState extends State<GameOverlay> {
   StreamSubscription<GyroscopeEvent>? _gyroscopeSubscription;
   double _gyroscopeValue = 0.0;
-  double _gyroscopeThreshold = 0.5;
+  final double _gyroscopeThreshold = 0.5;
 
   double dx = 100, dy = 100;
 

@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -100,7 +99,7 @@ class MyGameWidget extends StatelessWidget {
           return GameOverlay(game: game);
         },
         'WinnerOverlay': (context, MyGame game) {
-          return WinnerOverlay();
+          return const WinnerOverlay();
         }
       },
     );

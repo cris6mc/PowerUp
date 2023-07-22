@@ -127,6 +127,7 @@ class MyGame extends Forge2DGame
     // if (score.value > 40) {
     //   background = background2;
     // }
+
     if (state == GameState.running) {
       final heroY = (hero.body.position.y - worldSize.y) * -1;
       if (!mega) {
