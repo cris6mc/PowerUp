@@ -1,9 +1,7 @@
+import 'dart:math';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../login/cubit/my_user_cubit.dart';
-import '../provider/firestore_kid.dart';
 
 // ignore: must_be_immutable
 class FlBarChartExample extends StatefulWidget {
@@ -20,49 +18,86 @@ class FlBarChartExample extends StatefulWidget {
 class _FlBarChartExampleState extends State<FlBarChartExample> {
   @override
   Widget build(BuildContext context) {
-    Map valores =
-        widget.kid?['valores'] ?? {'1': 0, '2': 0, '3': 0, '4': 0, '5': 0};
+    Map valores = widget.kid?['valores'] ??
+        {
+          'empatia': 0,
+          'igualdad': 0,
+          'amor': 0,
+          'respeto': 0,
+          'solidaridad': 0
+        };
     Map antivalores =
         widget.kid?['antivalores'] ?? {'1': 0, '2': 0, '3': 0, '4': 0, '5': 0};
+
+    List valoreskeysList = valores.values.toList();
+    List antivaloreskeysList = antivalores.values.toList();
+
     final barGroups = <BarChartGroupData>[
-      for (final entry in valores.entries)
+      for (int i = 0; i < 5; i++) ...[
         BarChartGroupData(
-          x: int.parse(entry.key),
+          x: i * 2,
           barRods: [
             BarChartRodData(
-              toY: entry.value.toDouble(),
+              toY: valoreskeysList[i]!.toDouble(),
               color: Colors.blue,
               width: 15,
             ),
+          ],
+        ),
+        BarChartGroupData(
+          x: i * 2 + 1,
+          barRods: [
             BarChartRodData(
-              toY: antivalores[entry.key]!.toDouble(),
+              toY: antivaloreskeysList[i]!.toDouble(),
               color: Colors.red,
               width: 15,
             ),
           ],
         ),
+      ]
     ];
 
+    Widget rotText(String text) {
+      return Transform.rotate(
+          angle: -(55 * pi / 180),
+          child: Text(
+            text,
+            style: const TextStyle(fontSize: 10),
+          ));
+    }
+
     Widget getBottomTitles(double value, TitleMeta meta) {
-      Widget text = Transform.rotate(angle: 0.5, child: const Text(''));
+      Widget text = rotText('');
       switch (value.toInt()) {
         case 0:
-          text = Transform.rotate(angle: 0.5, child: const Text('amor'));
+          text = rotText('empatia');
           break;
         case 1:
-          text = Transform.rotate(angle: 0.5, child: const Text('amistad'));
+          text = rotText('envidia');
           break;
         case 2:
-          text = Transform.rotate(angle: 0.5, child: const Text('cariño'));
+          text = rotText('igualdad');
           break;
         case 3:
-          text = Transform.rotate(angle: 0.5, child: const Text('fuerza'));
+          text = rotText('odio');
           break;
         case 4:
-          text = Transform.rotate(angle: 0.5, child: const Text('valentia'));
+          text = rotText('amor');
           break;
         case 5:
-          text = Transform.rotate(angle: 0.5, child: const Text('honestidad'));
+          text = rotText('indiferencia');
+          break;
+        case 6:
+          text = rotText('respeto');
+          break;
+        case 7:
+          text = rotText('injusticia');
+          break;
+        case 8:
+          text = rotText('solidaridad');
+          break;
+        case 9:
+          text = rotText('violencia');
           break;
         default:
           const Text('');
@@ -81,41 +116,27 @@ class _FlBarChartExampleState extends State<FlBarChartExample> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.nameKid!),
-        actions: [
-          IconButton(
-            onPressed: () async {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                        title: const Text('Eliminar del registro'),
-                        content: const Text(
-                            '¿Estas seguro que deseas eliminar al niño del registro?'),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('Cancelar'),
-                          ),
-                          ElevatedButton(
-                            onPressed: () async {
-                              deleteKid(widget.index).then((value) {
-                                Navigator.pop(context);
-                                context.read<MyUserCubit>().getMyUser();
-                              });
-                            },
-                            child: const Text('Si'),
-                          ),
-                        ],
-                      ));
-            },
-            icon: const Icon(Icons.delete),
-          ),
-        ],
       ),
       body: Column(
         children: [
-          const Text('Valores'),
+          const Row(
+            children: [
+              Text('Valores', style: TextStyle(color: Colors.blue)),
+              Icon(
+                Icons.circle,
+                color: Colors.blue,
+              )
+            ],
+          ),
+          const Row(
+            children: [
+              Text('Antivalores', style: TextStyle(color: Colors.red)),
+              Icon(
+                Icons.circle,
+                color: Colors.red,
+              )
+            ],
+          ),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -158,19 +179,15 @@ class _FlBarChartExampleState extends State<FlBarChartExample> {
                   children: [
                     const Text(
                       'observaciones:',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     Text(widget.kid!['description']),
                     const SizedBox(height: 40),
                     const Text(
                       'informacion:',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     Text('Nombre: ${widget.kid!['name']}'),
                     Text('genero: ${widget.kid!['gender']}'),

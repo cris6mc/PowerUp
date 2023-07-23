@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/high_scores.dart';
 import 'package:jueguito2/game/objects/Plataform/platform.dart';
-import 'package:jueguito2/game/objects/Values/love.dart';
 import 'package:jueguito2/game/objects/anti_values.dart';
 import 'package:jueguito2/game/objects/bullet.dart';
 import 'package:jueguito2/game/objects/coin.dart';
@@ -17,7 +16,6 @@ import 'package:jueguito2/game/objects/floor.dart';
 import 'package:jueguito2/game/objects/hero.dart';
 import 'package:jueguito2/game/objects/platform.dart';
 import 'package:jueguito2/game/objects/platform_pieces.dart';
-import 'package:jueguito2/game/objects/power_up.dart';
 import 'package:jueguito2/game/objects/values.dart';
 import 'package:jueguito2/login/kid/provider/firestore_kid.dart';
 import 'package:jueguito2/main.dart';
@@ -29,22 +27,25 @@ final worldSize = Vector2(4.28, 9.26);
 
 final random = Random();
 
-enum GameState {
-  running,
-  gameOver,
-}
+enum GameState { running, gameOver, winner }
 
-enum ValuesType { empathy, solidarity, respect, equality }
+enum ValuesType { empathy, solidarity, respect, equality, love }
+
+enum AntiValuesType { hate, envy, indifference, violence, injustice }
 
 class MyGame extends Forge2DGame
     with HasKeyboardHandlerComponents, TapDetector {
   late final MyHero hero;
 
+  // ignore: prefer_typing_uninitialized_variables
+  late final background;
+  // late final background2;
+
   // int score = 0;
   ValueNotifier<int> score = ValueNotifier(0);
 
   // int bullets = 0;
-  ValueNotifier<int> bullets = ValueNotifier(0);
+  ValueNotifier<int> bullets = ValueNotifier(20);
   ValueNotifier<double> objects = ValueNotifier(5);
   double generatedWorldHeight = 6.7;
 
@@ -57,10 +58,19 @@ class MyGame extends Forge2DGame
   ValueNotifier<int> lightnings = ValueNotifier(0);
 
   ValueNotifier<Map<ValuesType, int>> valuesNotifier = ValueNotifier({
+    ValuesType.love: 0,
     ValuesType.empathy: 0,
     ValuesType.solidarity: 0,
     ValuesType.respect: 0,
     ValuesType.equality: 0,
+  });
+
+  ValueNotifier<Map<AntiValuesType, int>> antiValuesNotifier = ValueNotifier({
+    AntiValuesType.hate: 0,
+    AntiValuesType.envy: 0,
+    AntiValuesType.indifference: 0,
+    AntiValuesType.violence: 0,
+    AntiValuesType.injustice: 0,
   });
 
   // Scale the screenSize by 100 and set the gravity of 15
@@ -69,40 +79,41 @@ class MyGame extends Forge2DGame
 
   Character character;
 
+  // Hero is mega
+  bool mega = false;
+
+  double velocity = -7;
+
   void updateValue(ValuesType type) {
     final Map<ValuesType, int> currentValues = Map.from(valuesNotifier.value);
     currentValues[type] = (currentValues[type] ?? 0) + 1;
     valuesNotifier.value = currentValues;
   }
 
+  void updateAntiValue(AntiValuesType type) {
+    final Map<AntiValuesType, int> currentAntiValues =
+        Map.from(antiValuesNotifier.value);
+    currentAntiValues[type] = (currentAntiValues[type] ?? 0) + 1;
+    antiValuesNotifier.value = currentAntiValues;
+  }
+
   @override
   Future<void> onLoad() async {
     camera.viewport = FixedResolutionViewport(screenSize);
 
-    final background = await loadParallaxComponent(
-      [
-        ParallaxImageData(Assets.background1),
-        ParallaxImageData(Assets.background2),
-        ParallaxImageData(Assets.background3),
-        ParallaxImageData(Assets.background5),
-        ParallaxImageData(Assets.background4),
-        ParallaxImageData(Assets.background6),
-      ],
+    background = await loadParallaxComponent(
+      [ParallaxImageData(Assets.background)],
       fill: LayerFill.width,
-      repeat: ImageRepeat.repeat,
-      baseVelocity: Vector2(0, -5),
+      baseVelocity: Vector2(0, velocity),
       velocityMultiplierDelta: Vector2(0, 1.2),
     );
 
     add(background);
 
-    // add(GameUI());
-
     add(Floor());
     hero = MyHero(character: character);
 
     overlays.add('GameOverlay');
-    // generateNextSectionOfWorld();
 
     await add(hero);
 
@@ -114,15 +125,25 @@ class MyGame extends Forge2DGame
   @override
   void update(double dt) {
     super.update(dt);
+    // if (score.value > 40) {
+    //   background = background2;
+    // }
 
     if (state == GameState.running) {
-      if (generatedWorldHeight > hero.body.position.y - worldSize.y / 2) {
-        generateNextSectionOfWorld();
-      }
       final heroY = (hero.body.position.y - worldSize.y) * -1;
-
-      if (score.value < heroY) {
-        score.value = heroY.toInt();
+      if (!mega) {
+        if (generatedWorldHeight > hero.body.position.y - worldSize.y / 2) {
+          generateNextSectionOfWorld();
+        }
+        if (score.value < heroY) {
+          score.value = heroY.toInt();
+        }
+      }
+      if (mega) {
+        if (saveValues == true) {
+          updateKidValores(indexKid!, valuesNotifier.value,
+              antiValuesNotifier.value, score.value);
+        }
       }
 
       if (score.value - 7 > heroY) {
@@ -133,11 +154,17 @@ class MyGame extends Forge2DGame
         state = GameState.gameOver;
         //funcion de envio de contador de valores
         if (saveValues == true) {
-          //updateKidValores(indexKid!, null, antivaloresValues);
+          updateKidValores(indexKid!, valuesNotifier.value,
+              antiValuesNotifier.value, score.value);
         }
 
         HighScores.saveNewScore(score.value);
         overlays.add('GameOverMenu');
+      }
+      if (mega) {
+        overlays.add('WinnerOverlay');
+        overlays.remove('GameOverlay');
+        hero.onRemove();
       }
     }
   }
@@ -164,6 +191,21 @@ class MyGame extends Forge2DGame
           x: worldSize.x * random.nextDouble(),
           y: generatedWorldHeight,
         ));
+        if (random.nextDouble() < .4) {
+          add(AntiValues(
+            x: worldSize.x * random.nextDouble(),
+            y: generatedWorldHeight - 1.5,
+          ));
+        } else if (random.nextDouble() < .5) {
+          add(Values(
+              x: worldSize.x * random.nextDouble(),
+              y: generatedWorldHeight - 1.5));
+        }
+      } else if (score.value >= 100 && score.value < 200) {
+        add(Platform(
+          x: worldSize.x * random.nextDouble(),
+          y: generatedWorldHeight,
+        ));
         if (random.nextDouble() < .5) {
           add(AntiValues(
             x: worldSize.x * random.nextDouble(),
@@ -173,21 +215,7 @@ class MyGame extends Forge2DGame
           add(Values(
               x: worldSize.x * random.nextDouble(),
               y: generatedWorldHeight - 1.5));
-        } else if (random.nextDouble() < .5) {
-          add(Love(
-              x: worldSize.x * random.nextDouble(),
-              y: generatedWorldHeight - 1.5));
         }
-
-        // if (random.nextDouble() < .2) {
-        //   add(PowerUp(
-        //     x: worldSize.x * random.nextDouble(),
-        //     y: generatedWorldHeight - 1.5,
-        //   ));
-        //   if (random.nextDouble() < .2) {
-        //     addCoins();
-        //   }
-        // }
       } else if (score.value >= 100 && score.value < 300) {
         add(Platform2(
           x: worldSize.x * random.nextDouble(),
@@ -204,7 +232,7 @@ class MyGame extends Forge2DGame
               y: generatedWorldHeight - 1.5));
         }
       } else {
-        add(Platform(
+        add(Platform2(
           x: worldSize.x * random.nextDouble(),
           y: generatedWorldHeight,
         ));
@@ -218,15 +246,6 @@ class MyGame extends Forge2DGame
               x: worldSize.x * random.nextDouble(),
               y: generatedWorldHeight - 1.5));
         }
-        // if (score.value % 5 == 0) {
-        //   add(PowerUp(
-        //     x: worldSize.x * random.nextDouble(),
-        //     y: generatedWorldHeight - 1.5,
-        //   ));
-        //   if (random.nextDouble() < .4) {
-        //     addCoins();
-        //   }
-        // }
       }
       generatedWorldHeight -= 2.7;
     }
@@ -255,7 +274,6 @@ class MyGame extends Forge2DGame
   }
 
   void addCoins() {
-    final rows = random.nextInt(15) + 1;
     final cols = random.nextInt(5) + 1;
 
     final x = (worldSize.x - (Coin.size.x * cols)) * random.nextDouble() +

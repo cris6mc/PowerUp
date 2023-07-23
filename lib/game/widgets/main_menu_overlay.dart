@@ -2,14 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:jueguito2/game/managers/level_manager.dart';
-import 'package:jueguito2/game/my_game.dart';
 import 'package:jueguito2/game/navigation/routes.dart';
 import 'package:jueguito2/main.dart';
 import 'package:provider/provider.dart';
 
+import '../../login/kid/view/list_kids.dart';
 import '../../login/login/view/login_screen.dart';
 import '../ui/leaderboards_screen.dart';
 
@@ -31,81 +29,51 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
     return LayoutBuilder(builder: (context, constraints) {
       final characterWidth = constraints.maxWidth / 8;
 
-      final TextStyle titleStyle = (constraints.maxWidth > 830)
-          ? Theme.of(context).textTheme.displayLarge!
-          : Theme.of(context).textTheme.displaySmall!;
-
       // 760 is the smallest height the browser can have until the
       // layout is too large to fit.
-      final bool screenHeightIsSmall = constraints.maxHeight < 760;
-      LevelManager levelManager = LevelManager();
-      return Material(
-        color: Theme.of(context).colorScheme.background,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
+      return Container(
+        // color: Theme.of(context).colorScheme.background,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/inicio/background.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Stack(
           children: [
-            const WhiteSpace(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const MyScreen()));
-              },
-              child: const Text('login'),
+            Image.asset('assets/inicio/burbles.png'),
+            Positioned(
+              top: 0,
+              child: Image.asset('assets/inicio/top.png'),
             ),
-            const WhiteSpace(height: 50),
-            Center(
+            Positioned(
+              bottom: 0,
+              child: Image.asset('assets/inicio/bot.png'),
+            ),
+            Positioned(
+              top: 55,
+              right: 0,
+              left: 0,
               child: SingleChildScrollView(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
                   children: [
-                    Text(
-                      'Bullybuster',
-                      style: titleStyle.copyWith(
-                        height: .8,
-                      ),
-                      textAlign: TextAlign.center,
+                    Image.asset(
+                      'assets/inicio/logo.png',
                     ),
-                    const WhiteSpace(height: 50),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Text('Selecciona tu personaje:',
-                          style: Theme.of(context).textTheme.headlineSmall!),
-                    ),
-                    if (!screenHeightIsSmall) const WhiteSpace(height: 30),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CharacterButton(
-                            character: Character.human,
-                            selected: character == Character.human,
-                            onSelectChar: () {
-                              setState(() {
-                                character = Character.human;
-                              });
-                            },
-                            characterWidth: characterWidth,
-                          ),
-                          const HorizontalSpace(),
-                          CharacterButton(
                             character: Character.dash,
                             selected: character == Character.dash,
                             onSelectChar: () {
                               setState(() {
                                 character = Character.dash;
-                              });
-                            },
-                            characterWidth: characterWidth,
-                          ),
-                          const HorizontalSpace(),
-                          CharacterButton(
-                            character: Character.hero,
-                            selected: character == Character.hero,
-                            onSelectChar: () {
-                              setState(() {
-                                character = Character.hero;
                               });
                             },
                             characterWidth: characterWidth,
@@ -124,65 +92,85 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
                         ],
                       ),
                     ),
-                    if (!screenHeightIsSmall) const WhiteSpace(height: 50),
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('Dificultad:',
-                              style: Theme.of(context).textTheme.bodyLarge!),
-                          LevelPicker(
-                            level: levelManager.selectedLevel.toDouble(),
-                            label: levelManager.selectedLevel.toString(),
-                            onChanged: ((value) {
-                              setState(() {
-                                levelManager.selectLevel(value.toInt());
-                              });
-                            }),
-                          ),
-                        ],
-                      ),
-                    ),
-                    if (!screenHeightIsSmall) const WhiteSpace(height: 50),
                     Center(
-                      child: ElevatedButton(
-                        onPressed: () async {
+                      child: GestureDetector(
+                        onTap: () async {
+                          saveValues = false;
                           final myCharacter =
                               Provider.of<MyProvider>(context, listen: false);
                           myCharacter.updateValue(character);
                           context.pushAndRemoveUntil(Routes.game);
                         },
-                        style: ButtonStyle(
-                          minimumSize: MaterialStateProperty.all(
-                            const Size(100, 50),
-                          ),
-                          textStyle: MaterialStateProperty.all(
-                              Theme.of(context).textTheme.titleMedium),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/inicio/bg-icon.png',
+                              height: 150,
+                              width: 150,
+                            ),
+                            Image.asset(
+                              'assets/inicio/icon-play.png',
+                              height: 80,
+                              width: 80,
+                            ),
+                          ],
                         ),
-                        child: const Text('JUGAR'),
                       ),
                     ),
-                    const WhiteSpace(height: 20),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const LeaderboardScreen()));
-                        },
-                        style: ButtonStyle(
-                          minimumSize: MaterialStateProperty.all(
-                            const Size(100, 50),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const MyScreen()));
+                          },
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/inicio/bg-icon2.png',
+                                height: 150,
+                                width: 150,
+                              ),
+                              Image.asset(
+                                'assets/inicio/icon-home.png',
+                                height: 80,
+                                width: 80,
+                              ),
+                            ],
                           ),
-                          textStyle: MaterialStateProperty.all(
-                              Theme.of(context).textTheme.titleMedium),
                         ),
-                        child: const Text('LEADERBOARD'),
-                      ),
+                        GestureDetector(
+                          onTap: () async {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const LeaderboardScreen()));
+                          },
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/inicio/bg-icon2.png',
+                                height: 150,
+                                width: 150,
+                              ),
+                              Image.asset(
+                                'assets/inicio/icon-stadistic.png',
+                                height: 80,
+                                width: 80,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
+                    const WhiteSpace(height: 50),
                   ],
                 ),
               ),
@@ -249,7 +237,7 @@ class CharacterButton extends StatelessWidget {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            Container(
+            SizedBox(
               width: characterWidth,
               height: characterWidth,
               child: Image.asset(
@@ -260,9 +248,9 @@ class CharacterButton extends StatelessWidget {
             const SizedBox(height: 18),
             Text(
               (character.name.length > 4
-                  ? '${character.name.substring(0, 2)}..'
+                  ? character.name.substring(0, 4)
                   : character.name),
-              style: const TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 20),
               textAlign: TextAlign.center,
             ),
           ],

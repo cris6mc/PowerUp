@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,9 +12,9 @@ import 'package:jueguito2/game/navigation/routes.dart';
 import 'package:jueguito2/game/ui/pause_menu.dart';
 import 'package:jueguito2/game/util/color_schemes.dart';
 import 'package:jueguito2/game/widgets/game_over_overlay.dart';
-import 'dart:io' show Platform;
 
 import 'package:jueguito2/game/widgets/game_overlay.dart';
+import 'package:jueguito2/game/widgets/winner_overlay.dart';
 import 'package:jueguito2/login/login/cubit/auth_cubit.dart';
 import 'package:jueguito2/login/login/cubit/my_user_cubit.dart';
 import 'package:jueguito2/login/login/provider/auth.dart';
@@ -39,7 +38,7 @@ Future<void> main() async {
   ], child: MyApp.create()));
 }
 
-enum Character { dash, sparky, hero, human }
+enum Character { dash, sparky }
 
 class MyProvider with ChangeNotifier {
   Character _myValue = Character.dash;
@@ -59,14 +58,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Character character = Character.dash;
 
     return ChangeNotifierProvider(
       create: (context) => MyProvider(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'PowerUp',
-        themeMode: ThemeMode.dark,
+        title: 'Bullybuster',
+        themeMode: ThemeMode.light,
         theme: ThemeData(
           colorScheme: lightColorScheme,
           useMaterial3: true,
@@ -99,6 +97,9 @@ class MyGameWidget extends StatelessWidget {
         },
         'GameOverlay': (context, MyGame game) {
           return GameOverlay(game: game);
+        },
+        'WinnerOverlay': (context, MyGame game) {
+          return const WinnerOverlay();
         }
       },
     );

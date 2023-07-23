@@ -164,7 +164,7 @@ class _AddKidState extends State<AddKid> {
                       (!isSaving && _textIsValid == true && birthdate != null)
                           ? () async {
                               await saveKid(name, observaciones, _gender,
-                                  birthdate, school, null, null);
+                                  birthdate, school, null, null, 0);
                               // ignore: use_build_context_synchronously
                               Navigator.pop(context);
                             }

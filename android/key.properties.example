@@ -1,0 +1,4 @@
+storePassword=<bullybuster>
+keyPassword=<bullybuster>
+keyAlias=key
+storeFile=<D:\PowerUp/key.jks>

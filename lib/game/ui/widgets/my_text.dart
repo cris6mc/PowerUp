@@ -5,12 +5,8 @@ class MyText extends StatelessWidget {
   final double? fontSize;
   final Color? color;
 
-  const MyText(
-    this.text, {
-    super.key,
-    this.fontSize = 28,
-    this.color = const Color(0xFFD7E2FF)
-  });
+  const MyText(this.text,
+      {super.key, this.fontSize = 28, this.color = Colors.lightBlue});
 
   @override
   Widget build(BuildContext context) {

@@ -41,8 +41,6 @@ class Platform2 extends BodyComponent<MyGame> {
     await super.onLoad();
     renderBody = false;
 
-    Vector2 size2 = type.name == PlatformType.platform1.name ? Vector2(1.2, .9) : Vector2(1.2, .5);
-
     add(
       SpriteComponent(
         sprite: type.sprite,

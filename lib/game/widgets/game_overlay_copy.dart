@@ -164,7 +164,6 @@ class GameOverlayState extends State<GameOverlay> {
 
 import 'dart:async';
 import 'dart:io' show Platform;
-import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:jueguito2/game/my_game.dart';
@@ -172,7 +171,6 @@ import 'package:jueguito2/game/widgets/heart_display.dart';
 import 'package:jueguito2/game/widgets/life_display.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
-import '../doodle_dash.dart';
 import 'widgets.dart';
 
 class GameOverlay extends StatefulWidget {
@@ -190,7 +188,7 @@ class GameOverlay extends StatefulWidget {
 class GameOverlayState extends State<GameOverlay> {
   StreamSubscription<GyroscopeEvent>? _gyroscopeSubscription;
   double _gyroscopeValue = 0.0;
-  double _gyroscopeThreshold = 0.5;
+  final double _gyroscopeThreshold = 0.5;
 
   double dx = 100, dy = 100;
 
@@ -221,7 +219,6 @@ class GameOverlayState extends State<GameOverlay> {
     } else {
       widget.game.hero.resetDirection();
     }
-    print(_gyroscopeValue);
   }
 
   @override
@@ -358,15 +355,15 @@ class GameOverlayState extends State<GameOverlay> {
                           // y ajustar el diseño según tus necesidades.
                         ],
                       );
-                      if (snapshot.hasData) {
-                        dx = dx + (snapshot.data!.y * 30);
-                        dy = dy + (snapshot.data!.x * 30);
-                      }
-                      return Transform.translate(
-                          offset: Offset(dx, dy),
-                          child: const CircleAvatar(
-                            radius: 20,
-                          ));
+                      // if (snapshot.hasData) {
+                      //   dx = dx + (snapshot.data!.y * 30);
+                      //   dy = dy + (snapshot.data!.x * 30);
+                      // }
+                      // return Transform.translate(
+                      //     offset: Offset(dx, dy),
+                      //     child: const CircleAvatar(
+                      //       radius: 20,
+                      //     ));
                     },
 /*
                     stream: gyroscopeEvents,
@@ -380,5 +377,3 @@ class GameOverlayState extends State<GameOverlay> {
     );
   }
 }
-
-

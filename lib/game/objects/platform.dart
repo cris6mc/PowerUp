@@ -2,6 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/my_game.dart';
+import 'package:jueguito2/game/objects/anti_values_static.dart';
 
 enum PlatformType {
   blue,
@@ -88,6 +89,8 @@ class Platform extends BodyComponent<MyGame> {
 
   final PlatformType type;
 
+  double probability = random.nextDouble();
+
   Platform({
     required double x,
     required double y,
@@ -107,6 +110,35 @@ class Platform extends BodyComponent<MyGame> {
         anchor: Anchor.center,
       ),
     );
+    if (gameRef.score.value <= 50) {
+      if (probability < 0.0) {
+        gameRef.add(AntiValuesStatic(
+          x: _position.x,
+          y: _position.y - 0.5,
+        ));
+      }
+    } else if (gameRef.score.value > 50 || gameRef.score.value <= 90) {
+      if (probability < 0.2) {
+        gameRef.add(AntiValuesStatic(
+          x: _position.x,
+          y: _position.y - 0.5,
+        ));
+      }
+    } else if (gameRef.score.value > 90 || gameRef.score.value <= 300) {
+      if (probability < 0.03) {
+        gameRef.add(AntiValuesStatic(
+          x: _position.x,
+          y: _position.y - 0.5,
+        ));
+      }
+    } else if (gameRef.score.value > 300) {
+      if (probability < 0.1) {
+        gameRef.add(AntiValuesStatic(
+          x: _position.x,
+          y: _position.y - 0.5,
+        ));
+      }
+    }
   }
 
   @override
