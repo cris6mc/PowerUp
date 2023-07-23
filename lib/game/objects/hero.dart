@@ -184,11 +184,6 @@ class MyHero extends BodyComponent<MyGame>
     gameRef.bubbles.value++;
   }
 
-  void takeFrozen() {
-    if (state == HeroState.dead) return;
-    if (!hasFrozen) add(frozenComponent);
-  }
-
   //acumular coins
   void takeCoin() {
     if (state == HeroState.dead) return;
@@ -268,15 +263,14 @@ class MyHero extends BodyComponent<MyGame>
       if (frozenTimer >= frozenDuration) {
         // Si ha pasado el tiempo de inmovilización, permitir el movimiento nuevamente
         hasFrozen = false;
-        hasAppliedFrozenEffect =
-            false; // Restablecer la bandera de efecto aplicado
+        frozenTimer = 0;
+        remove(frozenComponent);
       } else {
         // Si aún estamos en el período de inmovilización, no permitir el movimiento
         body.linearVelocity = Vector2.zero();
         return;
       }
-      frozenTimer = 0;
-      remove(frozenComponent);
+
     }
 
     if (hasBurst) {
@@ -412,11 +406,8 @@ class MyHero extends BodyComponent<MyGame>
       if (hasJetpack) return;
       if (hasHat) return;
       if (isMega()) return;
-      if (other.type == AntiValuesTypeStatic.injustice &&
-          !hasAppliedFrozenEffect) {
+      if (other.type == AntiValuesTypeStatic.injustice) {
         setFrozen(3.0);
-        hasAppliedFrozenEffect =
-            true; // Marcar que se ha aplicado el efecto de lentitud
       }
 
       if (other.type == AntiValuesTypeStatic.hate) {

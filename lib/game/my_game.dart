@@ -37,7 +37,7 @@ class MyGame extends Forge2DGame
     with HasKeyboardHandlerComponents, TapDetector {
   late final MyHero hero;
 
-  late final background;
+  late final  background;
   // late final background2;
 
   // int score = 0;
@@ -124,9 +124,6 @@ class MyGame extends Forge2DGame
   @override
   void update(double dt) {
     super.update(dt);
-    // if (score.value > 40) {
-    //   background = background2;
-    // }
 
     if (state == GameState.running) {
       final heroY = (hero.body.position.y - worldSize.y) * -1;
