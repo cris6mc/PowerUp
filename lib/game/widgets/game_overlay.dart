@@ -134,11 +134,11 @@ class GameOverlayState extends State<GameOverlay> {
                           widget.game.hero.resetDirection();
                         },
                         child: Material(
-                          color: Colors.transparent,
+                          color: Colors.white24,
                           shape: const CircleBorder(),
                           elevation: 3.0,
                           shadowColor: Theme.of(context).colorScheme.background,
-                          child: const Icon(Icons.arrow_left, size: 100),
+                          child: const Icon(Icons.arrow_left, size: 120),
                         ),
                       ),
                     ),
@@ -177,11 +177,14 @@ class GameOverlayState extends State<GameOverlay> {
                           widget.game.hero.resetDirection();
                         },
                         child: Material(
-                          color: Colors.transparent,
+                          color: Colors.white24,
                           shape: const CircleBorder(),
                           elevation: 3.0,
                           shadowColor: Theme.of(context).colorScheme.background,
-                          child: const Icon(Icons.arrow_right, size: 100),
+                          child: const Icon(
+                            Icons.arrow_right,
+                            size: 120,
+                          ),
                         ),
                       ),
                     ),

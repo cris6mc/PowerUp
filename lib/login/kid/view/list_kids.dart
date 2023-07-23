@@ -80,7 +80,6 @@ class _ListKidsState extends State<ListKids> {
               },
               child: Text(
                 name,
-                style: const TextStyle(color: Colors.white),
               )),
           const SizedBox(width: 10),
           Text('Score: $score'),
@@ -93,7 +92,9 @@ class _ListKidsState extends State<ListKids> {
                       builder: (context) => FlBarChartExample(
                           index, widget.me.kids?[index], name)));
             },
-            child: const Icon(Icons.list, color: Colors.white),
+            child: const Icon(
+              Icons.list,
+            ),
           ),
         ],
       ),
@@ -148,7 +149,7 @@ class _ListKidsState extends State<ListKids> {
             end: Alignment.topCenter,
             colors: [
               Colors.transparent,
-              Colors.blue,
+              Colors.redAccent,
               Colors.transparent,
             ],
           ),

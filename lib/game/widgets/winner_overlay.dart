@@ -62,17 +62,22 @@ class _WinnerOverlayState extends State<WinnerOverlay> {
                   'assets/images/trophy.png',
                   width: MediaQuery.of(context).size.width,
                 ),
-                Center(
+                const Center(
                   child: Text(
                     '¡Ganaste!',
-                    style: Theme.of(context).textTheme.displayLarge,
+                    style: TextStyle(
+                        color: Colors.amberAccent,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 75),
                   ),
                 ),
                 Column(
                   children: [
                     const SizedBox(height: 20),
                     const Text(
-                        'Tenemos un video que podria gustarte. \n¿Te gustaria verlo?'),
+                      'Tenemos un video que podria gustarte. \n¿Te gustaria verlo?',
+                      style: TextStyle(color: Colors.amber, fontSize: 20),
+                    ),
                     ElevatedButton(
                       onPressed: () {
                         Navigator.push(

@@ -26,7 +26,7 @@ class _FormSignUpState extends State<FormSignUp> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Crear nueva cuenta'),
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.redAccent,
         ),
         body: BlocBuilder<AuthCubit, AuthState>(builder: (_, state) {
           return Container(
@@ -35,7 +35,7 @@ class _FormSignUpState extends State<FormSignUp> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.blue,
+                  Colors.redAccent,
                   Colors.transparent,
                 ],
               ),
@@ -125,7 +125,7 @@ class _FormSignUpState extends State<FormSignUp> {
                       const SizedBox(height: 20),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
+                          backgroundColor: Colors.redAccent,
                         ),
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
