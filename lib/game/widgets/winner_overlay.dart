@@ -79,6 +79,7 @@ class WinnerOverlayState extends State<WinnerOverlay> {
                     const Text(
                       'Tenemos un video que podria gustarte. \n¿Te gustaria verlo?',
                       style: TextStyle(color: Colors.amber, fontSize: 20),
+                      textAlign: TextAlign.center,
                     ),
                     ElevatedButton(
                       onPressed: () {
@@ -94,7 +95,10 @@ class WinnerOverlayState extends State<WinnerOverlay> {
                         foregroundColor: Colors.blue,
                         backgroundColor: Colors.yellow,
                       ),
-                      child: const Text('Ver video sobre el bullyng'),
+                      child: const Text(
+                        'Ver video sobre el bullyng',
+                        style: TextStyle(fontSize: 20),
+                      ),
                     ),
                   ],
                 ),
@@ -106,6 +110,9 @@ class WinnerOverlayState extends State<WinnerOverlay> {
                     child: const Text('Volver al menú'),
                   ),
                 ),
+                const SizedBox(
+                  height: 8,
+                )
               ],
             ),
           ],

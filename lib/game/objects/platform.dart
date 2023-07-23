@@ -124,14 +124,14 @@ class Platform extends BodyComponent<MyGame> {
           y: _position.y - 0.5,
         ));
       }
-    } else if (gameRef.score.value > 90 || gameRef.score.value <= 200) {
+    } else if (gameRef.score.value > 90 || gameRef.score.value <= 300) {
       if (probability < 0.03) {
         gameRef.add(AntiValuesStatic(
           x: _position.x,
           y: _position.y - 0.5,
         ));
       }
-    } else {
+    } else if (gameRef.score.value > 300) {
       if (probability < 0.1) {
         gameRef.add(AntiValuesStatic(
           x: _position.x,

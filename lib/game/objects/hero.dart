@@ -154,7 +154,6 @@ class MyHero extends BodyComponent<MyGame>
   void hit() {
     if (hasJetpack) return;
     if (hasHat) return;
-    if (hasMega) return;
     if (state == HeroState.dead) return;
 
     if (hasBubbleShield) {
@@ -172,7 +171,6 @@ class MyHero extends BodyComponent<MyGame>
 
   void takeJetpack() {
     if (state == HeroState.dead) return;
-    if (hasMega) return;
     hasJetpack = true;
     state = HeroState.rocket;
     gameRef.lightnings.value++;
@@ -180,18 +178,10 @@ class MyHero extends BodyComponent<MyGame>
 
   void takeBubbleShield() {
     if (state == HeroState.dead) return;
-    if (hasBubbleShield) return;
-    if (hasMega) return;
 
     if (!hasBubbleShield) add(bubbleShieldComponent);
     hasBubbleShield = true;
     gameRef.bubbles.value++;
-  }
-
-  void takeFrozen() {
-    if (state == HeroState.dead) return;
-    if (hasMega) return;
-    if (!hasFrozen) add(frozenComponent);
   }
 
   //acumular coins
@@ -273,15 +263,13 @@ class MyHero extends BodyComponent<MyGame>
       if (frozenTimer >= frozenDuration) {
         // Si ha pasado el tiempo de inmovilización, permitir el movimiento nuevamente
         hasFrozen = false;
-        hasAppliedFrozenEffect =
-            false; // Restablecer la bandera de efecto aplicado
+        frozenTimer = 0;
+        remove(frozenComponent);
       } else {
         // Si aún estamos en el período de inmovilización, no permitir el movimiento
         body.linearVelocity = Vector2.zero();
         return;
       }
-      frozenTimer = 0;
-      remove(frozenComponent);
     }
 
     if (hasBurst) {
@@ -328,7 +316,7 @@ class MyHero extends BodyComponent<MyGame>
   bool isMega() {
     final Map<ValuesType, int> currentValues = gameRef.valuesNotifier.value;
 
-    // Verificar si todos los valores son mayores o iguales a 1
+    // Verificar si todos los valores son mayores o iguales a 3
     return currentValues.values.every((value) => value >= 3);
   }
 
@@ -407,7 +395,6 @@ class MyHero extends BodyComponent<MyGame>
   @override
   void beginContact(Object other, Contact contact) {
     if (other is AntiValues) {
-      if (isMega()) return;
       other.destroy = true;
       final AntiValuesType type = other.type;
       gameRef.updateAntiValue(type);
@@ -418,11 +405,8 @@ class MyHero extends BodyComponent<MyGame>
       if (hasJetpack) return;
       if (hasHat) return;
       if (isMega()) return;
-      if (other.type == AntiValuesTypeStatic.injustice &&
-          !hasAppliedFrozenEffect) {
+      if (other.type == AntiValuesTypeStatic.injustice) {
         setFrozen(3.0);
-        hasAppliedFrozenEffect =
-            true; // Marcar que se ha aplicado el efecto de lentitud
       }
 
       if (other.type == AntiValuesTypeStatic.hate) {

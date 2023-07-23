@@ -29,77 +29,75 @@ class GameOverOverlay extends StatelessWidget {
               top: 0,
               child: Image.asset('assets/inicio/top.png'),
             ),
-            // Positioned(
-            //   bottom: 0,
-            //   child: Image.asset('assets/inicio/bot.png'),
-            // ),
             Center(
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/images/game_over_kid.png'),
-                    const Text(
-                      "Recuerda escoger los valores. No te rindas y vuelve a intentarlo. \n¡Tú puedes hacerlo!",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Colors.green,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
-                    ),
-                    const WhiteSpace(height: 20),
-                    const Text('Game Over',
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.asset('assets/images/game_over_kid.png'),
+                      const Text(
+                        "Recuerda escoger los valores. No te rindas y vuelve a intentarlo. \n¡Tú puedes hacerlo!",
+                        textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 50,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.redAccent,
-                        )),
-                    const WhiteSpace(height: 10),
-                    TitleDisplay(
-                      title: 'Score',
-                      value: game.score.value.toString(),
-                      isLight: true,
-                    ),
-                    TitleDisplay(
-                      title: 'Best Score',
-                      value: HighScores.highScores[0].toString(),
-                      isLight: true,
-                    ),
-                    const WhiteSpace(
-                      height: 50,
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.pushAndRemoveUntil(Routes.game);
-                      },
-                      style: ButtonStyle(
-                        minimumSize: MaterialStateProperty.all(
-                          const Size(200, 75),
-                        ),
-                        textStyle: MaterialStateProperty.all(
-                            Theme.of(context).textTheme.titleLarge),
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
                       ),
-                      child: const Text('Volver a jugar'),
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.pushAndRemoveUntil(Routes.main);
-                      },
-                      style: ButtonStyle(
-                        minimumSize: MaterialStateProperty.all(
-                          const Size(200, 75),
-                        ),
-                        textStyle: MaterialStateProperty.all(
-                            Theme.of(context).textTheme.titleLarge),
+                      const WhiteSpace(height: 20),
+                      const Text('Game Over',
+                          style: TextStyle(
+                            fontSize: 50,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.redAccent,
+                          )),
+                      const WhiteSpace(height: 10),
+                      TitleDisplay(
+                        title: 'Score',
+                        value: game.score.value.toString(),
+                        isLight: true,
                       ),
-                      child: const Text('Menú'),
-                    ),
-                  ],
+                      TitleDisplay(
+                        title: 'Best Score',
+                        value: HighScores.highScores[0].toString(),
+                        isLight: true,
+                      ),
+                      const WhiteSpace(
+                        height: 50,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          context.pushAndRemoveUntil(Routes.game);
+                        },
+                        style: ButtonStyle(
+                          minimumSize: MaterialStateProperty.all(
+                            const Size(200, 75),
+                          ),
+                          textStyle: MaterialStateProperty.all(
+                              Theme.of(context).textTheme.titleLarge),
+                        ),
+                        child: const Text('Volver a jugar'),
+                      ),
+                      const SizedBox(
+                        height: 25,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          context.pushAndRemoveUntil(Routes.main);
+                        },
+                        style: ButtonStyle(
+                          minimumSize: MaterialStateProperty.all(
+                            const Size(200, 75),
+                          ),
+                          textStyle: MaterialStateProperty.all(
+                              Theme.of(context).textTheme.titleLarge),
+                        ),
+                        child: const Text('Menú'),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

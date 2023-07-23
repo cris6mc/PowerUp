@@ -51,13 +51,14 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         body: BlocBuilder<AuthCubit, AuthState>(builder: (_, state) {
           return Container(
+            height: MediaQuery.of(context).size.height,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.redAccent,
                   Colors.transparent,
+                  Colors.redAccent,
                 ],
               ),
             ),
