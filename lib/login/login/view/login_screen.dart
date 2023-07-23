@@ -47,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Log In'),
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.redAccent,
         ),
         body: BlocBuilder<AuthCubit, AuthState>(builder: (_, state) {
           return Container(
@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.blue,
+                  Colors.redAccent,
                   Colors.transparent,
                 ],
               ),
@@ -120,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                             // cambiar color
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue,
+                              backgroundColor: Colors.redAccent,
                             ),
                             child: const Text('Ingresar',
                                 style: TextStyle(color: Colors.white)),
