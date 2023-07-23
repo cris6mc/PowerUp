@@ -2,8 +2,6 @@ import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 
 class Assets {
-  static late final Sprite button;
-  static late final Sprite buttonPause;
 
   static late final String background;
   static late final String background1;
@@ -12,15 +10,6 @@ class Assets {
   static late final String background4;
   static late final String background5;
   static late final String background6;
-
-  static late final Sprite heroFall;
-  static late final Sprite heroJump;
-
-  static late final Sprite cloudHappyEnemy;
-  static late final Sprite cloudAngryEnemy;
-  static late final SpriteAnimation hearthEnemy;
-  static late final SpriteAnimation jetpackFire;
-  static late final SpriteAnimation lightning;
 
   static late final Sprite coin;
   static late final Sprite gun;
@@ -32,6 +21,7 @@ class Assets {
   static late final Sprite jetpack;
   static late final SpriteAnimation frozenComponent;
   static late final SpriteAnimation burstComponent;
+  static late final Sprite hat;
 
   static late final Sprite platformBeige;
   static late final Sprite platformBeigeLight;
@@ -90,8 +80,6 @@ class Assets {
   static late final Sprite rocket4;
 
   static Future<void> load() async {
-    button = await _loadSprite('ui/button.png');
-    buttonPause = await _loadSprite('ui/buttonPause.png');
 
     //background
     background = 'background/background.png';
@@ -101,26 +89,6 @@ class Assets {
     background4 = 'background/03_Background_Block_Shapes.png';
     background5 = 'background/02_Background_Orbs.png';
     background6 = 'background/01_Background_Squiggles.png';
-
-    heroFall = await _loadSprite('dashJump.png');
-    heroJump = await _loadSprite('dashFall.png');
-
-    cloudHappyEnemy = await _loadSprite('HappyCloud.png');
-    cloudAngryEnemy = await _loadSprite('AngryCloud.png');
-    final enemy1 = await _loadSprite('HearthEnemy1.png');
-    final enemy2 = await _loadSprite('HearthEnemy2.png');
-    final lightning1 = await _loadItem('Lightning1');
-    final lightning2 = await _loadItem('Lightning2');
-
-    hearthEnemy = SpriteAnimation.spriteList([
-      enemy1,
-      enemy2,
-    ], stepTime: 0.2, loop: true);
-
-    lightning = SpriteAnimation.spriteList([
-      lightning1,
-      lightning2,
-    ], stepTime: 0.15, loop: true);
 
     final love2 = await _loadItem('Love2');
     final love3 = await _loadItem('Love3');
@@ -153,6 +121,8 @@ class Assets {
 
     burstComponent = SpriteAnimation.spriteList([burst1, burst2,burst3,burst4],stepTime: 0.75);
 
+    hat = await _loadItem('Hat');
+
     love = await _loadSprite('items/love.png');
     empathy = await _loadSprite('items/empathy.png');
     solidarity = await _loadSprite('items/solidarity.png');
@@ -178,19 +148,6 @@ class Assets {
     jetpackSmall = await _loadItem('Jetpack_Small');
     bubble = await _loadItem('Bubble_Big');
     jetpack = await _loadItem('Jetpack_Big');
-
-    final jetpack1 = await _loadItem('JetFire1');
-    final jetpack2 = await _loadItem('JetFire2');
-
-    jetpackFire = SpriteAnimation.spriteList([
-      jetpack1,
-      jetpack2,
-    ], stepTime: 0.15, loop: true);
-
-    final rocket1 = await _loadItem('rocket_1');
-    final rocket2 = await _loadItem('rocket_2');
-    final rocket3 = await _loadItem('rocket_3');
-    final rocket4 = await _loadItem('rocket_4');
 
     platform1 = await _loadPlatform('platform1');
     platform2 = await _loadPlatform('platform2');
@@ -241,13 +198,9 @@ class Assets {
     return _loadSprite('platforms/$name.png');
   }
 
-  static Future<Sprite> _loadItemSVG(String name) async {
-    return _loadSprite('items/$name.svg');
-  }
-
   static Future<Sprite> _loadItem(String name) {
     return _loadSprite('items/$name.png');
-  }
+  } 
 
   static Future<Sprite> _loadSprite(String name) async {
     return Sprite(await Flame.images.load(name));

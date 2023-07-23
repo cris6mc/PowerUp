@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jueguito2/login/kid/view/add_kid.dart';
 
 import '../../../game/navigation/routes.dart';
-import '../../../main.dart';
 import '../../../other screens/splash_screen.dart';
 import '../../login/cubit/auth_cubit.dart';
 import '../../login/cubit/my_user_cubit.dart';

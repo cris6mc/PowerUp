@@ -2,10 +2,6 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../login/cubit/my_user_cubit.dart';
-import '../provider/firestore_kid.dart';
 
 // ignore: must_be_immutable
 class FlBarChartExample extends StatefulWidget {

@@ -2,10 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:jueguito2/game/managers/level_manager.dart';
-import 'package:jueguito2/game/my_game.dart';
 import 'package:jueguito2/game/navigation/routes.dart';
 import 'package:jueguito2/main.dart';
 import 'package:provider/provider.dart';
@@ -39,7 +36,6 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
       // 760 is the smallest height the browser can have until the
       // layout is too large to fit.
       final bool screenHeightIsSmall = constraints.maxHeight < 760;
-      LevelManager levelManager = LevelManager();
       return Container(
         // color: Theme.of(context).colorScheme.background,
         decoration: const BoxDecoration(
@@ -233,46 +229,38 @@ class CharacterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        OutlinedButton(
-          style: selected
-              ? ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                    const Color.fromARGB(31, 64, 195, 255),
-                  ),
-                )
-              : null,
-          onPressed: onSelectChar,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                Container(
-                  width: characterWidth,
-                  height: characterWidth,
-                  child: Image.asset(
-                    'assets/images/game/${character.name}_center.png',
-                    fit: BoxFit.contain,
-                  ),
-                ),
-                const SizedBox(height: 18),
-                Text(
-                  (character.name.length > 4
-                      ? character.name.substring(0, 4)
-                      : character.name),
-                  style: const TextStyle(fontSize: 20, color: Colors.white),
-                  textAlign: TextAlign.center,
-                ),
-              ],
+    return OutlinedButton(
+      style: selected
+          ? ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(
+                const Color.fromARGB(31, 64, 195, 255),
+              ),
+            )
+          : null,
+      onPressed: onSelectChar,
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            SizedBox(
+              width: characterWidth,
+              height: characterWidth,
+              child: Image.asset(
+                'assets/images/game/${character.name}_center.png',
+                fit: BoxFit.contain,
+              ),
             ),
-          ),
+            const SizedBox(height: 18),
+            Text(
+              (character.name.length > 4
+                  ? character.name.substring(0, 4)
+                  : character.name),
+              style: const TextStyle(fontSize: 20),
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
-        // Image.asset(
-        //   'assets/inicio/plataform.png',
-        //   width: characterWidth * 2.5,
-        // ),
-      ],
+      ),
     );
   }
 }

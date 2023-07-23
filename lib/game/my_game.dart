@@ -9,9 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/high_scores.dart';
 import 'package:jueguito2/game/objects/Plataform/platform.dart';
-import 'package:jueguito2/game/objects/Values/love.dart';
 import 'package:jueguito2/game/objects/anti_values.dart';
-import 'package:jueguito2/game/objects/anti_values_static.dart';
 import 'package:jueguito2/game/objects/bullet.dart';
 import 'package:jueguito2/game/objects/coin.dart';
 import 'package:jueguito2/game/objects/floor.dart';
@@ -111,14 +109,10 @@ class MyGame extends Forge2DGame
 
     add(background);
 
-    // add(GameUI());
-
     add(Floor());
     hero = MyHero(character: character);
 
     overlays.add('GameOverlay');
-    //overlays.add('WinnerOverlay');
-    // generateNextSectionOfWorld();
 
     await add(hero);
 
@@ -133,6 +127,7 @@ class MyGame extends Forge2DGame
     // if (score.value > 40) {
     //   background = background2;
     // }
+
     if (state == GameState.running) {
       final heroY = (hero.body.position.y - worldSize.y) * -1;
       if (!mega) {
@@ -278,7 +273,6 @@ class MyGame extends Forge2DGame
   }
 
   void addCoins() {
-    final rows = random.nextInt(15) + 1;
     final cols = random.nextInt(5) + 1;
 
     final x = (worldSize.x - (Coin.size.x * cols)) * random.nextDouble() +
