@@ -191,12 +191,12 @@ class MyGame extends Forge2DGame
           x: worldSize.x * random.nextDouble(),
           y: generatedWorldHeight,
         ));
-        if (random.nextDouble() < .5) {
+        if (random.nextDouble() < .4) {
           add(AntiValues(
             x: worldSize.x * random.nextDouble(),
             y: generatedWorldHeight - 1.5,
           ));
-        } else if (random.nextDouble() < .6) {
+        } else if (random.nextDouble() < .5) {
           add(Values(
               x: worldSize.x * random.nextDouble(),
               y: generatedWorldHeight - 1.5));
