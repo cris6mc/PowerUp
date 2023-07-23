@@ -37,6 +37,7 @@ class MyGame extends Forge2DGame
     with HasKeyboardHandlerComponents, TapDetector {
   late final MyHero hero;
 
+  // ignore: prefer_typing_uninitialized_variables
   late final background;
   // late final background2;
 

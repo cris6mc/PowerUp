@@ -355,15 +355,15 @@ class GameOverlayState extends State<GameOverlay> {
                           // y ajustar el diseño según tus necesidades.
                         ],
                       );
-                      if (snapshot.hasData) {
-                        dx = dx + (snapshot.data!.y * 30);
-                        dy = dy + (snapshot.data!.x * 30);
-                      }
-                      return Transform.translate(
-                          offset: Offset(dx, dy),
-                          child: const CircleAvatar(
-                            radius: 20,
-                          ));
+                      // if (snapshot.hasData) {
+                      //   dx = dx + (snapshot.data!.y * 30);
+                      //   dy = dy + (snapshot.data!.x * 30);
+                      // }
+                      // return Transform.translate(
+                      //     offset: Offset(dx, dy),
+                      //     child: const CircleAvatar(
+                      //       radius: 20,
+                      //     ));
                     },
 /*
                     stream: gyroscopeEvents,

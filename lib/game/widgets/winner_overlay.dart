@@ -8,10 +8,10 @@ class WinnerOverlay extends StatefulWidget {
   const WinnerOverlay({super.key});
 
   @override
-  _WinnerOverlayState createState() => _WinnerOverlayState();
+  WinnerOverlayState createState() => WinnerOverlayState();
 }
 
-class _WinnerOverlayState extends State<WinnerOverlay> {
+class WinnerOverlayState extends State<WinnerOverlay> {
   final controller = ConfettiController();
 
   @override

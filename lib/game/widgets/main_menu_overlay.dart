@@ -29,13 +29,8 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
     return LayoutBuilder(builder: (context, constraints) {
       final characterWidth = constraints.maxWidth / 8;
 
-      final TextStyle titleStyle = (constraints.maxWidth > 830)
-          ? Theme.of(context).textTheme.displayLarge!
-          : Theme.of(context).textTheme.displaySmall!;
-
       // 760 is the smallest height the browser can have until the
       // layout is too large to fit.
-      final bool screenHeightIsSmall = constraints.maxHeight < 760;
       return Container(
         // color: Theme.of(context).colorScheme.background,
         decoration: const BoxDecoration(

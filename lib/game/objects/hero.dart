@@ -252,7 +252,7 @@ class MyHero extends BodyComponent<MyGame>
       velocity.y = -7.5;
     }
 
-    if (gameRef.valuesNotifier.value.values.every((value) => value >= 1)) {
+    if (gameRef.valuesNotifier.value.values.every((value) => value >= 3)) {
       state = HeroState.mega;
     } else if (gameRef.objects.value > 3) {
       if (!hasJetpack) {
@@ -329,7 +329,7 @@ class MyHero extends BodyComponent<MyGame>
     final Map<ValuesType, int> currentValues = gameRef.valuesNotifier.value;
 
     // Verificar si todos los valores son mayores o iguales a 1
-    return currentValues.values.every((value) => value >= 1);
+    return currentValues.values.every((value) => value >= 3);
   }
 
   void _setComponent(PositionComponent component) {

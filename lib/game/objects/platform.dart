@@ -110,22 +110,35 @@ class Platform extends BodyComponent<MyGame> {
         anchor: Anchor.center,
       ),
     );
-    if(gameRef.score.value > 100 || gameRef.score.value <= 200){
-      if(probability < 0.1){
+    if (gameRef.score.value <= 50) {
+      if (probability < 0.0) {
         gameRef.add(AntiValuesStatic(
           x: _position.x,
           y: _position.y - 0.5,
         ));
       }
-    }else{
-      if(probability < 0.3){
+    } else if (gameRef.score.value > 50 || gameRef.score.value <= 90) {
+      if (probability < 0.2) {
+        gameRef.add(AntiValuesStatic(
+          x: _position.x,
+          y: _position.y - 0.5,
+        ));
+      }
+    } else if (gameRef.score.value > 90 || gameRef.score.value <= 200) {
+      if (probability < 0.03) {
+        gameRef.add(AntiValuesStatic(
+          x: _position.x,
+          y: _position.y - 0.5,
+        ));
+      }
+    } else {
+      if (probability < 0.1) {
         gameRef.add(AntiValuesStatic(
           x: _position.x,
           y: _position.y - 0.5,
         ));
       }
     }
-
   }
 
   @override
@@ -139,8 +152,6 @@ class Platform extends BodyComponent<MyGame> {
       gameRef.remove(this);
       if (type.isBroken) gameRef.addBrokenPlatformPieces(this);
     }
-
-
   }
 
   @override
