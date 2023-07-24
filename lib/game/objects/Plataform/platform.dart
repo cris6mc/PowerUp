@@ -2,6 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:jueguito2/game/assets.dart';
 import 'package:jueguito2/game/my_game.dart';
+import 'package:jueguito2/game/objects/anti_values_static.dart';
 
 enum PlatformType {
   platform1,
@@ -29,6 +30,8 @@ class Platform2 extends BodyComponent<MyGame> {
 
   final PlatformType type;
 
+  double probability = random.nextDouble();
+
   Platform2({
     required double x,
     required double y,
@@ -48,6 +51,47 @@ class Platform2 extends BodyComponent<MyGame> {
         anchor: Anchor.center,
       ),
     );
+
+    add(
+      SpriteComponent(
+        sprite: type.sprite,
+        size: size,
+        anchor: Anchor.center,
+      ),
+    );
+    if (gameRef.score.value <= 50) {
+      if (probability < 0.0) {
+        gameRef.add(AntiValuesStatic(x: _position.x, y: _position.y - 0.3));
+      }
+    } else if (gameRef.score.value > 50 || gameRef.score.value <= 90) {
+      if (probability < 0.2) {
+        gameRef.add(AntiValuesStatic(
+          x: _position.x,
+          y: _position.y - 0.3,
+        ));
+      }
+    } else if (gameRef.score.value > 90 || gameRef.score.value <= 300) {
+      if (probability < 0.3) {
+        gameRef.add(AntiValuesStatic(
+          x: _position.x,
+          y: _position.y - 0.3,
+        ));
+      }
+    } else if (gameRef.score.value > 300 && gameRef.score.value <= 500) {
+      if (probability < 0.4) {
+        gameRef.add(AntiValuesStatic(
+          x: _position.x,
+          y: _position.y - 0.3,
+        ));
+      } else if (gameRef.score.value > 500) {
+        if (probability < 0.6) {
+          gameRef.add(AntiValuesStatic(
+            x: _position.x,
+            y: _position.y - 0.3,
+          ));
+        }
+      }
+    }
   }
 
   @override

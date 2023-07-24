@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jueguito2/firebase_options.dart';
@@ -58,6 +59,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
     return ChangeNotifierProvider(
       create: (context) => MyProvider(),
@@ -74,7 +76,7 @@ class MyApp extends StatelessWidget {
           textTheme: GoogleFonts.audiowideTextTheme(ThemeData.dark().textTheme),
           useMaterial3: true,
         ),
-        onGenerateRoute: Routes.routes,
+          onGenerateRoute: Routes.routes,
       ),
     );
   }

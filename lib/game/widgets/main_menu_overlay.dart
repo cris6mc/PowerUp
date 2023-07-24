@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:jueguito2/game/navigation/routes.dart';
+import 'package:jueguito2/game/widgets/information.dart';
 import 'package:jueguito2/main.dart';
 import 'package:provider/provider.dart';
 
@@ -42,6 +43,7 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
         child: Stack(
           children: [
             Image.asset('assets/inicio/burbles.png'),
+
             Positioned(
               top: 0,
               child: Image.asset('assets/inicio/top.png'),
@@ -49,6 +51,16 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
             Positioned(
               bottom: 0,
               child: Image.asset('assets/inicio/bot.png'),
+            ),
+            Positioned(
+              top: 0,
+              right: 10,
+              child: IconButton(onPressed: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const InformationScreen()));
+              }, icon: const Icon(Icons.info, color: Colors.white70, size: 60,)),
             ),
             Positioned(
               top: 55,
@@ -118,6 +130,7 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
                         ),
                       ),
                     ),
+                    const WhiteSpace(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

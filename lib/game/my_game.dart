@@ -182,7 +182,7 @@ class MyGame extends Forge2DGame
 
   void generateNextSectionOfWorld() {
     for (int i = 0; i < 10; i++) {
-      if (score.value < 100) {
+      if (score.value < 200) {
         add(Platform(
           x: worldSize.x * random.nextDouble(),
           y: generatedWorldHeight,
@@ -201,7 +201,7 @@ class MyGame extends Forge2DGame
               x: worldSize.x * random.nextDouble(),
               y: generatedWorldHeight - 1.5));
         }
-      } else if (score.value >= 100 && score.value < 200) {
+      } else if (score.value >= 200 && score.value < 300) {
         add(Platform(
           x: worldSize.x * random.nextDouble(),
           y: generatedWorldHeight,
@@ -211,22 +211,22 @@ class MyGame extends Forge2DGame
             x: worldSize.x * random.nextDouble(),
             y: generatedWorldHeight - 1.5,
           ));
-        } else if (random.nextDouble() < .6) {
+        } else if (random.nextDouble() < .4) {
           add(Values(
               x: worldSize.x * random.nextDouble(),
               y: generatedWorldHeight - 1.5));
         }
-      } else if (score.value >= 100 && score.value < 300) {
+      } else if (score.value >= 300 && score.value < 500) {
         add(Platform2(
           x: worldSize.x * random.nextDouble(),
           y: generatedWorldHeight,
         ));
-        if (random.nextDouble() < .5) {
+        if (random.nextDouble() < .7) {
           add(AntiValues(
             x: worldSize.x * random.nextDouble(),
             y: generatedWorldHeight - 1.5,
           ));
-        } else if (random.nextDouble() < .6) {
+        } else if (random.nextDouble() < .3) {
           add(Values(
               x: worldSize.x * random.nextDouble(),
               y: generatedWorldHeight - 1.5));
@@ -236,12 +236,18 @@ class MyGame extends Forge2DGame
           x: worldSize.x * random.nextDouble(),
           y: generatedWorldHeight,
         ));
-        if (random.nextDouble() < .2) {
+        if (random.nextDouble() < .9) {
           add(AntiValues(
             x: worldSize.x * random.nextDouble(),
             y: generatedWorldHeight - 1.5,
           ));
-        } else if (random.nextDouble() < .4) {
+
+          add(AntiValues(
+            x: worldSize.x * random.nextDouble(),
+            y: generatedWorldHeight - 1.5,
+          ));
+
+        } else if (random.nextDouble() < .2) {
           add(Values(
               x: worldSize.x * random.nextDouble(),
               y: generatedWorldHeight - 1.5));

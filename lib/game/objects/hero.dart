@@ -459,6 +459,7 @@ class MyHero extends BodyComponent<MyGame>
     }
 
     if (other is Platform2) {
+      if (hasFrozen) return;
       jump();
     }
   }

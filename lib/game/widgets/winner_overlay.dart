@@ -137,9 +137,10 @@ class _VideoScreenState extends State<VideoScreen> {
   void initState() {
     super.initState();
     _controller = YoutubePlayerController(
-      initialVideoId: 'mYrZvNW3DDw',
+      initialVideoId: 'tIn4m5Tb8KA',
       flags: const YoutubePlayerFlags(
         autoPlay: true,
+        showLiveFullscreenButton: false,
       ),
     );
   }
@@ -148,27 +149,30 @@ class _VideoScreenState extends State<VideoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('No al bullyng'),
+        title: const Text('No al bullying'),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 20),
             YoutubePlayer(
               controller: _controller,
               showVideoProgressIndicator: true,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             // texto de agradecimiento y recomendacion
-            const Text(
-              'Gracias por jugar, recuerda que el bullyng es un problema que afecta a muchos niños y niñas, no seas parte del problema, se parte de la solución.',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Roboto',
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child:  Text(
+                'Gracias por jugar, recuerda que el bullying es un problema que afecta a muchos niños y niñas, no seas parte del problema, se parte de la solución.',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey,
+                  fontFamily: 'DaveysDoodleface',
+                ),
+                textAlign: TextAlign.center,
               ),
             ),
-            const SizedBox(height: 20),
             Image.asset('assets/images/image_splash.png'),
           ],
         ),

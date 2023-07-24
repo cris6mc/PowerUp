@@ -137,7 +137,7 @@ class GameOverlayState extends State<GameOverlay> {
                           shape: const CircleBorder(),
                           elevation: 3.0,
                           shadowColor: Theme.of(context).colorScheme.background,
-                          child: const Icon(Icons.arrow_left, size: 120),
+                          child: const Icon(Icons.arrow_left, size: 100),
                         ),
                       ),
                     ),
@@ -182,7 +182,7 @@ class GameOverlayState extends State<GameOverlay> {
                           shadowColor: Theme.of(context).colorScheme.background,
                           child: const Icon(
                             Icons.arrow_right,
-                            size: 120,
+                            size: 100,
                           ),
                         ),
                       ),
